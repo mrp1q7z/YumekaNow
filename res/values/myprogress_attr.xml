@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MyProgress">
+        <attr name="start_image" format="integer" />
+        <attr name="goal_image" format="integer" />
+        <attr name="show_percent" format="boolean" />
+        <attr name="description" format="string" />
+    </declare-styleable>
+
+</resources>

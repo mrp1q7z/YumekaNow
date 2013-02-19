@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mycustom="http://schemas.android.com/apk/res/com.yojiokisoft.yumekanow"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <com.yojiokisoft.yumekanow.widget.MyProgress
+        android:id="@+id/totalProgress"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        mycustom:start_image="@drawable/start_flag"
+        mycustom:goal_image="@drawable/goal_flag" >
+    </com.yojiokisoft.yumekanow.widget.MyProgress>
+
+    <ListView
+        android:id="@+id/dayToDayList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
+</LinearLayout>

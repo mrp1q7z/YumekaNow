@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">夢かNow</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="ok">よし！</string>
+    <string name="cancel">やんぺ</string>
+    <string name="init_msg">        この度は「夢かNow」をダウンロードして頂き誠にありがとうございます。\n
+        このアプリケーションはあなたの夢の実現をお手伝いします。\n
+        このアプリケーションはウジェットとして動作します。</string>
+    <string name="title_activity_pager">PagerActivity</string>
+    <string name="title_activity_tab">TabActivity</string>
+
+</resources>

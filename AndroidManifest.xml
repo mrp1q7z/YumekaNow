@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.yojiokisoft.yumekanow"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="16" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <receiver
+            android:name="com.yojiokisoft.yumekanow.MyWidget"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget" />
+        </receiver>
+
+        <service android:name="com.yojiokisoft.yumekanow.MyWidgetService" >
+            <intent-filter>
+                <action android:name="com.example.android.appwidget.ClickSample.ACTION_MY_CLICK" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="com.yojiokisoft.yumekanow.InitActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.yojiokisoft.yumekanow.CardActivity" >
+        </activity>
+        <activity
+            android:name="com.yojiokisoft.yumekanow.PagerActivity"
+            android:label="@string/title_activity_pager" >
+        </activity>
+        <activity
+            android:name="com.yojiokisoft.yumekanow.TabActivity"
+            android:label="@string/title_activity_tab" >
+        </activity>
+        <activity android:name=".activity.MainActivity" >
+        </activity>
+        <activity android:name=".activity.DetailActivity" >
+        </activity>
+    </application>
+
+</manifest>
