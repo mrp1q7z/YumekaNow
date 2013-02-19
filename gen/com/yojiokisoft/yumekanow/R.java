@@ -109,7 +109,7 @@ containing a value of this type.
         public static final int lyt_main=0x7f08000f;
         public static final int lyt_main_fragment_container=0x7f08000c;
         public static final int lyt_swfrag_root=0x7f080007;
-        public static final int menu_settings=0x7f080022;
+        public static final int menu_settings=0x7f080023;
         public static final int messageText=0x7f080000;
         public static final int okButton=0x7f080001;
         public static final int pager=0x7f080010;
@@ -120,6 +120,7 @@ containing a value of this type.
         public static final int time_text_id=0x7f080006;
         public static final int totalProgress=0x7f080020;
         public static final int viewpager=0x7f080003;
+        public static final int webView=0x7f080022;
     }
     public static final class layout {
         public static final int activity_card=0x7f030000;
@@ -139,6 +140,7 @@ containing a value of this type.
         public static final int label_row=0x7f03000e;
         public static final int main_activity=0x7f03000f;
         public static final int state_fragment=0x7f030010;
+        public static final int usage_fragment=0x7f030011;
     }
     public static final class menu {
         public static final int activity_init=0x7f070000;

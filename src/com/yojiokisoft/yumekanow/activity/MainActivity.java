@@ -3,7 +3,6 @@ package com.yojiokisoft.yumekanow.activity;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -23,8 +22,8 @@ import android.widget.TextView;
 
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.fragment.CardFragment;
-import com.yojiokisoft.yumekanow.fragment.EmptyFragment;
 import com.yojiokisoft.yumekanow.fragment.StateFragment;
+import com.yojiokisoft.yumekanow.fragment.UsageFragment;
 import com.yojiokisoft.yumekanow.model.DummyGenerator;
 
 public class MainActivity extends FragmentActivity {
@@ -124,7 +123,7 @@ public class MainActivity extends FragmentActivity {
 				stateFragment.setArguments(args);
 				return stateFragment;
 			} else {
-				return new EmptyFragment(Color.WHITE);
+				return new UsageFragment();
 			}
 		}
 
