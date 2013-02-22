@@ -70,7 +70,7 @@ public class MyWidgetService extends Service {
 		AppWidgetManager manager = AppWidgetManager.getInstance(this);
 		manager.updateAppWidget(thisWidget, remoteViews);
 
-		Intent myIntent = new Intent(getApplicationContext(), TabActivity.class);
+		Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
 		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(myIntent);
 
