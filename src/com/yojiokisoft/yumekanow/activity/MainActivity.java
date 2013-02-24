@@ -19,6 +19,7 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.fragment.CardFragment;
@@ -27,6 +28,12 @@ import com.yojiokisoft.yumekanow.fragment.UsageFragment;
 import com.yojiokisoft.yumekanow.model.DummyGenerator;
 
 public class MainActivity extends FragmentActivity {
+
+	// メニューアイテム
+	private static final int MENU_CREATE_CARD = 0; // カードを作る
+	private static final int MENU_SELECT_CARD = 1; // カードを選ぶ
+	private static final int MENU_SETTING = 2; // 設定
+	private static final int MENU_USAGE = 3; // 使い方
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -161,12 +168,45 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_tab, menu);
+		//		getMenuInflater().inflate(R.menu.activity_tab, menu);
+		super.onCreateOptionsMenu(menu);
+
+		MenuItem item0 = menu.add(0, MENU_CREATE_CARD, 0, "カードを作る");
+		item0.setIcon(android.R.drawable.ic_menu_add);
+
+		MenuItem item1 = menu.add(0, MENU_SELECT_CARD, 0, "カードを選ぶ");
+		item1.setIcon(android.R.drawable.ic_menu_gallery);
+
+		MenuItem item2 = menu.add(0, MENU_SETTING, 0, "設定");
+		item2.setIcon(android.R.drawable.ic_menu_preferences);
+
+		MenuItem item3 = menu.add(0, MENU_USAGE, 0, "使い方");
+		item3.setIcon(android.R.drawable.ic_menu_help);
+
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		return super.onOptionsItemSelected(item);
+		Toast toast;
+		switch (item.getItemId()) {
+		case MENU_CREATE_CARD:
+			toast = Toast.makeText(this, "カードを作るが選択されました", Toast.LENGTH_LONG);
+			toast.show();
+			break;
+		case MENU_SELECT_CARD:
+			toast = Toast.makeText(this, "カードを選ぶが選択されました", Toast.LENGTH_LONG);
+			toast.show();
+			break;
+		case MENU_SETTING:
+			toast = Toast.makeText(this, "設定が選択されました", Toast.LENGTH_LONG);
+			toast.show();
+			break;
+		case MENU_USAGE:
+			toast = Toast.makeText(this, "使い方が選択されました", Toast.LENGTH_LONG);
+			toast.show();
+			break;
+		}
+		return true;
 	}
 }
