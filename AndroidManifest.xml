@@ -40,19 +40,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.yojiokisoft.yumekanow.CardActivity" >
+        <activity android:name="com.yojiokisoft.yumekanow.activity.CardListActivity" >
         </activity>
-        <activity
-            android:name="com.yojiokisoft.yumekanow.PagerActivity"
-            android:label="@string/title_activity_pager" >
-        </activity>
-        <activity
-            android:name="com.yojiokisoft.yumekanow.TabActivity"
-            android:label="@string/title_activity_tab" >
-        </activity>
-        <activity android:name=".activity.MainActivity" >
-        </activity>
-        <activity android:name=".activity.DetailActivity" >
+        <activity android:name="com.yojiokisoft.yumekanow.activity.MainActivity" >
         </activity>
     </application>
 

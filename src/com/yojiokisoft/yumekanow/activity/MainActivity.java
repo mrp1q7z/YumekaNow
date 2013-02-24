@@ -3,6 +3,7 @@ package com.yojiokisoft.yumekanow.activity;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -197,6 +198,9 @@ public class MainActivity extends FragmentActivity {
 		case MENU_SELECT_CARD:
 			toast = Toast.makeText(this, "カードを選ぶが選択されました", Toast.LENGTH_LONG);
 			toast.show();
+			Intent myIntent = new Intent(getApplicationContext(), CardListActivity.class);
+			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(myIntent);
 			break;
 		case MENU_SETTING:
 			toast = Toast.makeText(this, "設定が選択されました", Toast.LENGTH_LONG);
