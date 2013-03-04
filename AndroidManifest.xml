@@ -46,6 +46,8 @@
         </activity>
         <activity android:name="com.yojiokisoft.yumekanow.activity.MyPreference" >
         </activity>
+        <activity android:name="com.yojiokisoft.yumekanow.activity.UsageActivity" >
+        </activity>
         <activity android:name="com.yojiokisoft.yumekanow.activity.MainActivity" >
         </activity>
     </application>
