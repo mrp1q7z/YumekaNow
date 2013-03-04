@@ -190,15 +190,19 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Toast toast;
+		Intent myIntent;
 		switch (item.getItemId()) {
 		case MENU_CREATE_CARD:
 			toast = Toast.makeText(this, "カードを作るが選択されました", Toast.LENGTH_LONG);
 			toast.show();
+			myIntent = new Intent(getApplicationContext(), MakeCardActivity.class);
+			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(myIntent);
 			break;
 		case MENU_SELECT_CARD:
 			toast = Toast.makeText(this, "カードを選ぶが選択されました", Toast.LENGTH_LONG);
 			toast.show();
-			Intent myIntent = new Intent(getApplicationContext(), CardListActivity.class);
+			myIntent = new Intent(getApplicationContext(), CardListActivity.class);
 			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(myIntent);
 			break;

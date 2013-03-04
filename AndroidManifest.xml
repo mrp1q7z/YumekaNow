@@ -42,6 +42,8 @@
         </activity>
         <activity android:name="com.yojiokisoft.yumekanow.activity.CardListActivity" >
         </activity>
+        <activity android:name="com.yojiokisoft.yumekanow.activity.MakeCardActivity" >
+        </activity>
         <activity android:name="com.yojiokisoft.yumekanow.activity.MainActivity" >
         </activity>
     </application>
