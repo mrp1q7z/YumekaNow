@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="設定画面" >
+
+    <ListPreference
+        android:dialogTitle="表示間隔"
+        android:entries="@array/disp_interval_key"
+        android:entryValues="@array/disp_interval_val"
+        android:key="DISP_INTERVAL"
+        android:summary="アファーメーションの表示間隔を設定します"
+        android:title="表示間隔" />
+
+    <EditTextPreference
+        android:defaultValue="999"
+        android:dialogTitle="目標回数"
+        android:key="GOAL_CNT"
+        android:summary="アファーメーションを唱えた回数がこの値になったら目標達成とみなします"
+        android:title="目標回数" />
+
+    <ListPreference
+        android:dialogTitle="アニメーション"
+        android:entries="@array/animation_key"
+        android:entryValues="@array/animation_val"
+        android:key="ANIMATION"
+        android:summary="ウジェットのアイコンに表示されるアニメーションを設定します"
+        android:title="アニメーション" />
+
+</PreferenceScreen>

@@ -209,6 +209,9 @@ public class MainActivity extends FragmentActivity {
 		case MENU_SETTING:
 			toast = Toast.makeText(this, "設定が選択されました", Toast.LENGTH_LONG);
 			toast.show();
+			myIntent = new Intent(getApplicationContext(), MyPreference.class);
+			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(myIntent);
 			break;
 		case MENU_USAGE:
 			toast = Toast.makeText(this, "使い方が選択されました", Toast.LENGTH_LONG);

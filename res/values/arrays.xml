@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="disp_interval_val">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>90</item>
+        <item>2H</item>
+        <item>3H</item>
+        <item>4H</item>
+        <item>5H</item>
+        <item>6H</item>
+        <item>7H</item>
+        <item>8H</item>
+    </string-array>
+    <string-array name="disp_interval_key">
+        <item>15分</item>
+        <item>30分</item>
+        <item>1時間</item>
+        <item>1時間30分</item>
+        <item>2時間</item>
+        <item>3時間</item>
+        <item>4時間</item>
+        <item>5時間</item>
+        <item>6時間</item>
+        <item>7時間</item>
+        <item>8時間</item>
+    </string-array>
+    <string-array name="animation_val">
+        <item>flower</item>
+        <item>drop</item>
+    </string-array>
+    <string-array name="animation_key">
+        <item>花</item>
+        <item>水滴</item>
+    </string-array>
+
+</resources>
