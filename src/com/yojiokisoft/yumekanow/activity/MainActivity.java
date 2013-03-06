@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.fragment.CardFragment;
 import com.yojiokisoft.yumekanow.fragment.StateFragment;
-import com.yojiokisoft.yumekanow.fragment.UsageFragment;
+import com.yojiokisoft.yumekanow.fragment.SleepFragment;
 import com.yojiokisoft.yumekanow.model.DummyGenerator;
 
 public class MainActivity extends FragmentActivity {
@@ -131,7 +131,7 @@ public class MainActivity extends FragmentActivity {
 				stateFragment.setArguments(args);
 				return stateFragment;
 			} else {
-				return new UsageFragment();
+				return new SleepFragment();
 			}
 		}
 
