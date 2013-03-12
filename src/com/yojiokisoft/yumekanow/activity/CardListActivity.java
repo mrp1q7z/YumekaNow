@@ -3,10 +3,13 @@ package com.yojiokisoft.yumekanow.activity;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -27,6 +30,17 @@ public class CardListActivity extends Activity {
 		ArrayList<Item> list = (ArrayList<Item>) DummyGenerator.getItemAlphabetList();
 		adapter = new MyListArrayAdapter(this, list);
 		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				ListView listView = (ListView) parent;
+				Intent myIntent = new Intent(getApplicationContext(), CardPreviewActivity.class);
+				Item item = (Item) listView.getItemAtPosition(position);
+				myIntent.putExtra("Item", item);
+				myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(myIntent);
+			}
+		});
 	}
 
 	@Override

@@ -3,16 +3,20 @@ package com.yojiokisoft.yumekanow.activity;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
@@ -27,6 +31,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	private BaseAdapter mAdapter;
 	private ImageSwitcher mImageSwitcher;
 	private Gallery mGallery;
+	private int mCurImgPos;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +48,8 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		mGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				mImageSwitcher.setImageResource((int)mGallery.getItemIdAtPosition(position));
+				mImageSwitcher.setImageResource((int) mGallery.getItemIdAtPosition(position));
+				mCurImgPos = position;
 			}
 
 			@Override
@@ -53,6 +59,21 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		ArrayList<Item> list = (ArrayList<Item>) DummyGenerator.getItemAlphabetList();
 		mAdapter = new MyListArrayAdapter(this, list);
 		mGallery.setAdapter(mAdapter);
+
+		Button previewButton = (Button) findViewById(R.id.previewButton);
+		previewButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				EditText editText = (EditText) findViewById(R.id.affirmationText);
+				Intent myIntent = new Intent(getApplicationContext(), CardPreviewActivity.class);
+				Item item = new Item();
+				item.setLabel(editText.getText().toString());
+				item.setDrawable((int) mGallery.getItemIdAtPosition(mCurImgPos));
+				myIntent.putExtra("Item", item);
+				myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(myIntent);
+			}
+		});
 	}
 
 	@Override
@@ -106,15 +127,15 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 				layout.setOrientation(LinearLayout.VERTICAL);
 				layout.setGravity(Gravity.CENTER);
 				convertView = layout;
-				
+
 				ImageView view = new ImageView(mActivity);
 				view.setTag("image");
 				view.setLayoutParams(new LinearLayout.LayoutParams(240, 120));
 				layout.addView(view);
 			}
-			
+
 			Item item = mItems.get(position);
-			ImageView imageView = (ImageView)convertView.findViewWithTag("image");
+			ImageView imageView = (ImageView) convertView.findViewWithTag("image");
 			imageView.setImageResource(item.getDrawable());
 
 			return convertView;
