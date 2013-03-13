@@ -34,7 +34,7 @@ public class StateFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		view = inflater.inflate(R.layout.state_fragment, container, false);
+		view = inflater.inflate(R.layout.fragment_state, container, false);
 
 		MyProgress progress = (MyProgress) view.findViewById(R.id.totalProgress);
 		progress.setShowPsersent(true);

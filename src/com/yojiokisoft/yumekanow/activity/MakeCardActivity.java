@@ -36,7 +36,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_makecard);
+		setContentView(R.layout.activity_make_card);
 
 		mImageSwitcher = (ImageSwitcher) findViewById(R.id.backImgSwitcher);
 		mImageSwitcher.setFactory(this);

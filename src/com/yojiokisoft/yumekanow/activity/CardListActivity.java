@@ -25,7 +25,7 @@ public class CardListActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_cardlist);
+		setContentView(R.layout.activity_card_list);
 		ListView listView = (ListView) findViewById(R.id.cardList);
 		ArrayList<Item> list = (ArrayList<Item>) DummyGenerator.getItemAlphabetList();
 		adapter = new MyListArrayAdapter(this, list);
