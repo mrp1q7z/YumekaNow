@@ -6,15 +6,14 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.yojiokisoft.yumekanow.R;
@@ -22,7 +21,7 @@ import com.yojiokisoft.yumekanow.model.DayCnt;
 import com.yojiokisoft.yumekanow.widget.MyProgress;
 
 public class StateFragment extends Fragment {
-//	private ArrayAdapter<DayCnt> adapter;
+	//	private ArrayAdapter<DayCnt> adapter;
 	private BaseAdapter adapter;
 	private View view;
 
@@ -39,6 +38,9 @@ public class StateFragment extends Fragment {
 		MyProgress progress = (MyProgress) view.findViewById(R.id.totalProgress);
 		progress.setShowPsersent(true);
 		progress.setDescription("345/999");
+		ProgressBar p = progress.getProgressBar();
+		p.setMax(100);
+		p.setProgress(37);
 
 		return view;
 	}
@@ -54,78 +56,56 @@ public class StateFragment extends Fragment {
 		ListView listView = (ListView) view.findViewById(R.id.dayToDayList);
 		listView.setAdapter(adapter);
 	}
-	
+
 	/**
 	 * アダプタークラス
 	 */
 	private class MyListArrayAdapter extends BaseAdapter {
 		private Activity mActivity;
 		private ArrayList<DayCnt> mItems;
-		
+
 		MyListArrayAdapter(Activity activity, ArrayList<DayCnt> items) {
 			super();
 			mActivity = activity;
 			mItems = items;
 		}
-		
+
 		@Override
 		public int getCount() {
 			return mItems.size();
 		}
-		
+
 		@Override
 		public Object getItem(int pos) {
 			return mItems.get(pos);
 		}
-		
+
 		@Override
 		public long getItemId(int pos) {
 			return pos;
 		}
-		
+
 		@Override
 		public View getView(int pos, View convertView, ViewGroup parent) {
 			DayCnt item = mItems.get(pos);
 			// レイアウトの生成
 			if (convertView == null) {
-				LinearLayout layout = new LinearLayout(mActivity);
-				layout.setPadding(10, 10, 10, 10);
-				convertView = layout;
-				
-				// ｎ日目
-				TextView nday = new TextView(mActivity);
-				nday.setTag("nday");
-				nday.setTextColor(Color.rgb(0, 255, 128));
-				nday.setPadding(0, 0, 10, 0);
-				layout.addView(nday);
-				
-				// 日付
-				TextView date = new TextView(mActivity);
-				date.setTag("date");
-				date.setTextColor(Color.rgb(0, 128, 255));
-				date.setPadding(0, 0, 10, 0);
-				layout.addView(date);
-				
-				// OKカウント
-				TextView cnt = new TextView(mActivity);
-				cnt.setTag("cnt");
-				cnt.setTextColor(Color.rgb(255, 128, 128));
-				cnt.setPadding(0, 0, 10, 0);
-				layout.addView(cnt);
+				convertView = mActivity.getLayoutInflater().inflate(R.layout.row_state_list, null);
 			}
 			// 値の設定
 			String s;
-			TextView nday = (TextView)convertView.findViewWithTag("nday");
+			TextView nday = (TextView) convertView.findViewById(R.id.nday);
 			s = String.format("%02d", item.getDay()) + "日目";
 			nday.setText(s);
-			TextView date = (TextView)convertView.findViewWithTag("date");
-			DateFormat format = new SimpleDateFormat("yyyy-MM-dd'('E')'", Locale.JAPAN);
+			TextView date = (TextView) convertView.findViewById(R.id.date);
+			DateFormat format = new SimpleDateFormat("yyyy-MM-dd' ('E')'", Locale.JAPAN);
 			s = format.format(item.getDate());
 			date.setText(s);
-			TextView myCnt = (TextView)convertView.findViewWithTag("cnt");
+			TextView myCnt = (TextView) convertView.findViewById(R.id.cnt);
 			s = String.format("%2d", item.getDay()) + "回";
 			myCnt.setText(s);
-			
+			// TODO: ここでパーセンテージを表示（１０％ごとに）
+
 			return convertView;
 		}
 	}

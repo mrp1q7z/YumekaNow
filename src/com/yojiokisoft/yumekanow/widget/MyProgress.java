@@ -15,17 +15,17 @@ import com.yojiokisoft.yumekanow.R;
 public class MyProgress extends LinearLayout {
 
 	// パーセントテキスト
-	private TextView persentText = null;
+	private TextView mPersentText = null;
 	// プログレスバー部分のコンテナ
-	private LinearLayout progressContainer = null;
+	private LinearLayout mProgressContainer = null;
 	// スタート画像
-	private ImageView startImageView = null;
+	private ImageView mStartImageView = null;
 	// プログレスバー
-	private ProgressBar progressBar = null;
+	private ProgressBar mProgressBar = null;
 	// ゴール画像
-	private ImageView goalImageView = null;
+	private ImageView mGoalImageView = null;
 	// 注釈テキスト
-	private TextView descriptionText = null;
+	private TextView mDescriptionText = null;
 
 	public MyProgress(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -42,60 +42,76 @@ public class MyProgress extends LinearLayout {
 		String description = attrsArray.getString(R.styleable.MyProgress_description);
 
 		// レイアウトを生成
-		setOrientation(VERTICAL);
-		// パーセント
-		persentText = new TextView(context, attrs);
-		persentText.setGravity(Gravity.CENTER);
-		setShowPsersent(showPersent);
-		persentText.setText("37%");
-		addView(persentText);
-		// プログレスバーのコンテナ
-		progressContainer = new LinearLayout(context, attrs);
-		progressContainer.setOrientation(HORIZONTAL);
+		setOrientation(HORIZONTAL);
 		// スタート画像
-		startImageView = new ImageView(context, attrs);
-		startImageView.setImageDrawable(startImage);
-		progressContainer.addView(startImageView);
+		mStartImageView = new ImageView(context, attrs);
+		mStartImageView.setImageDrawable(startImage);
+		addView(mStartImageView);
+		LayoutParams params = (LayoutParams) mStartImageView.getLayoutParams();
+		mStartImageView.setLayoutParams(params);
+		params.setMargins(5, 5, 5, 5);
+		// プログレスバーのコンテナ
+		mProgressContainer = new LinearLayout(context, attrs);
+		mProgressContainer.setOrientation(VERTICAL);
+		mProgressContainer
+				.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1.0f));
+		// パーセント
+		mPersentText = new TextView(context, attrs);
+		mPersentText.setGravity(Gravity.CENTER);
+		mPersentText.setTextColor(0xff6790a4);
+		setShowPsersent(showPersent);
+		mPersentText.setText("37%");
+		mProgressContainer.addView(mPersentText);
 		// プログレスバー
-		progressBar = new ProgressBar(context, attrs, android.R.attr.progressBarStyleHorizontal);
-		progressBar.setLayoutParams(new LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.0f));
-		progressContainer.addView(progressBar);
-		// ゴール画像
-		goalImageView = new ImageView(context, attrs);
-		goalImageView.setImageDrawable(goalImage);
-		progressContainer.addView(goalImageView);
-		addView(progressContainer);
+		mProgressBar = new ProgressBar(context, attrs, android.R.attr.progressBarStyleHorizontal);
+		mProgressContainer.addView(mProgressBar);
+		params = (LayoutParams) mProgressBar.getLayoutParams();
+		params.setMargins(5, 0, 5, 0);
+		mProgressBar.setLayoutParams(params);
 		// 注釈
-		descriptionText = new TextView(context, attrs);
-		descriptionText.setGravity(Gravity.CENTER);
+		mDescriptionText = new TextView(context, attrs);
+		mDescriptionText.setGravity(Gravity.CENTER);
+		mDescriptionText.setTextColor(0xff6790a4);
 		setDescription(description);
-		addView(descriptionText);
+		mProgressContainer.addView(mDescriptionText);
+		addView(mProgressContainer);
+		// ゴール画像
+		mGoalImageView = new ImageView(context, attrs);
+		mGoalImageView.setImageDrawable(goalImage);
+		addView(mGoalImageView);
+		params = (LayoutParams) mGoalImageView.getLayoutParams();
+		mStartImageView.setLayoutParams(params);
+		params.setMargins(5, 5, 5, 5);
 	}
 
 	public void setShowPsersent(boolean showFlag) {
 		if (showFlag) {
-			persentText.setVisibility(VISIBLE);
+			mPersentText.setVisibility(VISIBLE);
 		} else {
-			persentText.setVisibility(GONE);
+			mPersentText.setVisibility(GONE);
 		}
 	}
 
 	public void setDescription(String description) {
 		if (description != null && description.length() > 0) {
-			descriptionText.setText(description);
-			descriptionText.setVisibility(VISIBLE);
+			mDescriptionText.setText(description);
+			mDescriptionText.setVisibility(VISIBLE);
 		} else {
-			descriptionText.setVisibility(GONE);
+			mDescriptionText.setVisibility(GONE);
 		}
 	}
-	
+
 	public void drawableDestroy() {
-		Drawable drawable = startImageView.getDrawable();
+		Drawable drawable = mStartImageView.getDrawable();
 		drawable = null;
-		startImageView.setImageDrawable(null);
-		
-		drawable = goalImageView.getDrawable();
+		mStartImageView.setImageDrawable(null);
+
+		drawable = mGoalImageView.getDrawable();
 		drawable = null;
-		goalImageView.setImageDrawable(null);
+		mGoalImageView.setImageDrawable(null);
+	}
+
+	public ProgressBar getProgressBar() {
+		return mProgressBar;
 	}
 }

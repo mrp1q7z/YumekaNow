@@ -3,20 +3,24 @@
     xmlns:mycustom="http://schemas.android.com/apk/res/com.yojiokisoft.yumekanow"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="#212121"
     android:orientation="vertical" >
 
     <com.yojiokisoft.yumekanow.widget.MyProgress
         android:id="@+id/totalProgress"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        mycustom:start_image="@drawable/start_flag"
-        mycustom:goal_image="@drawable/goal_flag" >
+        android:layout_margin="5dp"
+        mycustom:goal_image="@drawable/goal_flag"
+        mycustom:start_image="@drawable/start_flag" >
     </com.yojiokisoft.yumekanow.widget.MyProgress>
 
     <ListView
         android:id="@+id/dayToDayList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:background="#212121"
+        android:cacheColorHint="#212121" >
     </ListView>
 
 </LinearLayout>

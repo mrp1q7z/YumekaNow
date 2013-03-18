@@ -1,81 +1,298 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".MakeCardActivity" >
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true" >
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="背景画像" />
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/addBackImgButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="追加" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
-    </LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_info_details" />
 
-    <Gallery
-        android:id="@+id/backImgGallery"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" >
-    </Gallery>
-    
-    <ImageSwitcher
-        android:id="@+id/backImgSwitcher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" >
-    </ImageSwitcher>
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="背景画像" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="アファーメーションの言葉" />
+                <Button
+                    android:id="@+id/addBackImgButton"
+                    android:layout_width="100sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5sp"
+                    android:text="追加" />
+            </LinearLayout>
 
-    <EditText
-        android:id="@+id/affirmationText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:layout_weight="1" >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/waku"
+                android:orientation="vertical" >
 
-        <requestFocus />
-    </EditText>
+                <Gallery
+                    android:id="@+id/backImgGallery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" >
+                </Gallery>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+                <ImageSwitcher
+                    android:id="@+id/backImgSwitcher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" >
+                </ImageSwitcher>
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/previewButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="プレビュー" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" >
 
-        <Button
-            android:id="@+id/okButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="OK" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_info_details" />
 
-        <Button
-            android:id="@+id/cancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cancel" />
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="アファーメーションの言葉" />
+            </LinearLayout>
 
-    </LinearLayout>
-    
-</LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/waku"
+                android:orientation="vertical" >
+
+                <EditText
+                    android:id="@+id/affirmationText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:maxLines="5"
+                    android:minLines="5" >
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_info_details" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="文字の色" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/waku"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dip"
+                    android:text="文字の色はプレビュー画面で文字をタップすることによっても変更できます" />
+
+                <TextView
+                    android:id="@+id/textColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#33ee88"
+                    android:textColor="#000000"
+                    android:gravity="center"
+                    android:padding="5dip"
+                    android:text="whitesmoke" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_info_details" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="文字の影" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/waku"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dip"
+                    android:text="文字の影はプレビュー画面で文字をタップすることによっても変更できます" />
+
+                <TextView
+                    android:id="@+id/shadowColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ff00ff"
+                    android:gravity="center"
+                    android:padding="5dip"
+                    android:text="Black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_info_details" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="文字の位置" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/waku"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dip"
+                    android:text="文字の位置はプレビュー画面で文字を長押してドラッグすることによっても変更できます" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="5sp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5sp"
+                        android:text="上マージン" />
+
+                    <Button
+                        android:id="@+id/marginTopDownButton"
+                        android:layout_width="35sp"
+                        android:layout_height="wrap_content"
+                        android:text="◀" />
+
+                    <TextView
+                        android:id="@+id/marginTop"
+                        android:layout_width="30sp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="10" />
+
+                    <Button
+                        android:id="@+id/marginTopUpButton"
+                        android:layout_width="35sp"
+                        android:layout_height="wrap_content"
+                        android:text="▶" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="5sp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5sp"
+                        android:text="左マージン" />
+
+                    <Button
+                        android:id="@+id/marginLeftDownButton"
+                        android:layout_width="35sp"
+                        android:layout_height="wrap_content"
+                        android:text="◀" />
+
+                    <TextView
+                        android:id="@+id/marginLeft"
+                        android:layout_width="30sp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="5" />
+
+                    <Button
+                        android:id="@+id/marginLeftUpButton"
+                        android:layout_width="35sp"
+                        android:layout_height="wrap_content"
+                        android:text="▶" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp" >
+
+                <Button
+                    android:id="@+id/previewButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="プレビュー" />
+
+                <Button
+                    android:id="@+id/okButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="OK" />
+
+                <Button
+                    android:id="@+id/cancelButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cancel" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

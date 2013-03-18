@@ -24,8 +24,8 @@ import android.widget.Toast;
 
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.fragment.CardFragment;
-import com.yojiokisoft.yumekanow.fragment.StateFragment;
 import com.yojiokisoft.yumekanow.fragment.SleepFragment;
+import com.yojiokisoft.yumekanow.fragment.StateFragment;
 import com.yojiokisoft.yumekanow.model.DummyGenerator;
 
 public class MainActivity extends FragmentActivity {
@@ -59,7 +59,7 @@ public class MainActivity extends FragmentActivity {
 		int tabWidth = metrics.widthPixels / 3;
 		int tabHeight = metrics.widthPixels / 7;
 
-		String tabTitle[] = { "カード", "情報", "使い方" };
+		String tabTitle[] = { "カード", "情報", "スリープ" };
 		for (int i = 0; i < 3; i++) {
 			TabSpec spec = tabHost.newTabSpec("tab" + i);
 			spec.setIndicator(getTabView(tabWidth, tabHeight, tabTitle[i]));
