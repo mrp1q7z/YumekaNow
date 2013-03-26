@@ -3,6 +3,7 @@ package com.yojiokisoft.yumekanow.activity;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -21,9 +22,11 @@ import android.widget.Gallery;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.ViewSwitcher.ViewFactory;
 
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.dialog.ColorPickerDialog;
 import com.yojiokisoft.yumekanow.model.DummyGenerator;
 import com.yojiokisoft.yumekanow.model.Item;
 
@@ -72,6 +75,15 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 				myIntent.putExtra("Item", item);
 				myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(myIntent);
+			}
+		});
+
+		TextView textColor = (TextView) findViewById(R.id.textColor);
+		textColor.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Dialog dialog = new ColorPickerDialog(MakeCardActivity.this);
+				dialog.show();
 			}
 		});
 	}

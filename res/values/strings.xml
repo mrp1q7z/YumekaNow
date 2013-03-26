@@ -12,4 +12,6 @@
     <string name="title_activity_pager">PagerActivity</string>
     <string name="title_activity_tab">TabActivity</string>
 
+    <integer name="colorGridColumnWidth">32</integer>
+
 </resources>
