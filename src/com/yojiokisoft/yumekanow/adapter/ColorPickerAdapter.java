@@ -71,8 +71,8 @@ public class ColorPickerAdapter extends BaseAdapter {
 		return colorList.size();
 	}
 
-	public Object getItem(int position) {
-		return null;
+	public Integer getItem(int position) {
+		return colorList.get(position);
 	}
 
 	public long getItemId(int position) {

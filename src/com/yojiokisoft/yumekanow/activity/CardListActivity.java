@@ -37,6 +37,7 @@ public class CardListActivity extends Activity {
 				Intent myIntent = new Intent(getApplicationContext(), CardPreviewActivity.class);
 				Item item = (Item) listView.getItemAtPosition(position);
 				myIntent.putExtra("Item", item);
+				myIntent.putExtra("Position", position);
 				myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(myIntent);
 			}

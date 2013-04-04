@@ -27,6 +27,7 @@ import android.widget.ViewSwitcher.ViewFactory;
 
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.dialog.ColorPickerDialog;
+import com.yojiokisoft.yumekanow.model.CardDetailDto;
 import com.yojiokisoft.yumekanow.model.DummyGenerator;
 import com.yojiokisoft.yumekanow.model.Item;
 
@@ -35,6 +36,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	private ImageSwitcher mImageSwitcher;
 	private Gallery mGallery;
 	private int mCurImgPos;
+	private EditText mAffirmationText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,8 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		mImageSwitcher.setImageResource(R.drawable.image_1);
 
 		mGallery = (Gallery) findViewById(R.id.backImgGallery);
+		mAffirmationText = (EditText) findViewById(R.id.affirmationText);
+
 		mGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -64,19 +68,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		mGallery.setAdapter(mAdapter);
 
 		Button previewButton = (Button) findViewById(R.id.previewButton);
-		previewButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				EditText editText = (EditText) findViewById(R.id.affirmationText);
-				Intent myIntent = new Intent(getApplicationContext(), CardPreviewActivity.class);
-				Item item = new Item();
-				item.setLabel(editText.getText().toString());
-				item.setDrawable((int) mGallery.getItemIdAtPosition(mCurImgPos));
-				myIntent.putExtra("Item", item);
-				myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(myIntent);
-			}
-		});
+		previewButton.setOnClickListener(mPreviewClickListener);
 
 		TextView textColor = (TextView) findViewById(R.id.textColor);
 		textColor.setOnClickListener(new OnClickListener() {
@@ -86,6 +78,18 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 				dialog.show();
 			}
 		});
+
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			CardDetailDto dto = (CardDetailDto) extras.getSerializable("dto");
+			mAffirmationText.setText(dto.affirmationText);
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).getDrawable() == dto.backImageResId) {
+					mGallery.setSelection(i, false);
+					break;
+				}
+			}
+		}
 	}
 
 	@Override
@@ -102,6 +106,23 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		imageView.setLayoutParams(new ImageSwitcher.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 		return imageView;
 	}
+
+	/**
+	 * プレビューボタンのクリックリスナー
+	 */
+	private final OnClickListener mPreviewClickListener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Intent myIntent = new Intent(getApplicationContext(), CardPreviewActivity.class);
+			Item item = new Item();
+			item.setLabel(mAffirmationText.getText().toString());
+			item.setDrawable((int) mGallery.getItemIdAtPosition(mCurImgPos));
+			myIntent.putExtra("Item", item);
+			myIntent.putExtra("Position", -1);
+			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(myIntent);
+		}
+	};
 
 	/**
 	 * アダプタークラス

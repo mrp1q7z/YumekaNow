@@ -95,13 +95,13 @@ containing a value of this type.
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f0a0020;
-        public static final int addBackImgButton=0x7f0a0006;
+        public static final int addBackImgButton=0x7f0a0008;
         public static final int affirmationBack=0x7f0a0019;
         public static final int affirmationText=0x7f0a0002;
         public static final int backImage=0x7f0a0001;
-        public static final int backImgGallery=0x7f0a0007;
-        public static final int backImgSwitcher=0x7f0a0008;
-        public static final int cancelButton=0x7f0a0014;
+        public static final int backImgGallery=0x7f0a0009;
+        public static final int backImgSwitcher=0x7f0a000a;
+        public static final int cancelButton=0x7f0a0004;
         public static final int cardList=0x7f0a0000;
         public static final int cnt=0x7f0a0025;
         public static final int date=0x7f0a0024;
@@ -110,23 +110,23 @@ containing a value of this type.
         public static final int icon_id=0x7f0a0016;
         public static final int item_row_img=0x7f0a0021;
         public static final int item_row_txt=0x7f0a0022;
-        public static final int lyt_main=0x7f0a0003;
-        public static final int marginLeft=0x7f0a0010;
-        public static final int marginLeftDownButton=0x7f0a000f;
-        public static final int marginLeftUpButton=0x7f0a0011;
-        public static final int marginTop=0x7f0a000d;
-        public static final int marginTopDownButton=0x7f0a000c;
-        public static final int marginTopUpButton=0x7f0a000e;
+        public static final int lyt_main=0x7f0a0005;
+        public static final int marginLeft=0x7f0a0012;
+        public static final int marginLeftDownButton=0x7f0a0011;
+        public static final int marginLeftUpButton=0x7f0a0013;
+        public static final int marginTop=0x7f0a000f;
+        public static final int marginTopDownButton=0x7f0a000e;
+        public static final int marginTopUpButton=0x7f0a0010;
         public static final int menu_settings=0x7f0a0026;
         public static final int nday=0x7f0a0023;
-        public static final int okButton=0x7f0a0013;
-        public static final int pager=0x7f0a0004;
-        public static final int previewButton=0x7f0a0012;
+        public static final int okButton=0x7f0a0003;
+        public static final int pager=0x7f0a0006;
+        public static final int previewButton=0x7f0a0014;
         public static final int rtime=0x7f0a001c;
-        public static final int shadowColor=0x7f0a000b;
-        public static final int textColor=0x7f0a000a;
-        public static final int textView1=0x7f0a0005;
-        public static final int textView2=0x7f0a0009;
+        public static final int shadowColor=0x7f0a000d;
+        public static final int textColor=0x7f0a000c;
+        public static final int textView1=0x7f0a0007;
+        public static final int textView2=0x7f0a000b;
         public static final int timeKind=0x7f0a001a;
         public static final int time_text_id=0x7f0a0017;
         public static final int totalProgress=0x7f0a001e;
@@ -146,11 +146,12 @@ containing a value of this type.
         public static final int activity_usage=0x7f030005;
         public static final int activity_widget=0x7f030006;
         public static final int color_picker=0x7f030007;
-        public static final int fragment_card=0x7f030008;
-        public static final int fragment_sleep=0x7f030009;
-        public static final int fragment_state=0x7f03000a;
-        public static final int item_row=0x7f03000b;
-        public static final int row_state_list=0x7f03000c;
+        public static final int dialog_set_color=0x7f030008;
+        public static final int fragment_card=0x7f030009;
+        public static final int fragment_sleep=0x7f03000a;
+        public static final int fragment_state=0x7f03000b;
+        public static final int item_row=0x7f03000c;
+        public static final int row_state_list=0x7f03000d;
     }
     public static final class menu {
         public static final int activity_cardlist=0x7f090000;
