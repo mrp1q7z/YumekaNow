@@ -1,12 +1,19 @@
 package com.yojiokisoft.yumekanow.activity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
+import com.yojiokisoft.yumekanow.MyWidgetService;
 import com.yojiokisoft.yumekanow.R;
 
 public class MyPreference extends PreferenceActivity implements OnSharedPreferenceChangeListener {
@@ -93,6 +100,19 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		setSummary(key);
+		if ("DISP_INTERVAL".equals(key)) {
+			Intent intent = new Intent(this, MyWidgetService.class);
+			PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent,
+					PendingIntent.FLAG_UPDATE_CURRENT);
+			AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+			alarmManager.cancel(pendingIntent);
+
+			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+			String dispInterval = sp.getString("DISP_INTERVAL", "60");
+Log.d("taoka", "onSharedPreferrnceChanged:dispInterval=" + dispInterval);
+			long interval = Integer.parseInt(dispInterval) * 60 * 1000;
+			alarmManager.setRepeating(AlarmManager.RTC, interval, interval, pendingIntent);
+		}
 	}
 
 	@Override

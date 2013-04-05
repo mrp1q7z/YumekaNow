@@ -6,13 +6,13 @@
         <item>30</item>
         <item>60</item>
         <item>90</item>
-        <item>2H</item>
-        <item>3H</item>
-        <item>4H</item>
-        <item>5H</item>
-        <item>6H</item>
-        <item>7H</item>
-        <item>8H</item>
+        <item>120</item>
+        <item>180</item>
+        <item>240</item>
+        <item>300</item>
+        <item>360</item>
+        <item>420</item>
+        <item>480</item>
     </string-array>
     <string-array name="disp_interval_key">
         <item>15分</item>
