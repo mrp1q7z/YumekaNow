@@ -4,7 +4,13 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -28,13 +34,15 @@ import com.yojiokisoft.yumekanow.fragment.SleepFragment;
 import com.yojiokisoft.yumekanow.fragment.StateFragment;
 import com.yojiokisoft.yumekanow.model.DummyGenerator;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements CardFragment.OnCardClickListener {
 
 	// メニューアイテム
 	private static final int MENU_CREATE_CARD = 0; // カードを作る
 	private static final int MENU_SELECT_CARD = 1; // カードを選ぶ
 	private static final int MENU_SETTING = 2; // 設定
 	private static final int MENU_USAGE = 3; // 使い方
+
+	Ringtone mRingtone;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +72,20 @@ public class MainActivity extends FragmentActivity {
 			TabSpec spec = tabHost.newTabSpec("tab" + i);
 			spec.setIndicator(getTabView(tabWidth, tabHeight, tabTitle[i]));
 			adapter.addTab(spec, "tab" + i);
+		}
+
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean isVibrator = sp.getBoolean("Vibrator", false);
+		if (isVibrator) {
+			Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+			long[] pattern = { 0, 500, 250, 500, 250, 500 }; // OFF/ON/OFF/ON...
+			vibrator.vibrate(pattern, -1);
+		}
+
+		String url = sp.getString("Alarm", "");
+		if (url.length() > 0) {
+			mRingtone = RingtoneManager.getRingtone(this, Uri.parse(url));
+			mRingtone.play();
 		}
 	}
 
@@ -222,5 +244,10 @@ public class MainActivity extends FragmentActivity {
 			break;
 		}
 		return true;
+	}
+
+	@Override
+	public void onCardClick() {
+		mRingtone.stop();
 	}
 }

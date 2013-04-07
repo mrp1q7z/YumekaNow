@@ -1,5 +1,6 @@
 package com.yojiokisoft.yumekanow.fragment;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,12 @@ import com.yojiokisoft.yumekanow.R;
 
 public class CardFragment extends Fragment {
 	private View view;
+	private OnCardClickListener mListener;
+
+	// Container Activity must implement this interface  
+	public interface OnCardClickListener {
+		public void onCardClick();
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -38,7 +45,25 @@ public class CardFragment extends Fragment {
 		text.setShadowLayer(1.5f, 1.0f, 1.0f, Color.WHITE);
 		text.setText("すごく調子がいい\n頭も冴えて\nエネルギーで満ち溢れています");
 
+		text.setOnClickListener(mAffirmationTextClick);
+
 		return view;
 	}
 
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			mListener = (OnCardClickListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString() + " must implement OnCardClickListener");
+		}
+	}
+
+	private final View.OnClickListener mAffirmationTextClick = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			mListener.onCardClick();
+		}
+	};
 }
