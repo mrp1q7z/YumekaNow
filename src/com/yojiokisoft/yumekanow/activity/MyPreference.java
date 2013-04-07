@@ -6,17 +6,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.preference.RingtonePreference;
 import android.util.Log;
 
 import com.yojiokisoft.yumekanow.MyWidgetService;
 import com.yojiokisoft.yumekanow.R;
 
-public class MyPreference extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+public class MyPreference extends PreferenceActivity implements OnSharedPreferenceChangeListener,
+		OnPreferenceChangeListener {
 	private final static String BR = System.getProperty("line.separator");
 	private static String[] mDispIntervalKey;
 	private static String[] mDispIntervalVal;
@@ -70,6 +78,17 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 		return key;
 	}
 
+	private String vibratorVal2Key(boolean isChecked) {
+		String key;
+
+		if (isChecked) {
+			key = "オン";
+		} else {
+			key = "OFF";
+		}
+		return key;
+	}
+
 	private void setSummary(String key) {
 		String summary;
 		if (key == null || "DISP_INTERVAL".equals(key)) {
@@ -96,6 +115,25 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 			summary += BR + "現在値：" + animationVal2Key(prefAnimation.getValue());
 			prefAnimation.setSummary(summary);
 		}
+		if (key == null || "Vibrator".equals(key)) {
+			CheckBoxPreference prefVibrator = (CheckBoxPreference) getPreferenceScreen().findPreference("Vibrator");
+			summary = indexOfBr(prefVibrator.getSummary().toString());
+			summary += BR + "現在値：" + vibratorVal2Key(prefVibrator.isChecked());
+			prefVibrator.setSummary(summary);
+		}
+		if (key == null || "Alarm".equals(key)) {
+			RingtonePreference prefAlarm = (RingtonePreference) getPreferenceScreen().findPreference("Alarm");
+			summary = indexOfBr(prefAlarm.getSummary().toString());
+			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+			String url = sp.getString("Alarm", "");
+			if (url.length() <= 0) {
+				summary += BR + "現在値：サイレント";
+			} else {
+				Ringtone rm = RingtoneManager.getRingtone(this, Uri.parse(url));
+				summary += BR + "現在値：" + rm.getTitle(this);
+			}
+			prefAlarm.setSummary(summary);
+		}
 	}
 
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -109,7 +147,7 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 			String dispInterval = sp.getString("DISP_INTERVAL", "60");
-Log.d("taoka", "onSharedPreferrnceChanged:dispInterval=" + dispInterval);
+			Log.d("taoka", "onSharedPreferrnceChanged:dispInterval=" + dispInterval);
 			long interval = Integer.parseInt(dispInterval) * 60 * 1000;
 			alarmManager.setRepeating(AlarmManager.RTC, interval, interval, pendingIntent);
 		}
@@ -125,5 +163,21 @@ Log.d("taoka", "onSharedPreferrnceChanged:dispInterval=" + dispInterval);
 	protected void onResume() {
 		super.onResume();
 		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+		RingtonePreference pref = (RingtonePreference) findPreference("Alarm");
+		pref.setOnPreferenceChangeListener(this);
+	}
+
+	@Override
+	public boolean onPreferenceChange(Preference preference, Object newValue) {
+		RingtonePreference prefAlarm = (RingtonePreference) preference;
+		Ringtone rm = RingtoneManager.getRingtone(this, Uri.parse((String) newValue));
+		String summary = indexOfBr(prefAlarm.getSummary().toString());
+		if (((String) newValue).length() <= 0) {
+			summary += BR + "現在値：Silent";
+		} else {
+			summary += BR + "現在値：" + rm.getTitle(this);
+		}
+		prefAlarm.setSummary(summary);
+		return true;
 	}
 }

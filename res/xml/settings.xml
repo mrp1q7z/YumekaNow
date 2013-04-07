@@ -25,6 +25,20 @@
         android:summary="ウジェットのアイコンに表示されるアニメーションを設定します"
         android:title="アニメーション" />
 
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="Vibrator"
+        android:summary="アファーメーションカードの起動をバイブレータでお知らせします"
+        android:title="バイブレータ" />
+
+    <RingtonePreference
+        android:key="Alarm"
+        android:ringtoneType="all"
+        android:showDefault="true"
+        android:showSilent="true"
+        android:summary="アファーメーションカードの起動をアラーム音でお知らせします"
+        android:title="アラーム音" />
+
     <PreferenceCategory android:title="このアプリについて" >
         <com.yojiokisoft.yumekanow.dialog.VersionDialogPreference
             android:dialogMessage="Version 0.0.1"
