@@ -208,20 +208,20 @@
                     android:paddingLeft="5sp" >
 
                     <Button
-                        android:id="@+id/marginTopDownButton"
+                        android:id="@+id/textSizeDownButton"
                         android:layout_width="35sp"
                         android:layout_height="wrap_content"
                         android:text="◀" />
 
                     <TextView
-                        android:id="@+id/marginTop"
+                        android:id="@+id/textSize"
                         android:layout_width="30sp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="10" />
 
                     <Button
-                        android:id="@+id/marginTopUpButton"
+                        android:id="@+id/textSizeUpButton"
                         android:layout_width="35sp"
                         android:layout_height="wrap_content"
                         android:text="▶" />
