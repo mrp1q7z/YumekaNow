@@ -46,8 +46,11 @@ public class CardListActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				ListView listView = (ListView) parent;
 				Intent myIntent = new Intent(getApplicationContext(), CardPreviewActivity.class);
-				Item item = (Item) listView.getItemAtPosition(position);
-				myIntent.putExtra("Item", item);
+				CardEntity item = (CardEntity) listView.getItemAtPosition(position);
+				Item itemDummy = new Item();
+				itemDummy.setDrawable(item.backImageResourceId);
+				itemDummy.setLabel(item.affirmationText);
+				myIntent.putExtra("Item", itemDummy);
 				myIntent.putExtra("Position", position);
 				myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(myIntent);
@@ -119,52 +122,5 @@ public class CardListActivity extends Activity {
 				this.label = (TextView) view.findViewById(R.id.item_row_txt);
 			}
 		}
-
-		//		@Override
-		//		public View getView(int pos, View convertView, ViewGroup parent) {
-		//			DayCnt item = mItems.get(pos);
-		//			// レイアウトの生成
-		//			if (convertView == null) {
-		//				LinearLayout layout = new LinearLayout(mActivity);
-		//				layout.setPadding(10, 10, 10, 10);
-		//				convertView = layout;
-		//
-		//				// ｎ日目
-		//				TextView nday = new TextView(mActivity);
-		//				nday.setTag("nday");
-		//				nday.setTextColor(Color.rgb(0, 255, 128));
-		//				nday.setPadding(0, 0, 10, 0);
-		//				layout.addView(nday);
-		//
-		//				// 日付
-		//				TextView date = new TextView(mActivity);
-		//				date.setTag("date");
-		//				date.setTextColor(Color.rgb(0, 128, 255));
-		//				date.setPadding(0, 0, 10, 0);
-		//				layout.addView(date);
-		//
-		//				// OKカウント
-		//				TextView cnt = new TextView(mActivity);
-		//				cnt.setTag("cnt");
-		//				cnt.setTextColor(Color.rgb(255, 128, 128));
-		//				cnt.setPadding(0, 0, 10, 0);
-		//				layout.addView(cnt);
-		//			}
-		//			// 値の設定
-		//			String s;
-		//			TextView nday = (TextView) convertView.findViewWithTag("nday");
-		//			s = String.format("%02d", item.getDay()) + "日目";
-		//			nday.setText(s);
-		//			TextView date = (TextView) convertView.findViewWithTag("date");
-		//			DateFormat format = new SimpleDateFormat("yyyy-MM-dd'('E')'", Locale.JAPAN);
-		//			s = format.format(item.getDate());
-		//			date.setText(s);
-		//			TextView myCnt = (TextView) convertView.findViewWithTag("cnt");
-		//			s = String.format("%2d", item.getDay()) + "回";
-		//			myCnt.setText(s);
-		//
-		//			return convertView;
-		//		}
 	}
-
 }
