@@ -1,6 +1,7 @@
 package com.yojiokisoft.yumekanow.activity;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,8 +16,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.j256.ormlite.dao.Dao;
 import com.yojiokisoft.yumekanow.R;
-import com.yojiokisoft.yumekanow.model.DummyGenerator;
+import com.yojiokisoft.yumekanow.db.DatabaseHelper;
+import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.model.Item;
 
 public class CardListActivity extends Activity {
@@ -27,8 +30,16 @@ public class CardListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_card_list);
 		ListView listView = (ListView) findViewById(R.id.cardList);
-		ArrayList<Item> list = (ArrayList<Item>) DummyGenerator.getItemAlphabetList();
-		adapter = new MyListArrayAdapter(this, list);
+		DatabaseHelper helper = new DatabaseHelper(this);
+		List<CardEntity> cardList = null;
+		try {
+			Dao<CardEntity, Integer> cardDao = helper.getDao(CardEntity.class);
+			cardList = cardDao.queryForAll();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		adapter = new MyListArrayAdapter(this, cardList);
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -56,9 +67,9 @@ public class CardListActivity extends Activity {
 	 */
 	private class MyListArrayAdapter extends BaseAdapter {
 		private Activity mActivity;
-		private ArrayList<Item> mItems;
+		private List<CardEntity> mItems;
 
-		MyListArrayAdapter(Activity activity, ArrayList<Item> items) {
+		MyListArrayAdapter(Activity activity, List<CardEntity> items) {
 			super();
 			mActivity = activity;
 			mItems = items;
@@ -92,9 +103,9 @@ public class CardListActivity extends Activity {
 				wrapper = (ViewWrapper) view.getTag();
 			}
 
-			Item item = mItems.get(position);
-			wrapper.image.setImageResource(item.getDrawable());
-			wrapper.label.setText(item.getLabel());
+			CardEntity item = mItems.get(position);
+			wrapper.image.setImageResource(item.backImageResourceId);
+			wrapper.label.setText(item.affirmationText);
 
 			return view;
 		}
