@@ -1,7 +1,7 @@
 package com.yojiokisoft.yumekanow.activity;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -31,9 +31,10 @@ import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.dialog.ColorPickerDialog;
+import com.yojiokisoft.yumekanow.entity.BackImageEntity;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
+import com.yojiokisoft.yumekanow.model.BackImageDao;
 import com.yojiokisoft.yumekanow.model.CardDetailDto;
-import com.yojiokisoft.yumekanow.model.DummyGenerator;
 import com.yojiokisoft.yumekanow.model.Item;
 
 public class MakeCardActivity extends Activity implements ViewFactory {
@@ -82,7 +83,8 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
-		ArrayList<Item> list = (ArrayList<Item>) DummyGenerator.getItemAlphabetList();
+		BackImageDao backImageDao = new BackImageDao(this.getResources());
+		List<BackImageEntity> list = backImageDao.queryForAll();
 		mAdapter = new MyListArrayAdapter(this, list);
 		mGallery.setAdapter(mAdapter);
 
@@ -123,7 +125,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			CardDetailDto dto = (CardDetailDto) extras.getSerializable("dto");
 			mAffirmationText.setText(dto.affirmationText);
 			for (int i = 0; i < list.size(); i++) {
-				if (list.get(i).getDrawable() == dto.backImageResId) {
+				if (list.get(i).resouceId == dto.backImageResId) {
 					mGallery.setSelection(i, false);
 					break;
 				}
@@ -328,9 +330,9 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	 */
 	private class MyListArrayAdapter extends BaseAdapter {
 		private Activity mActivity;
-		private ArrayList<Item> mItems;
+		private List<BackImageEntity> mItems;
 
-		MyListArrayAdapter(Activity activity, ArrayList<Item> items) {
+		MyListArrayAdapter(Activity activity, List<BackImageEntity> items) {
 			super();
 			mActivity = activity;
 			mItems = items;
@@ -348,7 +350,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 
 		@Override
 		public long getItemId(int pos) {
-			return mItems.get(pos).getDrawable();
+			return mItems.get(pos).resouceId;
 		}
 
 		@Override
@@ -362,13 +364,13 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 
 				ImageView view = new ImageView(mActivity);
 				view.setTag("image");
-				view.setLayoutParams(new LinearLayout.LayoutParams(240, 120));
+				view.setLayoutParams(new LinearLayout.LayoutParams(80, 120));
 				layout.addView(view);
 			}
 
-			Item item = mItems.get(position);
+			BackImageEntity item = mItems.get(position);
 			ImageView imageView = (ImageView) convertView.findViewWithTag("image");
-			imageView.setImageResource(item.getDrawable());
+			imageView.setImageResource(item.resouceId);
 
 			return convertView;
 		}
