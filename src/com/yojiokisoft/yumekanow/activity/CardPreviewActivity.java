@@ -243,6 +243,7 @@ public class CardPreviewActivity extends Activity {
 			dto.backImageResId = item.getDrawable();
 			Intent myIntent = new Intent(getApplicationContext(), MakeCardActivity.class);
 			myIntent.putExtra("dto", dto);
+			myIntent.putExtra("Position", mPosition);
 			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(myIntent);
 		}

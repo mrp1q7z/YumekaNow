@@ -76,7 +76,6 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				mImageSwitcher.setImageResource((int) mGallery.getItemIdAtPosition(position));
-				mCardId = position;
 			}
 
 			@Override
@@ -124,12 +123,19 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		if (extras != null) {
 			CardDetailDto dto = (CardDetailDto) extras.getSerializable("dto");
 			mAffirmationText.setText(dto.affirmationText);
+			int position = -1;
 			for (int i = 0; i < list.size(); i++) {
 				if (list.get(i).resouceId == dto.backImageResId) {
-					mGallery.setSelection(i, false);
+					position = i;
 					break;
 				}
 			}
+			if (position == -1) {
+				mGallery.setSelection(0);
+			} else {
+				mGallery.setSelection(position, false);
+			}
+			mCardId = (Integer) extras.getSerializable("Position");
 		}
 	}
 
@@ -306,7 +312,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 				Dao<CardEntity, Integer> cardDao = mHelper.getDao(CardEntity.class);
 				CardEntity cardEntity = new CardEntity();
 				cardEntity.id = mCardId;
-				cardEntity.backImageResourceId = ((Item) mGallery.getSelectedItem()).getDrawable();
+				cardEntity.backImageResourceId = ((BackImageEntity) mGallery.getSelectedItem()).resouceId;
 				cardEntity.affirmationText = mAffirmationText.getText().toString();
 				cardEntity.textColor = (Integer) mTextColor.getTag();
 				cardEntity.shadowColor = (Integer) mShadowColor.getTag();
