@@ -214,24 +214,11 @@
                         android:layout_marginRight="5sp"
                         android:text="文字サイズ" />
 
-                    <Button
-                        android:id="@+id/textSizeDownButton"
-                        android:layout_width="35sp"
-                        android:layout_height="wrap_content"
-                        android:text="◀" />
-
                     <TextView
                         android:id="@+id/textSize"
                         android:layout_width="30sp"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="10" />
-
-                    <Button
-                        android:id="@+id/textSizeUpButton"
-                        android:layout_width="35sp"
-                        android:layout_height="wrap_content"
-                        android:text="▶" />
+                        android:gravity="center" />
                 </LinearLayout>
 
                 <SeekBar
@@ -285,24 +272,11 @@
                         android:layout_marginRight="5sp"
                         android:text="上マージン" />
 
-                    <Button
-                        android:id="@+id/marginTopDownButton"
-                        android:layout_width="35sp"
-                        android:layout_height="wrap_content"
-                        android:text="◀" />
-
                     <TextView
                         android:id="@+id/marginTop"
                         android:layout_width="30sp"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="10" />
-
-                    <Button
-                        android:id="@+id/marginTopUpButton"
-                        android:layout_width="35sp"
-                        android:layout_height="wrap_content"
-                        android:text="▶" />
+                        android:gravity="center" />
                 </LinearLayout>
 
                 <SeekBar
@@ -326,24 +300,11 @@
                         android:layout_marginRight="5sp"
                         android:text="左マージン" />
 
-                    <Button
-                        android:id="@+id/marginLeftDownButton"
-                        android:layout_width="35sp"
-                        android:layout_height="wrap_content"
-                        android:text="◀" />
-
                     <TextView
                         android:id="@+id/marginLeft"
                         android:layout_width="30sp"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="5" />
-
-                    <Button
-                        android:id="@+id/marginLeftUpButton"
-                        android:layout_width="35sp"
-                        android:layout_height="wrap_content"
-                        android:text="▶" />
+                        android:gravity="center" />
                 </LinearLayout>
 
                 <SeekBar
@@ -353,7 +314,7 @@
                     android:max="300"
                     android:paddingLeft="5sp"
                     android:paddingRight="5sp"
-                    android:progress="50" />
+                    android:progress="10" />
             </LinearLayout>
 
             <LinearLayout

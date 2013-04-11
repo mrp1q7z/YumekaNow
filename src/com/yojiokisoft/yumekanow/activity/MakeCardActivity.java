@@ -38,6 +38,8 @@ import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.model.BackImageDao;
 
 public class MakeCardActivity extends Activity implements ViewFactory {
+	private final int TEXT_SIZE_MIN = 10;
+
 	private BaseAdapter mAdapter;
 	// GUI items
 	private ImageSwitcher mImageSwitcher;
@@ -45,14 +47,8 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	private EditText mAffirmationText;
 	private TextView mTextColor;
 	private TextView mShadowColor;
-	private Button mTextSizeDownButton;
-	private Button mTextSizeUpButton;
 	private TextView mTextSize;
-	private Button mMarginTopDownButton;
-	private Button mMarginTopUpButton;
 	private TextView mMarginTop;
-	private Button mMarginLeftDownButton;
-	private Button mMarginLeftUpButton;
 	private TextView mMarginLeft;
 
 	private final DatabaseHelper mHelper = new DatabaseHelper(this);
@@ -101,24 +97,6 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		mShadowColor.setTag(0x000001);
 		mShadowColor.setOnClickListener(mShadowColorClick);
 
-		mTextSizeDownButton = (Button) findViewById(R.id.textSizeDownButton);
-		mTextSizeDownButton.setOnClickListener(mTextSizeDownOnClick);
-		mTextSizeUpButton = (Button) findViewById(R.id.textSizeUpButton);
-		mTextSizeUpButton.setOnClickListener(mTextSizeUpOnClick);
-		mTextSize = (TextView) findViewById(R.id.textSize);
-
-		mMarginTopDownButton = (Button) findViewById(R.id.marginTopDownButton);
-		mMarginTopDownButton.setOnClickListener(mMarginTopDownOnClick);
-		mMarginTopUpButton = (Button) findViewById(R.id.marginTopUpButton);
-		mMarginTopUpButton.setOnClickListener(mMarginTopUpOnClick);
-		mMarginTop = (TextView) findViewById(R.id.marginTop);
-
-		mMarginLeftDownButton = (Button) findViewById(R.id.marginLeftDownButton);
-		mMarginLeftDownButton.setOnClickListener(mMarginLeftDownOnClick);
-		mMarginLeftUpButton = (Button) findViewById(R.id.marginLeftUpButton);
-		mMarginLeftUpButton.setOnClickListener(mMarginLeftUpOnClick);
-		mMarginLeft = (TextView) findViewById(R.id.marginLeft);
-
 		SeekBar textSizeBar = (SeekBar) findViewById(R.id.textSizeBar);
 		textSizeBar.setOnSeekBarChangeListener(mTextSizeOnSeekBarChange);
 
@@ -127,6 +105,13 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 
 		SeekBar marginLeftBar = (SeekBar) findViewById(R.id.marginLeftBar);
 		marginLeftBar.setOnSeekBarChangeListener(mMarginLeftOnSeekBarChange);
+
+		mTextSize = (TextView) findViewById(R.id.textSize);
+		mTextSize.setText(String.valueOf(textSizeBar.getProgress() + TEXT_SIZE_MIN));
+		mMarginTop = (TextView) findViewById(R.id.marginTop);
+		mMarginTop.setText(String.valueOf(marginTopBar.getProgress()));
+		mMarginLeft = (TextView) findViewById(R.id.marginLeft);
+		mMarginLeft.setText(String.valueOf(marginLeftBar.getProgress()));
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
@@ -137,8 +122,11 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			mShadowColor.setBackgroundColor(card.shadowColor);
 			mShadowColor.setTag(card.shadowColor);
 			mTextSize.setText(String.valueOf(card.textSize));
+			textSizeBar.setProgress(card.textSize - TEXT_SIZE_MIN);
 			mMarginTop.setText(String.valueOf(card.marginTop));
+			marginTopBar.setProgress(card.marginTop);
 			mMarginLeft.setText(String.valueOf(card.marginLeft));
+			marginLeftBar.setProgress(card.marginLeft);
 			int position = -1;
 			for (int i = 0; i < list.size(); i++) {
 				if (list.get(i).resouceId == card.backImageResourceId) {
@@ -211,96 +199,6 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	};
 
 	/**
-	 * 文字サイズ縮小ボタンのクリックリスナー
-	 */
-	private final OnClickListener mTextSizeDownOnClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			int size = Integer.parseInt(mTextSize.getText().toString());
-			size--;
-			if (size < 10) {
-				size = 10;
-			}
-			mTextSize.setText(String.valueOf(size));
-		}
-	};
-
-	/**
-	 * 文字サイズ拡大ボタンのクリックリスナー
-	 */
-	private final OnClickListener mTextSizeUpOnClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			int size = Integer.parseInt(mTextSize.getText().toString());
-			size++;
-			if (size > 50) {
-				size = 50;
-			}
-			mTextSize.setText(String.valueOf(size));
-		}
-	};
-
-	/**
-	 * 上マージン縮小ボタンのクリックリスナー
-	 */
-	private final OnClickListener mMarginTopDownOnClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			int size = Integer.parseInt(mMarginTop.getText().toString());
-			size--;
-			if (size < 10) {
-				size = 10;
-			}
-			mMarginTop.setText(String.valueOf(size));
-		}
-	};
-
-	/**
-	 * 上マージン拡大ボタンのクリックリスナー
-	 */
-	private final OnClickListener mMarginTopUpOnClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			int size = Integer.parseInt(mMarginTop.getText().toString());
-			size++;
-			if (size > 60) {
-				size = 60;
-			}
-			mMarginTop.setText(String.valueOf(size));
-		}
-	};
-
-	/**
-	 * 左マージン縮小ボタンのクリックリスナー
-	 */
-	private final OnClickListener mMarginLeftDownOnClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			int size = Integer.parseInt(mMarginLeft.getText().toString());
-			size--;
-			if (size < 10) {
-				size = 10;
-			}
-			mMarginLeft.setText(String.valueOf(size));
-		}
-	};
-
-	/**
-	 * 左マージン拡大ボタンのクリックリスナー
-	 */
-	private final OnClickListener mMarginLeftUpOnClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			int size = Integer.parseInt(mMarginLeft.getText().toString());
-			size++;
-			if (size > 60) {
-				size = 60;
-			}
-			mMarginLeft.setText(String.valueOf(size));
-		}
-	};
-
-	/**
 	 * プレビューボタンのクリックリスナー
 	 */
 	private final OnClickListener mPreviewClickListener = new OnClickListener() {
@@ -365,7 +263,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 
 		@Override
 		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-			mTextSize.setText(String.valueOf(progress + 10));
+			mTextSize.setText(String.valueOf(progress + TEXT_SIZE_MIN));
 		}
 	};
 
