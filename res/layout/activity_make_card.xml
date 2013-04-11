@@ -208,6 +208,12 @@
                     android:orientation="horizontal"
                     android:paddingLeft="5sp" >
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5sp"
+                        android:text="文字サイズ" />
+
                     <Button
                         android:id="@+id/textSizeDownButton"
                         android:layout_width="35sp"
@@ -227,6 +233,15 @@
                         android:layout_height="wrap_content"
                         android:text="▶" />
                 </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/textSizeBar"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:max="40"
+                    android:paddingLeft="5sp"
+                    android:paddingRight="5sp"
+                    android:progress="10" />
             </LinearLayout>
 
             <LinearLayout
@@ -290,6 +305,15 @@
                         android:text="▶" />
                 </LinearLayout>
 
+                <SeekBar
+                    android:id="@+id/marginTopBar"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:max="500"
+                    android:paddingLeft="5sp"
+                    android:paddingRight="5sp"
+                    android:progress="50" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -321,6 +345,15 @@
                         android:layout_height="wrap_content"
                         android:text="▶" />
                 </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/marginLeftBar"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:max="300"
+                    android:paddingLeft="5sp"
+                    android:paddingRight="5sp"
+                    android:progress="50" />
             </LinearLayout>
 
             <LinearLayout

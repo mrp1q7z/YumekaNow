@@ -23,6 +23,8 @@ import android.widget.Gallery;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.ViewSwitcher.ViewFactory;
 
@@ -117,10 +119,26 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		mMarginLeftUpButton.setOnClickListener(mMarginLeftUpOnClick);
 		mMarginLeft = (TextView) findViewById(R.id.marginLeft);
 
+		SeekBar textSizeBar = (SeekBar) findViewById(R.id.textSizeBar);
+		textSizeBar.setOnSeekBarChangeListener(mTextSizeOnSeekBarChange);
+
+		SeekBar marginTopBar = (SeekBar) findViewById(R.id.marginTopBar);
+		marginTopBar.setOnSeekBarChangeListener(mMarginTopOnSeekBarChange);
+
+		SeekBar marginLeftBar = (SeekBar) findViewById(R.id.marginLeftBar);
+		marginLeftBar.setOnSeekBarChangeListener(mMarginLeftOnSeekBarChange);
+
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			CardEntity card = (CardEntity) extras.getSerializable("Card");
 			mAffirmationText.setText(card.affirmationText);
+			mTextColor.setBackgroundColor(card.textColor);
+			mTextColor.setTag(card.textColor);
+			mShadowColor.setBackgroundColor(card.shadowColor);
+			mShadowColor.setTag(card.shadowColor);
+			mTextSize.setText(String.valueOf(card.textSize));
+			mMarginTop.setText(String.valueOf(card.marginTop));
+			mMarginLeft.setText(String.valueOf(card.marginLeft));
 			int position = -1;
 			for (int i = 0; i < list.size(); i++) {
 				if (list.get(i).resouceId == card.backImageResourceId) {
@@ -331,6 +349,57 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			} finally {
 				mHelper.close();
 			}
+		}
+	};
+
+	private final OnSeekBarChangeListener mTextSizeOnSeekBarChange = new OnSeekBarChangeListener() {
+		@Override
+		public void onStopTrackingTouch(SeekBar seekBar) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void onStartTrackingTouch(SeekBar seekBar) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+			mTextSize.setText(String.valueOf(progress + 10));
+		}
+	};
+
+	private final OnSeekBarChangeListener mMarginTopOnSeekBarChange = new OnSeekBarChangeListener() {
+		@Override
+		public void onStopTrackingTouch(SeekBar seekBar) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void onStartTrackingTouch(SeekBar seekBar) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+			mMarginTop.setText(String.valueOf(progress));
+		}
+	};
+
+	private final OnSeekBarChangeListener mMarginLeftOnSeekBarChange = new OnSeekBarChangeListener() {
+		@Override
+		public void onStopTrackingTouch(SeekBar seekBar) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void onStartTrackingTouch(SeekBar seekBar) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+			mMarginLeft.setText(String.valueOf(progress));
 		}
 	};
 

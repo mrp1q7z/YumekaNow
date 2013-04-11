@@ -23,6 +23,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewConfiguration;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,6 +93,12 @@ public class CardPreviewActivity extends Activity {
 
 		mTextView = (TextView) findViewById(R.id.affirmationText);
 		mTextView.setText(card.affirmationText);
+		mTextView.setTextColor(card.textColor);
+		mTextView.setShadowLayer(1.5f, 1.5f, 1.5f, card.shadowColor);
+		mTextView.setTextSize(card.textSize);
+//		mTextView.setPadding(card.marginLeft, card.marginTop, 0, 0);
+		LinearLayout textContainer = (LinearLayout) findViewById(R.id.textContainer);
+		textContainer.setPadding(card.marginLeft, card.marginTop, 0, 0);
 
 		mImageView = (ImageView) findViewById(R.id.backImage);
 		mImageView.setImageResource(card.backImageResourceId);
