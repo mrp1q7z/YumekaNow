@@ -20,7 +20,6 @@ import com.j256.ormlite.dao.Dao;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
-import com.yojiokisoft.yumekanow.model.Item;
 
 public class CardListActivity extends Activity {
 	private BaseAdapter adapter;
@@ -46,11 +45,8 @@ public class CardListActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				ListView listView = (ListView) parent;
 				Intent myIntent = new Intent(getApplicationContext(), CardPreviewActivity.class);
-				CardEntity item = (CardEntity) listView.getItemAtPosition(position);
-				Item itemDummy = new Item();
-				itemDummy.setDrawable(item.backImageResourceId);
-				itemDummy.setLabel(item.affirmationText);
-				myIntent.putExtra("Item", itemDummy);
+				CardEntity card = (CardEntity) listView.getItemAtPosition(position);
+				myIntent.putExtra("Card", card);
 				myIntent.putExtra("Position", position);
 				myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(myIntent);

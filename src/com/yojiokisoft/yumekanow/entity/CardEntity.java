@@ -1,10 +1,12 @@
 package com.yojiokisoft.yumekanow.entity;
 
+import java.io.Serializable;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName="card")
-public class CardEntity {
+public class CardEntity implements Serializable {
 	@DatabaseField(generatedId = true)
 	public int id; // カードID
 	@DatabaseField

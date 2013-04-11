@@ -34,8 +34,6 @@ import com.yojiokisoft.yumekanow.dialog.ColorPickerDialog;
 import com.yojiokisoft.yumekanow.entity.BackImageEntity;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.model.BackImageDao;
-import com.yojiokisoft.yumekanow.model.CardDetailDto;
-import com.yojiokisoft.yumekanow.model.Item;
 
 public class MakeCardActivity extends Activity implements ViewFactory {
 	private BaseAdapter mAdapter;
@@ -121,11 +119,11 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			CardDetailDto dto = (CardDetailDto) extras.getSerializable("dto");
-			mAffirmationText.setText(dto.affirmationText);
+			CardEntity card = (CardEntity) extras.getSerializable("Card");
+			mAffirmationText.setText(card.affirmationText);
 			int position = -1;
 			for (int i = 0; i < list.size(); i++) {
-				if (list.get(i).resouceId == dto.backImageResId) {
+				if (list.get(i).resouceId == card.backImageResourceId) {
 					position = i;
 					break;
 				}
@@ -135,7 +133,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			} else {
 				mGallery.setSelection(position, false);
 			}
-			mCardId = (Integer) extras.getSerializable("Position");
+			mCardId = card.id;
 		}
 	}
 
@@ -291,10 +289,15 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		@Override
 		public void onClick(View v) {
 			Intent myIntent = new Intent(getApplicationContext(), CardPreviewActivity.class);
-			Item item = new Item();
-			item.setLabel(mAffirmationText.getText().toString());
-			item.setDrawable((int) mGallery.getItemIdAtPosition(mCardId));
-			myIntent.putExtra("Item", item);
+			CardEntity card = new CardEntity();
+			card.affirmationText = mAffirmationText.getText().toString();
+			card.backImageResourceId = ((BackImageEntity) mGallery.getSelectedItem()).resouceId;
+			card.textColor = (Integer) mTextColor.getTag();
+			card.shadowColor = (Integer) mShadowColor.getTag();
+			card.textSize = Integer.parseInt(mTextSize.getText().toString());
+			card.marginTop = Integer.parseInt(mMarginTop.getText().toString());
+			card.marginLeft = Integer.parseInt(mMarginLeft.getText().toString());
+			myIntent.putExtra("Card", card);
 			myIntent.putExtra("Position", -1);
 			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(myIntent);

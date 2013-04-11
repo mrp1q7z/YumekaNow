@@ -1,6 +1,7 @@
 package com.yojiokisoft.yumekanow.activity;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,11 +26,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.j256.ormlite.dao.Dao;
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.dialog.ColorPickerDialog;
-import com.yojiokisoft.yumekanow.model.CardDetailDto;
-import com.yojiokisoft.yumekanow.model.DummyGenerator;
-import com.yojiokisoft.yumekanow.model.Item;
+import com.yojiokisoft.yumekanow.entity.CardEntity;
 
 public class CardPreviewActivity extends Activity {
 	private static final int SWIPE_MIN_DISTANCE = 120;
@@ -42,7 +43,7 @@ public class CardPreviewActivity extends Activity {
 	private TextView mTextView;
 	private ImageView mImageView;
 	private int mPosition;
-	private ArrayList<Item> mList;
+	private List<CardEntity> mList;
 	private LayoutInflater mInflater;
 	private Context mContext;
 
@@ -86,14 +87,14 @@ public class CardPreviewActivity extends Activity {
 		if (extras == null) {
 			return;
 		}
-		Item item = (Item) extras.getSerializable("Item");
+		CardEntity card = (CardEntity) extras.getSerializable("Card");
 		mPosition = (Integer) extras.getSerializable("Position");
 
 		mTextView = (TextView) findViewById(R.id.affirmationText);
-		mTextView.setText(item.getLabel());
+		mTextView.setText(card.affirmationText);
 
 		mImageView = (ImageView) findViewById(R.id.backImage);
-		mImageView.setImageResource(item.getDrawable());
+		mImageView.setImageResource(card.backImageResourceId);
 
 		Button okButton = (Button) findViewById(R.id.okButton);
 		Button cancelButton = (Button) findViewById(R.id.cancelButton);
@@ -107,7 +108,15 @@ public class CardPreviewActivity extends Activity {
 			mDragView = mTextView;
 		} else { // 一覧画面からの遷移
 			mGestureDetector = new GestureDetector(this, mOnGestureListener);
-			mList = (ArrayList<Item>) DummyGenerator.getItemAlphabetList();
+			DatabaseHelper helper = new DatabaseHelper(this);
+			Dao<CardEntity, Integer> cardDao;
+			try {
+				cardDao = helper.getDao(CardEntity.class);
+				mList = cardDao.queryForAll();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			cancelButton.setOnClickListener(mEditButtonOnClick);
 		}
 	}
@@ -190,9 +199,9 @@ public class CardPreviewActivity extends Activity {
 					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
 				if (mPosition < (mList.size() - 1)) {
 					mPosition++;
-					Item item = mList.get(mPosition);
-					mTextView.setText(item.getLabel());
-					mImageView.setImageResource(item.getDrawable());
+					CardEntity card = mList.get(mPosition);
+					mTextView.setText(card.affirmationText);
+					mImageView.setImageResource(card.backImageResourceId);
 				} else {
 					Toast.makeText(CardPreviewActivity.this, "次ページはありません", Toast.LENGTH_SHORT).show();
 					return false;
@@ -201,9 +210,9 @@ public class CardPreviewActivity extends Activity {
 					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
 				if (mPosition > 0) {
 					mPosition--;
-					Item item = mList.get(mPosition);
-					mTextView.setText(item.getLabel());
-					mImageView.setImageResource(item.getDrawable());
+					CardEntity card = mList.get(mPosition);
+					mTextView.setText(card.affirmationText);
+					mImageView.setImageResource(card.backImageResourceId);
 				} else {
 					Toast.makeText(CardPreviewActivity.this, "前ページはありません", Toast.LENGTH_SHORT).show();
 					return false;
@@ -237,12 +246,9 @@ public class CardPreviewActivity extends Activity {
 	private final OnClickListener mEditButtonOnClick = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			CardDetailDto dto = new CardDetailDto();
-			Item item = mList.get(mPosition);
-			dto.affirmationText = item.getLabel();
-			dto.backImageResId = item.getDrawable();
+			CardEntity card = mList.get(mPosition);
 			Intent myIntent = new Intent(getApplicationContext(), MakeCardActivity.class);
-			myIntent.putExtra("dto", dto);
+			myIntent.putExtra("Card", card);
 			myIntent.putExtra("Position", mPosition);
 			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(myIntent);
