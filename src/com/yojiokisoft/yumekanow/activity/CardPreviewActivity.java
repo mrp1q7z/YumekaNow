@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -15,8 +16,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup.MarginLayoutParams;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yojiokisoft.yumekanow.R;
@@ -44,6 +46,7 @@ public class CardPreviewActivity extends Activity {
 	private float[] mTextSize;
 	private int mTextSizeIndex = 0;
 	private long mDownTime;
+	private CardEntity mCard;
 
 	private final Runnable mLongPressRunnable = new Runnable() {
 		@Override
@@ -72,22 +75,37 @@ public class CardPreviewActivity extends Activity {
 		if (extras == null) {
 			return;
 		}
-		CardEntity card = (CardEntity) extras.getSerializable("Card");
+		mCard = (CardEntity) extras.getSerializable("Card");
 
 		mTextView = (TextView) findViewById(R.id.affirmationText);
-		mTextView.setText(card.affirmationText);
-		mTextView.setTextColor(card.textColor);
-		mTextView.setShadowLayer(1.5f, 1.5f, 1.5f, card.shadowColor);
-		mTextView.setTextSize(card.textSize);
-		LinearLayout textContainer = (LinearLayout) findViewById(R.id.textContainer);
-		textContainer.setPadding(card.marginLeft, card.marginTop, 0, 0);
+		mTextView.setText(mCard.affirmationText);
+		mTextView.setTextColor(mCard.textColor);
+		mTextView.setShadowLayer(1.5f, 1.5f, 1.5f, mCard.shadowColor);
+		mTextView.setTextSize(mCard.textSize);
+
+		MarginLayoutParams params = (MarginLayoutParams) mTextView.getLayoutParams();
+		params.leftMargin = mCard.marginLeft;
+		params.topMargin = mCard.marginTop;
+		mTextView.setLayoutParams(params);
+
+		//		mTextView.setPadding(mCard.marginLeft, mCard.marginTop, 0, 0);
+		//		mTextView.layout(mCard.marginLeft, mCard.marginTop, mCard.marginLeft + mTextView.getWidth(), mCard.marginTop
+		//				+ mTextView.getHeight());
+		//		Log.d("taoka", "marginLeft=" + mCard.marginLeft + ",top=" + mCard.marginTop);
+		//		LinearLayout textContainer = (LinearLayout) findViewById(R.id.textContainer);
+		//		textContainer.setPadding(mCard.marginLeft, mCard.marginTop, 0, 0);
 
 		mImageView = (ImageView) findViewById(R.id.backImage);
-		mImageView.setImageResource(card.backImageResourceId);
+		mImageView.setImageResource(mCard.backImageResourceId);
 
 		mScaleGestureDetector = new ScaleGestureDetector(this, mOnScaleGestureListener);
 		mTextView.setOnTouchListener(mAffirmationTextOnTouch);
 		mDragView = mTextView;
+
+		Button okButton = (Button) findViewById(R.id.okButton);
+		okButton.setOnClickListener(mOkButtonClick);
+		Button cancelButton = (Button) findViewById(R.id.cancelButton);
+		cancelButton.setOnClickListener(mCancelButtonClick);
 	}
 
 	@Override
@@ -133,6 +151,12 @@ public class CardPreviewActivity extends Activity {
 				}
 				break;
 			case MotionEvent.ACTION_CANCEL:
+				Log.v("taoka", "ACTION_CANCEL");
+				mIsLongPress = false;
+				mDragging = false;
+				mDragView.setBackgroundColor(0x00000000);
+				mHandler.removeCallbacks(mLongPressRunnable);
+				break;
 			case MotionEvent.ACTION_UP:
 				Log.v("taoka", "ACTION_UP");
 				mIsLongPress = false;
@@ -141,6 +165,9 @@ public class CardPreviewActivity extends Activity {
 				mHandler.removeCallbacks(mLongPressRunnable);
 				if (System.currentTimeMillis() - mDownTime < LONG_PRESS_TIMEOUT) {
 					setTextColor();
+				} else {
+					mCard.marginLeft = mDragView.getLeft();
+					mCard.marginTop = mDragView.getTop();
 				}
 				break;
 			}
@@ -168,6 +195,7 @@ public class CardPreviewActivity extends Activity {
 				}
 			}
 			mDragView.setTextSize(mTextSize[mTextSizeIndex]);
+			mCard.textSize = (int) mTextSize[mTextSizeIndex];
 			return true;
 		}
 	};
@@ -181,7 +209,6 @@ public class CardPreviewActivity extends Activity {
 		final ColorPickerDialog.DialogCallback textColorOnDialgOk = new ColorPickerDialog.DialogCallback() {
 			@Override
 			public void onDialogOk(int color) {
-				Log.v("taoka", "textColor:" + color);
 				textColor.setBackgroundColor(color);
 				textColor.setTag(color);
 			}
@@ -189,7 +216,6 @@ public class CardPreviewActivity extends Activity {
 		final ColorPickerDialog.DialogCallback shadowColorOnDialgOk = new ColorPickerDialog.DialogCallback() {
 			@Override
 			public void onDialogOk(int color) {
-				Log.v("taoka", "shadowColor:" + color);
 				shadowColor.setBackgroundColor(color);
 				shadowColor.setTag(color);
 			}
@@ -221,15 +247,42 @@ public class CardPreviewActivity extends Activity {
 		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				int color;
 				if (textColor.getTag() != null) {
-					mTextView.setTextColor((Integer) textColor.getTag());
+					color = (Integer) textColor.getTag();
+					mTextView.setTextColor(color);
+					mCard.textColor = color;
 				}
 				if (shadowColor.getTag() != null) {
-					mTextView.setShadowLayer(1.5f, 1.5f, 1.5f, (Integer) shadowColor.getTag());
+					color = (Integer) shadowColor.getTag();
+					mTextView.setShadowLayer(1.5f, 1.5f, 1.5f, color);
+					mCard.shadowColor = color;
 				}
 			}
 		});
 		builder.setNegativeButton("Cancel", null);
+		textColor.setBackgroundColor(mCard.textColor);
+		textColor.setTag(mCard.textColor);
+		shadowColor.setBackgroundColor(mCard.shadowColor);
+		shadowColor.setTag(mCard.shadowColor);
 		builder.show();
 	}
+
+	private final OnClickListener mOkButtonClick = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Intent myIntent = new Intent(getApplicationContext(), MakeCardActivity.class);
+			myIntent.putExtra("Card", mCard);
+			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(myIntent);
+			finish();
+		}
+	};
+
+	private final OnClickListener mCancelButtonClick = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			finish();
+		}
+	};
 }
