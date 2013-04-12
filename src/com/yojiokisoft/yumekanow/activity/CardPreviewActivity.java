@@ -1,20 +1,12 @@
 package com.yojiokisoft.yumekanow.activity;
 
-import java.sql.SQLException;
-import java.util.List;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -23,30 +15,20 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewConfiguration;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.j256.ormlite.dao.Dao;
 import com.yojiokisoft.yumekanow.R;
-import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.dialog.ColorPickerDialog;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 
 public class CardPreviewActivity extends Activity {
-	private static final int SWIPE_MIN_DISTANCE = 120;
-	private static final int SWIPE_MAX_OFF_PATH = 250;
-	private static final int SWIPE_THRESHOLD_VELOCITY = 200;
 	private final int LONG_PRESS_TIMEOUT = ViewConfiguration.getLongPressTimeout();
 
-	private GestureDetector mGestureDetector = null;
-	private ScaleGestureDetector mScaleGestureDetector = null;
+	private ScaleGestureDetector mScaleGestureDetector;
 	private TextView mTextView;
 	private ImageView mImageView;
-	private int mPosition;
-	private List<CardEntity> mList;
 	private LayoutInflater mInflater;
 	private Context mContext;
 
@@ -91,57 +73,29 @@ public class CardPreviewActivity extends Activity {
 			return;
 		}
 		CardEntity card = (CardEntity) extras.getSerializable("Card");
-		mPosition = (Integer) extras.getSerializable("Position");
 
 		mTextView = (TextView) findViewById(R.id.affirmationText);
 		mTextView.setText(card.affirmationText);
 		mTextView.setTextColor(card.textColor);
 		mTextView.setShadowLayer(1.5f, 1.5f, 1.5f, card.shadowColor);
 		mTextView.setTextSize(card.textSize);
-//		mTextView.setPadding(card.marginLeft, card.marginTop, 0, 0);
 		LinearLayout textContainer = (LinearLayout) findViewById(R.id.textContainer);
 		textContainer.setPadding(card.marginLeft, card.marginTop, 0, 0);
 
 		mImageView = (ImageView) findViewById(R.id.backImage);
 		mImageView.setImageResource(card.backImageResourceId);
 
-		Button okButton = (Button) findViewById(R.id.okButton);
-		Button cancelButton = (Button) findViewById(R.id.cancelButton);
-
-		// 編集画面からの遷移？
-		if (mPosition == -1) {
-			mScaleGestureDetector = new ScaleGestureDetector(this, mOnScaleGestureListener);
-			okButton.setText("OK");
-			cancelButton.setText("Cancel");
-			mTextView.setOnTouchListener(mAffirmationTextOnTouch);
-			mDragView = mTextView;
-		} else { // 一覧画面からの遷移
-			mGestureDetector = new GestureDetector(this, mOnGestureListener);
-			DatabaseHelper helper = new DatabaseHelper(this);
-			Dao<CardEntity, Integer> cardDao;
-			try {
-				cardDao = helper.getDao(CardEntity.class);
-				mList = cardDao.queryForAll();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			okButton.setOnClickListener(mUseButtonOnClick);
-			cancelButton.setOnClickListener(mEditButtonOnClick);
-		}
+		mScaleGestureDetector = new ScaleGestureDetector(this, mOnScaleGestureListener);
+		mTextView.setOnTouchListener(mAffirmationTextOnTouch);
+		mDragView = mTextView;
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (mScaleGestureDetector != null) {
-			final boolean isInProgres = mScaleGestureDetector.isInProgress();
-			mScaleGestureDetector.onTouchEvent(event);
-			if (isInProgres || mScaleGestureDetector.isInProgress()) {
-				return true;
-			}
-		}
-		if (mGestureDetector != null) {
-			mGestureDetector.onTouchEvent(event);
+		final boolean isInProgres = mScaleGestureDetector.isInProgress();
+		mScaleGestureDetector.onTouchEvent(event);
+		if (isInProgres || mScaleGestureDetector.isInProgress()) {
+			return true;
 		}
 		return super.onTouchEvent(event);
 	}
@@ -198,40 +152,6 @@ public class CardPreviewActivity extends Activity {
 		}
 	};
 
-	private final SimpleOnGestureListener mOnGestureListener = new SimpleOnGestureListener() {
-
-		@Override
-		public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
-			if (Math.abs(event1.getX() - event2.getX()) > SWIPE_MAX_OFF_PATH) {
-				return false;
-			}
-			if (event1.getX() - event2.getX() > SWIPE_MIN_DISTANCE
-					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-				if (mPosition < (mList.size() - 1)) {
-					mPosition++;
-					CardEntity card = mList.get(mPosition);
-					mTextView.setText(card.affirmationText);
-					mImageView.setImageResource(card.backImageResourceId);
-				} else {
-					Toast.makeText(CardPreviewActivity.this, "次ページはありません", Toast.LENGTH_SHORT).show();
-					return false;
-				}
-			} else if (event2.getX() - event1.getX() > SWIPE_MIN_DISTANCE
-					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-				if (mPosition > 0) {
-					mPosition--;
-					CardEntity card = mList.get(mPosition);
-					mTextView.setText(card.affirmationText);
-					mImageView.setImageResource(card.backImageResourceId);
-				} else {
-					Toast.makeText(CardPreviewActivity.this, "前ページはありません", Toast.LENGTH_SHORT).show();
-					return false;
-				}
-			}
-			return false;
-		}
-	};
-
 	// スケールジェスチャー
 	private final SimpleOnScaleGestureListener mOnScaleGestureListener = new SimpleOnScaleGestureListener() {
 		@Override
@@ -249,30 +169,6 @@ public class CardPreviewActivity extends Activity {
 			}
 			mDragView.setTextSize(mTextSize[mTextSizeIndex]);
 			return true;
-		}
-	};
-
-	// このカードを使うボタンクリック
-	private final OnClickListener mUseButtonOnClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			CardEntity card = mList.get(mPosition);
-			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
-			sp.edit().putInt("UseCard", card.id).commit();
-			finish();
-		}
-	};
-	
-	// 編集ボタンクリック
-	private final OnClickListener mEditButtonOnClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			CardEntity card = mList.get(mPosition);
-			Intent myIntent = new Intent(getApplicationContext(), MakeCardActivity.class);
-			myIntent.putExtra("Card", card);
-			myIntent.putExtra("Position", mPosition);
-			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(myIntent);
 		}
 	};
 

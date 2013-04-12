@@ -44,7 +44,7 @@ public class CardListActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				ListView listView = (ListView) parent;
-				Intent myIntent = new Intent(getApplicationContext(), CardPreviewActivity.class);
+				Intent myIntent = new Intent(getApplicationContext(), CardDetailActivity.class);
 				CardEntity card = (CardEntity) listView.getItemAtPosition(position);
 				myIntent.putExtra("Card", card);
 				myIntent.putExtra("Position", position);

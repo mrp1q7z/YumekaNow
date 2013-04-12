@@ -41,18 +41,18 @@
         android:padding="5dip" >
 
         <Button
-            android:id="@+id/okButton"
+            android:id="@+id/useButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="OK" />
+            android:text="このカードを使う" />
 
         <Button
-            android:id="@+id/cancelButton"
+            android:id="@+id/editButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cancel" />
+            android:text="編集" />
     </LinearLayout>
 
 </RelativeLayout>

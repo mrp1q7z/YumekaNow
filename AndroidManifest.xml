@@ -57,6 +57,8 @@
         </activity>
         <activity android:name="com.yojiokisoft.yumekanow.activity.CardPreviewActivity" >
         </activity>
+        <activity android:name="com.yojiokisoft.yumekanow.activity.CardDetailActivity" >
+        </activity>
         <activity android:name="com.yojiokisoft.yumekanow.activity.MainActivity" >
         </activity>
     </application>
