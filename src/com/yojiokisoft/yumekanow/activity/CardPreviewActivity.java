@@ -8,8 +8,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -124,6 +126,7 @@ public class CardPreviewActivity extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			okButton.setOnClickListener(mUseButtonOnClick);
 			cancelButton.setOnClickListener(mEditButtonOnClick);
 		}
 	}
@@ -249,6 +252,17 @@ public class CardPreviewActivity extends Activity {
 		}
 	};
 
+	// このカードを使うボタンクリック
+	private final OnClickListener mUseButtonOnClick = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			CardEntity card = mList.get(mPosition);
+			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
+			sp.edit().putInt("UseCard", card.id).commit();
+			finish();
+		}
+	};
+	
 	// 編集ボタンクリック
 	private final OnClickListener mEditButtonOnClick = new OnClickListener() {
 		@Override
