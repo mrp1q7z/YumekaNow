@@ -88,13 +88,6 @@ public class CardPreviewActivity extends Activity {
 		params.topMargin = mCard.marginTop;
 		mTextView.setLayoutParams(params);
 
-		//		mTextView.setPadding(mCard.marginLeft, mCard.marginTop, 0, 0);
-		//		mTextView.layout(mCard.marginLeft, mCard.marginTop, mCard.marginLeft + mTextView.getWidth(), mCard.marginTop
-		//				+ mTextView.getHeight());
-		//		Log.d("taoka", "marginLeft=" + mCard.marginLeft + ",top=" + mCard.marginTop);
-		//		LinearLayout textContainer = (LinearLayout) findViewById(R.id.textContainer);
-		//		textContainer.setPadding(mCard.marginLeft, mCard.marginTop, 0, 0);
-
 		mImageView = (ImageView) findViewById(R.id.backImage);
 		mImageView.setImageResource(mCard.backImageResourceId);
 

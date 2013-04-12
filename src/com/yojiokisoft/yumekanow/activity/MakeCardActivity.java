@@ -206,6 +206,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		public void onClick(View v) {
 			Intent myIntent = new Intent(getApplicationContext(), CardPreviewActivity.class);
 			CardEntity card = new CardEntity();
+			card.id = mCardId;
 			card.affirmationText = mAffirmationText.getText().toString();
 			card.backImageResourceId = ((BackImageEntity) mGallery.getSelectedItem()).resouceId;
 			card.textColor = (Integer) mTextColor.getTag();
@@ -214,7 +215,6 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			card.marginTop = Integer.parseInt(mMarginTop.getText().toString());
 			card.marginLeft = Integer.parseInt(mMarginLeft.getText().toString());
 			myIntent.putExtra("Card", card);
-			myIntent.putExtra("Position", -1);
 			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(myIntent);
 		}

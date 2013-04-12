@@ -50,7 +50,7 @@ public class CardDetailActivity extends Activity {
 			return;
 		}
 		CardEntity card = (CardEntity) extras.getSerializable("Card");
-		mPosition = (Integer) extras.getSerializable("Position");
+		mPosition = extras.getInt("Position");
 
 		mTextView = (TextView) findViewById(R.id.affirmationText);
 		mTextContainer = (LinearLayout) findViewById(R.id.textContainer);
@@ -141,7 +141,6 @@ public class CardDetailActivity extends Activity {
 			CardEntity card = mList.get(mPosition);
 			Intent myIntent = new Intent(getApplicationContext(), MakeCardActivity.class);
 			myIntent.putExtra("Card", card);
-			myIntent.putExtra("Position", mPosition);
 			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(myIntent);
 		}
