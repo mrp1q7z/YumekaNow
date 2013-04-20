@@ -14,8 +14,8 @@
 
         <TextView
             android:id="@+id/affirmationText"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="50dp"
             android:shadowColor="#fff"
@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="#33000000"
+            android:onClick="okButtonOnClick"
             android:src="@drawable/ic_menu_mark" />
 
         <ImageButton
@@ -44,6 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="#33000000"
+            android:onClick="cancelButtonOnClick"
             android:src="@android:drawable/ic_menu_close_clear_cancel" />
     </LinearLayout>
 

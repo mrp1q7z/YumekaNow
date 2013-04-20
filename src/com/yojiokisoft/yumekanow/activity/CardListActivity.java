@@ -29,7 +29,7 @@ public class CardListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_card_list);
 		ListView listView = (ListView) findViewById(R.id.cardList);
-		DatabaseHelper helper = new DatabaseHelper(this);
+		DatabaseHelper helper = DatabaseHelper.getInstance(this);
 		List<CardEntity> cardList = null;
 		try {
 			Dao<CardEntity, Integer> cardDao = helper.getDao(CardEntity.class);

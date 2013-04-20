@@ -10,10 +10,10 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.yojiokisoft.yumekanow.activity.MainActivity;
+import com.yojiokisoft.yumekanow.model.CounterDao;
 
 public class MyWidgetService extends Service {
 	private static final String ACTION_MY_CLICK = "com.example.android.appwidget.ClickSample.ACTION_MY_CLICK";
-	int okCnt = 0;
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -63,7 +63,8 @@ public class MyWidgetService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.d("TAG", "onStartCommand begin");
-		okCnt++;
+		CounterDao counterDao = new CounterDao(this);
+		int okCnt = counterDao.getGrowLevel();
 		RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.activity_widget);
 		remoteViews.setTextViewText(R.id.time_text_id, "OK:" + okCnt);
 		ComponentName thisWidget = new ComponentName(this, MyWidget.class);

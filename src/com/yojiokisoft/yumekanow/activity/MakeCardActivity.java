@@ -51,7 +51,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	private TextView mMarginTop;
 	private TextView mMarginLeft;
 
-	private final DatabaseHelper mHelper = new DatabaseHelper(this);
+	private final DatabaseHelper mHelper = DatabaseHelper.getInstance(this);
 	private int mCardId;
 
 	@Override
@@ -245,7 +245,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
-				mHelper.close();
+//				mHelper.close();
 			}
 		}
 	};

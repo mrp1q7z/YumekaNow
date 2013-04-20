@@ -1,8 +1,11 @@
 package com.yojiokisoft.yumekanow;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+
+import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 
 public class InitActivity extends Activity {
 
@@ -10,6 +13,9 @@ public class InitActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_init);
+		
+		DatabaseHelper.getInstance(this);
+		Log.d("taoak", "InitActivity.onCreate");
 	}
 
 	@Override

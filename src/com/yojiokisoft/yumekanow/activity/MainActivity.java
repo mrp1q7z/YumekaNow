@@ -1,6 +1,8 @@
 package com.yojiokisoft.yumekanow.activity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,9 +31,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.entity.CounterEntity;
 import com.yojiokisoft.yumekanow.fragment.CardFragment;
 import com.yojiokisoft.yumekanow.fragment.SleepFragment;
 import com.yojiokisoft.yumekanow.fragment.StateFragment;
+import com.yojiokisoft.yumekanow.model.CounterDao;
 import com.yojiokisoft.yumekanow.model.DummyGenerator;
 
 public class MainActivity extends FragmentActivity implements CardFragment.OnCardClickListener {
@@ -249,5 +253,37 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 	@Override
 	public void onCardClick() {
 		mRingtone.stop();
+	}
+
+	public void cancelButtonOnClick(View view) {
+		CounterDao counterDao = new CounterDao(this);
+		if (counterDao.getCurrentCardId() != -1) {
+			CounterEntity cnt = new CounterEntity();
+			cnt.cardId = counterDao.getCurrentCardId();
+			cnt.procTime = System.currentTimeMillis();
+			cnt.okCnt = 0;
+			cnt.ngCnt = 1;
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+			cnt.procDay = sdf.format(new Date(cnt.procTime));
+			counterDao.setCounter(cnt);
+		}
+		
+		finish();
+	}
+
+	public void okButtonOnClick(View view) {
+		CounterDao counterDao = new CounterDao(this);
+		if (counterDao.getCurrentCardId() != -1) {
+			CounterEntity cnt = new CounterEntity();
+			cnt.cardId = counterDao.getCurrentCardId();
+			cnt.procTime = System.currentTimeMillis();
+			cnt.okCnt = 1;
+			cnt.ngCnt = 0;
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+			cnt.procDay = sdf.format(new Date(cnt.procTime));
+			counterDao.setCounter(cnt);
+		}
+
+		finish();
 	}
 }

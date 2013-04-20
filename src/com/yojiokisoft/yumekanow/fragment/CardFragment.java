@@ -54,7 +54,7 @@ public class CardFragment extends Fragment {
 			setDefalutCard();
 			return view;
 		}
-		DatabaseHelper helper = new DatabaseHelper(mActivity);
+		DatabaseHelper helper = DatabaseHelper.getInstance(mActivity);
 		Dao<CardEntity, Integer> cardDao;
 		List<CardEntity> cardList = null;
 		try {

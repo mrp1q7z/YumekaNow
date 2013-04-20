@@ -48,7 +48,7 @@ public class CardDetailActivity extends Activity {
 		Button useButton = (Button) findViewById(R.id.useButton);
 		Button editButton = (Button) findViewById(R.id.editButton);
 
-		DatabaseHelper helper = new DatabaseHelper(this);
+		DatabaseHelper helper = DatabaseHelper.getInstance(this);
 		Dao<CardEntity, Integer> cardDao;
 		List<CardEntity> list = null;
 		try {
@@ -124,7 +124,7 @@ public class CardDetailActivity extends Activity {
 			mInflter = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			mList = new ArrayList<Integer>();
 
-			DatabaseHelper helper = new DatabaseHelper(mContext);
+			DatabaseHelper helper = DatabaseHelper.getInstance(mContext);
 			try {
 				mCardDao = helper.getDao(CardEntity.class);
 			} catch (SQLException e) {
