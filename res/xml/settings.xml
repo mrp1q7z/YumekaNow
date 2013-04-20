@@ -3,6 +3,7 @@
     android:title="設定画面" >
 
     <ListPreference
+        android:defaultValue="60"
         android:dialogTitle="表示間隔"
         android:entries="@array/disp_interval_key"
         android:entryValues="@array/disp_interval_val"
@@ -18,6 +19,7 @@
         android:title="目標回数" />
 
     <ListPreference
+        android:defaultValue="flower"
         android:dialogTitle="アニメーション"
         android:entries="@array/animation_key"
         android:entryValues="@array/animation_val"
