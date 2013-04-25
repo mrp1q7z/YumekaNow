@@ -27,18 +27,18 @@
             android:padding="10sp" >
 
             <RadioButton
-                android:id="@+id/ztime"
+                android:id="@+id/jikan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="以下の時間に起こしてください"
+                android:text="時間（指定の時間に起動します）"
                 android:textColor="#c7c5c6" />
 
             <RadioButton
-                android:id="@+id/rtime"
+                android:id="@+id/timer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="以下の時間経過後に起こしてください"
+                android:text="タイマー（指定の時間経過後に起動します）"
                 android:textColor="#c7c5c6" />
         </RadioGroup>
 
@@ -55,10 +55,11 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/okButton"
+            android:id="@+id/setTimerButton"
             android:layout_width="800dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="setTimerButtonOnClick"
             android:text="セット" />
     </LinearLayout>
 

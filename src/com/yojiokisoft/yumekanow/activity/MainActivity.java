@@ -2,8 +2,11 @@ package com.yojiokisoft.yumekanow.activity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,17 +22,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.yojiokisoft.yumekanow.MyWidgetService;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.entity.CounterEntity;
 import com.yojiokisoft.yumekanow.fragment.CardFragment;
@@ -110,6 +117,7 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 		private final TabHost tabHost;
 		private final ViewPager pager;
 		private final ArrayList<String> tabs = new ArrayList<String>();
+		private SleepFragment mSleepFragment;
 
 		// dummy contents class
 		class DummyTabFactory implements TabHost.TabContentFactory {
@@ -157,7 +165,8 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 				stateFragment.setArguments(args);
 				return stateFragment;
 			} else {
-				return new SleepFragment();
+				mSleepFragment = new SleepFragment();
+				return mSleepFragment;
 			}
 		}
 
@@ -189,6 +198,10 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 			int position = tabHost.getCurrentTab();
 
 			pager.setCurrentItem(position);
+		}
+
+		public SleepFragment getSeepFragment() {
+			return mSleepFragment;
 		}
 	}
 
@@ -267,7 +280,7 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 			cnt.procDay = sdf.format(new Date(cnt.procTime));
 			counterDao.setCounter(cnt);
 		}
-		
+
 		finish();
 	}
 
@@ -283,6 +296,47 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 			cnt.procDay = sdf.format(new Date(cnt.procTime));
 			counterDao.setCounter(cnt);
 		}
+
+		finish();
+	}
+
+	public void setTimerButtonOnClick(View view) {
+		// アファーメーションアラームの解除
+		Intent intent = new Intent(this, MyWidgetService.class);
+		PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+		alarmManager.cancel(pendingIntent);
+
+		// タイマーのアラームをセット
+		final ViewPager pager = (ViewPager) findViewById(R.id.pager);
+		SleepFragment sleepFragment = ((MyAdapter1) pager.getAdapter()).getSeepFragment();
+		TimePicker wakeUpTime = (TimePicker) sleepFragment.getView().findViewById(R.id.wakeUpTime);
+		int hour = wakeUpTime.getCurrentHour();
+		int min = wakeUpTime.getCurrentMinute();
+		Calendar calendar = Calendar.getInstance(); // Calendar取得
+		calendar.setTimeInMillis(System.currentTimeMillis()); // 現在時刻を取得
+		RadioGroup timeKind = (RadioGroup) findViewById(R.id.timeKind);
+		if (timeKind.getCheckedRadioButtonId() == R.id.jikan) {
+			// 時間指定
+			if (hour < calendar.get(calendar.HOUR_OF_DAY)
+					|| (hour <= calendar.get(calendar.HOUR_OF_DAY) && min < calendar.get(calendar.MINUTE))) {
+				calendar.add(calendar.DAY_OF_MONTH, 1);
+			}
+			calendar.set(calendar.get(calendar.YEAR), calendar.get(calendar.MONTH),
+					calendar.get(calendar.DAY_OF_MONTH), hour, min);
+		} else {
+			// タイマー指定
+			calendar.add(Calendar.MINUTE, 60 * hour + min); // 現時刻 + 指定時間
+		}
+		intent = new Intent(this, TimerActivity.class);
+		pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		Log.d("taoka", "MainActivity.setTimerButtonOnClick : calendar=" + calendar.toString());
+		// TODO:タイマーはキャンセルしなくても上書きされる？
+		alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+
+		Toast toast = Toast.makeText(this, "おやすみなさい", Toast.LENGTH_LONG);
+		toast.show();
 
 		finish();
 	}
