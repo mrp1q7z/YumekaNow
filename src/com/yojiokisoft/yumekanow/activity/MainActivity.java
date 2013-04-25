@@ -341,7 +341,7 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 				calendar.add(calendar.DAY_OF_MONTH, 1);
 			}
 			calendar.set(calendar.get(calendar.YEAR), calendar.get(calendar.MONTH),
-					calendar.get(calendar.DAY_OF_MONTH), hour, min);
+					calendar.get(calendar.DAY_OF_MONTH), hour, min, 0);
 		} else {
 			// タイマー指定
 			calendar.add(Calendar.MINUTE, 60 * hour + min); // 現時刻 + 指定時間
