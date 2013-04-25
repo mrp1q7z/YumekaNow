@@ -53,7 +53,8 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 	private static final int MENU_SETTING = 2; // 設定
 	private static final int MENU_USAGE = 3; // 使い方
 
-	Ringtone mRingtone;
+	Vibrator mVibrator = null;
+	Ringtone mRingtone = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +89,9 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean isVibrator = sp.getBoolean("Vibrator", false);
 		if (isVibrator) {
-			Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+			mVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 			long[] pattern = { 0, 500, 250, 500, 250, 500 }; // OFF/ON/OFF/ON...
-			vibrator.vibrate(pattern, -1);
+			mVibrator.vibrate(pattern, -1);
 		}
 
 		String url = sp.getString("Alarm", "");
@@ -98,6 +99,17 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 			mRingtone = RingtoneManager.getRingtone(this, Uri.parse(url));
 			mRingtone.play();
 		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		if (mVibrator != null) {
+			mVibrator.cancel();
+		}
+		if (mRingtone != null) {
+			mRingtone.stop();
+		}
+		super.onDestroy();
 	}
 
 	private TextView getTabView(int width, int height, String title) {
@@ -265,7 +277,12 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 
 	@Override
 	public void onCardClick() {
-		mRingtone.stop();
+		if (mVibrator != null) {
+			mVibrator.cancel();
+		}
+		if (mRingtone != null) {
+			mRingtone.stop();
+		}
 	}
 
 	public void cancelButtonOnClick(View view) {
