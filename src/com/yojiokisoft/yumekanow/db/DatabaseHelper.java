@@ -26,13 +26,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	public static DatabaseHelper getInstance(Context context) {
 		if (mInstance == null) {
 			mInstance = new DatabaseHelper(context);
+			createTable(mInstance.getConnectionSource());
 		}
 		return mInstance;
 	}
 
-	@Override
-	public void onCreate(SQLiteDatabase db, ConnectionSource conn) {
-		Log.d("taoka", "DatabaseHelper#onCreate:bigin");
+	public static void createTable(ConnectionSource conn) {
 		try {
 			TableUtils.createTableIfNotExists(conn, CardEntity.class);
 			TableUtils.createTableIfNotExists(conn, CounterEntity.class);
@@ -40,6 +39,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void onCreate(SQLiteDatabase db, ConnectionSource conn) {
+		Log.d("taoka", "DatabaseHelper#onCreate:bigin");
+		createTable(conn);
 	}
 
 	@Override

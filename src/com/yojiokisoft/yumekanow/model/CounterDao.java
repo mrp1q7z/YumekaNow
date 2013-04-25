@@ -24,8 +24,6 @@ public class CounterDao {
 		DatabaseHelper helper = DatabaseHelper.getInstance(context);
 		try {
 			mCounterDao = helper.getDao(CounterEntity.class);
-			// 明示的にonCreateを呼ばないとテーブルが作られない（onCreateはDBが存在しない最初だけしか呼ばれない）
-			//helper.onCreate(helper.getWritableDatabase(),helper.getConnectionSource());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
