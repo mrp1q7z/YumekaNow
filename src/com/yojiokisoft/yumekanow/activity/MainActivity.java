@@ -43,7 +43,6 @@ import com.yojiokisoft.yumekanow.fragment.CardFragment;
 import com.yojiokisoft.yumekanow.fragment.SleepFragment;
 import com.yojiokisoft.yumekanow.fragment.StateFragment;
 import com.yojiokisoft.yumekanow.model.CounterDao;
-import com.yojiokisoft.yumekanow.model.DummyGenerator;
 
 public class MainActivity extends FragmentActivity implements CardFragment.OnCardClickListener {
 
@@ -167,15 +166,9 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 		@Override
 		public Fragment getItem(int position) {
 			if (position == 0) {
-				//return new ButtonSwitchFragment();
 				return new CardFragment();
 			} else if (position == 1) {
-				//return new LabelListFragment(DummyGenerator.getLabelList());
-				StateFragment stateFragment = new StateFragment();
-				Bundle args = new Bundle();
-				args.putSerializable("DTO", DummyGenerator.getDayCntList());
-				stateFragment.setArguments(args);
-				return stateFragment;
+				return new StateFragment();
 			} else {
 				mSleepFragment = new SleepFragment();
 				return mSleepFragment;

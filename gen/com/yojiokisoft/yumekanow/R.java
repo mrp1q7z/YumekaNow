@@ -122,10 +122,11 @@ containing a value of this type.
         public static final int marginLeftBar=0x7f0a0016;
         public static final int marginTop=0x7f0a0013;
         public static final int marginTopBar=0x7f0a0014;
-        public static final int menu_settings=0x7f0a002a;
+        public static final int menu_settings=0x7f0a002b;
         public static final int nday=0x7f0a0027;
         public static final int okButton=0x7f0a0007;
         public static final int pager=0x7f0a0000;
+        public static final int percent=0x7f0a002a;
         public static final int previewButton=0x7f0a0017;
         public static final int setTimerButton=0x7f0a0021;
         public static final int shadowColor=0x7f0a0010;

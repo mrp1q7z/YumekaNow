@@ -15,7 +15,7 @@ import com.yojiokisoft.yumekanow.R;
 public class MyProgress extends LinearLayout {
 
 	// パーセントテキスト
-	private TextView mPersentText = null;
+	private TextView mPercentText = null;
 	// プログレスバー部分のコンテナ
 	private LinearLayout mProgressContainer = null;
 	// スタート画像
@@ -56,12 +56,11 @@ public class MyProgress extends LinearLayout {
 		mProgressContainer
 				.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1.0f));
 		// パーセント
-		mPersentText = new TextView(context, attrs);
-		mPersentText.setGravity(Gravity.CENTER);
-		mPersentText.setTextColor(0xff6790a4);
-		setShowPsersent(showPersent);
-		mPersentText.setText("37%");
-		mProgressContainer.addView(mPersentText);
+		mPercentText = new TextView(context, attrs);
+		mPercentText.setGravity(Gravity.CENTER);
+		mPercentText.setTextColor(0xff6790a4);
+		setShowPercent(showPersent);
+		mProgressContainer.addView(mPercentText);
 		// プログレスバー
 		mProgressBar = new ProgressBar(context, attrs, android.R.attr.progressBarStyleHorizontal);
 		mProgressContainer.addView(mProgressBar);
@@ -84,11 +83,11 @@ public class MyProgress extends LinearLayout {
 		params.setMargins(5, 5, 5, 5);
 	}
 
-	public void setShowPsersent(boolean showFlag) {
+	public void setShowPercent(boolean showFlag) {
 		if (showFlag) {
-			mPersentText.setVisibility(VISIBLE);
+			mPercentText.setVisibility(VISIBLE);
 		} else {
-			mPersentText.setVisibility(GONE);
+			mPercentText.setVisibility(GONE);
 		}
 	}
 
@@ -111,7 +110,20 @@ public class MyProgress extends LinearLayout {
 		mGoalImageView.setImageDrawable(null);
 	}
 
-	public ProgressBar getProgressBar() {
-		return mProgressBar;
+	public void setMax(int max) {
+		mProgressBar.setMax(max);
+		setPercent();
+	}
+
+	public void setProgress(int progress) {
+		mProgressBar.setProgress(progress);
+		setPercent();
+	}
+
+	private void setPercent() {
+		if (mProgressBar.getMax() != 0) {
+			int p = mProgressBar.getProgress() * 100 / mProgressBar.getMax();
+			mPercentText.setText(p + "%");
+		}
 	}
 }
