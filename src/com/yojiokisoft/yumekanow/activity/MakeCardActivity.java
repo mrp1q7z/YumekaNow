@@ -89,6 +89,9 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		Button okButton = (Button) findViewById(R.id.okButton);
 		okButton.setOnClickListener(mOkButtonClick);
 
+		Button cancelButton = (Button) findViewById(R.id.cancelButton);
+		cancelButton.setOnClickListener(mCancelButtonClick);
+
 		mTextColor = (TextView) findViewById(R.id.textColor);
 		mTextColor.setTag(0x33ee88);
 		mTextColor.setOnClickListener(mTextColorClick);
@@ -245,8 +248,18 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
-//				mHelper.close();
+				//				mHelper.close();
 			}
+		}
+	};
+
+	/**
+	 * Cancelボタンのクリックリスナー
+	 */
+	private final OnClickListener mCancelButtonClick = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			finish();
 		}
 	};
 
