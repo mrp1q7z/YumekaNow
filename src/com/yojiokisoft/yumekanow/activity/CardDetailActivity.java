@@ -86,6 +86,10 @@ public class CardDetailActivity extends Activity {
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
 			sp.edit().putInt("UseCard", card.id).commit();
 			finish();
+			
+			Intent intent = new Intent(getApplication(), MainActivity.class);
+		    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		    startActivity(intent);
 		}
 	};
 
