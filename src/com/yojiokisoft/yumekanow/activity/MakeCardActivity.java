@@ -242,7 +242,6 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 				cardEntity.marginTop = Integer.parseInt(mMarginTop.getText().toString());
 				cardEntity.marginLeft = Integer.parseInt(mMarginLeft.getText().toString());
 				CreateOrUpdateStatus ret = cardDao.createOrUpdate(cardEntity);
-				finish();
 				Log.d("taoka", "MakeCardActivity#mOkButtonClick#onClick:createOrUpdate ret=" + ret.toString());
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -250,6 +249,11 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			} finally {
 				//				mHelper.close();
 			}
+			finish();
+			
+			Intent intent = new Intent(getApplication(), MainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
 		}
 	};
 
@@ -260,6 +264,10 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		@Override
 		public void onClick(View v) {
 			finish();
+
+			Intent intent = new Intent(getApplication(), MainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
 		}
 	};
 
