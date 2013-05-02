@@ -36,13 +36,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.yojiokisoft.yumekanow.MyWidgetService;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.entity.CounterEntity;
 import com.yojiokisoft.yumekanow.fragment.CardFragment;
 import com.yojiokisoft.yumekanow.fragment.SleepFragment;
 import com.yojiokisoft.yumekanow.fragment.StateFragment;
 import com.yojiokisoft.yumekanow.model.CounterDao;
+import com.yojiokisoft.yumekanow.service.MyWidgetService;
 
 public class MainActivity extends FragmentActivity implements CardFragment.OnCardClickListener {
 
@@ -339,7 +339,7 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 			// タイマー指定
 			calendar.add(Calendar.MINUTE, 60 * hour + min); // 現時刻 + 指定時間
 		}
-		intent = new Intent(this, TimerActivity.class);
+		intent = new Intent(this, WakeUpActivity.class);
 		pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		Log.d("taoka", "MainActivity.setTimerButtonOnClick : calendar=" + calendar.toString());
 		// TODO:タイマーはキャンセルしなくても上書きされる？

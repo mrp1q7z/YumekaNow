@@ -154,8 +154,8 @@ containing a value of this type.
         public static final int activity_init=0x7f030003;
         public static final int activity_main=0x7f030004;
         public static final int activity_make_card=0x7f030005;
-        public static final int activity_timer=0x7f030006;
-        public static final int activity_usage=0x7f030007;
+        public static final int activity_usage=0x7f030006;
+        public static final int activity_wake_up=0x7f030007;
         public static final int activity_widget=0x7f030008;
         public static final int card_detail=0x7f030009;
         public static final int color_picker=0x7f03000a;

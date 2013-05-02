@@ -6,14 +6,14 @@
     android:background="#212121"
     android:orientation="vertical" >
 
-    <com.yojiokisoft.yumekanow.widget.MyProgress
+    <com.yojiokisoft.yumekanow.mycomponent.MyProgress
         android:id="@+id/totalProgress"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         mycustom:goal_image="@drawable/goal_flag"
         mycustom:start_image="@drawable/start_flag" >
-    </com.yojiokisoft.yumekanow.widget.MyProgress>
+    </com.yojiokisoft.yumekanow.mycomponent.MyProgress>
 
     <ListView
         android:id="@+id/dayToDayList"

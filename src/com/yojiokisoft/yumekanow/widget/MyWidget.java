@@ -1,4 +1,6 @@
-package com.yojiokisoft.yumekanow;
+package com.yojiokisoft.yumekanow.widget;
+
+import com.yojiokisoft.yumekanow.service.MyWidgetService;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

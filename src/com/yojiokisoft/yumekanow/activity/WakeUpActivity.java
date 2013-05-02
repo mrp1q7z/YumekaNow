@@ -13,16 +13,16 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
-import com.yojiokisoft.yumekanow.MyWidgetService;
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.service.MyWidgetService;
 
-public class TimerActivity extends Activity {
+public class WakeUpActivity extends Activity {
 	private Activity mActivity;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_timer);
+		setContentView(R.layout.activity_wake_up);
 		mActivity = this;
 		Button okButton = (Button) findViewById(R.id.okButton);
 		okButton.setOnClickListener(mOkButtonClick);
@@ -47,7 +47,7 @@ public class TimerActivity extends Activity {
 			Log.d("taoka", "TimerActivity.mOkButtonClick : Interval=" + dispInterval);
 			long interval = Integer.parseInt(dispInterval) * 60 * 1000;
 			alarmManager.setRepeating(AlarmManager.RTC, now, interval, pendingIntent);
-			
+
 			finish();
 		}
 	};

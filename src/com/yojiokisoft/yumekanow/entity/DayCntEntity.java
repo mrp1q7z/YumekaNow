@@ -1,9 +1,9 @@
-package com.yojiokisoft.yumekanow.model;
+package com.yojiokisoft.yumekanow.entity;
 
 import java.io.Serializable;
 import java.util.Calendar;
 
-public class DayCnt implements Serializable {
+public class DayCntEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public int day;

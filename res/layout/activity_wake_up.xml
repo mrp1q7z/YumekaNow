@@ -3,17 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".TimerActivity" >
+    tools:context=".WakeUpActivity" >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="時間です" />
-    
-    <Button 
+
+    <Button
         android:id="@+id/okButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="OK"/>
+        android:text="OK" />
 
 </LinearLayout>

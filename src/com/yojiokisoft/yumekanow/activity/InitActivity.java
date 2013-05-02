@@ -1,10 +1,13 @@
-package com.yojiokisoft.yumekanow;
+package com.yojiokisoft.yumekanow.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 
+import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.R.layout;
+import com.yojiokisoft.yumekanow.R.menu;
 import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 
 public class InitActivity extends Activity {

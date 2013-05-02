@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <receiver
-            android:name="com.yojiokisoft.yumekanow.MyWidget"
+            android:name="com.yojiokisoft.yumekanow.widget.MyWidget"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -28,14 +28,14 @@
                 android:resource="@xml/appwidget" />
         </receiver>
 
-        <service android:name="com.yojiokisoft.yumekanow.MyWidgetService" >
+        <service android:name="com.yojiokisoft.yumekanow.service.MyWidgetService" >
             <intent-filter>
                 <action android:name="com.example.android.appwidget.ClickSample.ACTION_MY_CLICK" />
             </intent-filter>
         </service>
 
         <activity
-            android:name="com.yojiokisoft.yumekanow.InitActivity"
+            android:name="com.yojiokisoft.yumekanow.activity.InitActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,7 +61,7 @@
         </activity>
         <activity android:name="com.yojiokisoft.yumekanow.activity.MainActivity" >
         </activity>
-        <activity android:name="com.yojiokisoft.yumekanow.activity.TimerActivity" >
+        <activity android:name="com.yojiokisoft.yumekanow.activity.WakeUpActivity" >
         </activity>
     </application>
 

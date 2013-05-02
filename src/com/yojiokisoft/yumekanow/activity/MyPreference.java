@@ -20,8 +20,8 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.util.Log;
 
-import com.yojiokisoft.yumekanow.MyWidgetService;
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.service.MyWidgetService;
 
 public class MyPreference extends PreferenceActivity implements OnSharedPreferenceChangeListener,
 		OnPreferenceChangeListener {

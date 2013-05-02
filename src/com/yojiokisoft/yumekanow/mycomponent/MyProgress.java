@@ -1,4 +1,4 @@
-package com.yojiokisoft.yumekanow.widget;
+package com.yojiokisoft.yumekanow.mycomponent;
 
 import android.content.Context;
 import android.content.res.TypedArray;

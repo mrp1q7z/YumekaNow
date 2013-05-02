@@ -19,9 +19,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.entity.DayCntEntity;
 import com.yojiokisoft.yumekanow.model.CounterDao;
-import com.yojiokisoft.yumekanow.model.DayCnt;
-import com.yojiokisoft.yumekanow.widget.MyProgress;
+import com.yojiokisoft.yumekanow.mycomponent.MyProgress;
 
 public class StateFragment extends Fragment {
 	private BaseAdapter mAdapter;
@@ -67,7 +67,7 @@ public class StateFragment extends Fragment {
 
 		if (mAdapter == null) {
 			CounterDao counter = new CounterDao(mActivity);
-			List<DayCnt> list = counter.getDayCnt();
+			List<DayCntEntity> list = counter.getDayCnt();
 			mAdapter = new MyListArrayAdapter(mActivity, list);
 		}
 		ListView listView = (ListView) mView.findViewById(R.id.dayToDayList);
@@ -79,9 +79,9 @@ public class StateFragment extends Fragment {
 	 */
 	private class MyListArrayAdapter extends BaseAdapter {
 		private Activity mActivity;
-		private List<DayCnt> mItems;
+		private List<DayCntEntity> mItems;
 
-		MyListArrayAdapter(Activity activity, List<DayCnt> items) {
+		MyListArrayAdapter(Activity activity, List<DayCntEntity> items) {
 			super();
 			mActivity = activity;
 			mItems = items;
@@ -104,7 +104,7 @@ public class StateFragment extends Fragment {
 
 		@Override
 		public View getView(int pos, View convertView, ViewGroup parent) {
-			DayCnt item = mItems.get(pos);
+			DayCntEntity item = mItems.get(pos);
 			// レイアウトの生成
 			if (convertView == null) {
 				convertView = mActivity.getLayoutInflater().inflate(R.layout.row_state_list, null);
@@ -132,7 +132,7 @@ public class StateFragment extends Fragment {
 		}
 	}
 
-	private String getComment(DayCnt item) {
+	private String getComment(DayCntEntity item) {
 		if (item.day == 1) {
 			return "スタート";
 		}

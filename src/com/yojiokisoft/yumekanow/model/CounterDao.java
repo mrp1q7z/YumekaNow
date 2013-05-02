@@ -14,6 +14,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.entity.CounterEntity;
+import com.yojiokisoft.yumekanow.entity.DayCntEntity;
 
 public class CounterDao {
 	private Dao<CounterEntity, Integer> mCounterDao = null;
@@ -92,9 +93,9 @@ public class CounterDao {
 	 * 日々カウントの取得
 	 * @return
 	 */
-	public List<DayCnt> getDayCnt() {
+	public List<DayCntEntity> getDayCnt() {
 		GenericRawResults<String[]> rawResults = null;
-		List<DayCnt> ret = new ArrayList<DayCnt>();
+		List<DayCntEntity> ret = new ArrayList<DayCntEntity>();
 		try {
 			rawResults = mCounterDao
 					.queryRaw(
@@ -106,7 +107,7 @@ public class CounterDao {
 			int totalNgCnt = 0;
 			for (String[] resultArray : results) {
 				day++;
-				DayCnt dayCnt = new DayCnt();
+				DayCntEntity dayCnt = new DayCntEntity();
 				dayCnt.day = day;
 				String yyyymmdd = resultArray[0];
 				Calendar date = Calendar.getInstance();

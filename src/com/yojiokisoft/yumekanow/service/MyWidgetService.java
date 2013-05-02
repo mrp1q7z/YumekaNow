@@ -1,4 +1,4 @@
-package com.yojiokisoft.yumekanow;
+package com.yojiokisoft.yumekanow.service;
 
 import android.app.PendingIntent;
 import android.app.Service;
@@ -9,8 +9,12 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.R.id;
+import com.yojiokisoft.yumekanow.R.layout;
 import com.yojiokisoft.yumekanow.activity.MainActivity;
 import com.yojiokisoft.yumekanow.model.CounterDao;
+import com.yojiokisoft.yumekanow.widget.MyWidget;
 
 public class MyWidgetService extends Service {
 	private static final String ACTION_MY_CLICK = "com.example.android.appwidget.ClickSample.ACTION_MY_CLICK";
