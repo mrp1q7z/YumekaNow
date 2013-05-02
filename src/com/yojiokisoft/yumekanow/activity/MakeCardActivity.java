@@ -1,12 +1,23 @@
 package com.yojiokisoft.yumekanow.activity;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
@@ -36,9 +47,11 @@ import com.yojiokisoft.yumekanow.dialog.ColorPickerDialog;
 import com.yojiokisoft.yumekanow.entity.BackImageEntity;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.model.BackImageDao;
+import com.yojiokisoft.yumekanow.utils.MyImage;
 
 public class MakeCardActivity extends Activity implements ViewFactory {
 	private final int TEXT_SIZE_MIN = 10;
+	private final int INTENT_REQUEST_PICTURE = 3;
 
 	private BaseAdapter mAdapter;
 	// GUI items
@@ -71,7 +84,12 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		mGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				mImageSwitcher.setImageResource((int) mGallery.getItemIdAtPosition(position));
+				BackImageEntity backImage = (BackImageEntity) mGallery.getItemAtPosition(position);
+				if (backImage.resouceId == 0) {
+					mImageSwitcher.setImageURI(Uri.parse("file:///" + backImage.bitmapPath));
+				} else {
+					mImageSwitcher.setImageResource(backImage.resouceId);
+				}
 			}
 
 			@Override
@@ -82,6 +100,9 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		List<BackImageEntity> list = backImageDao.queryForAll();
 		mAdapter = new MyListArrayAdapter(this, list);
 		mGallery.setAdapter(mAdapter);
+
+		Button addBackImgButton = (Button) findViewById(R.id.addBackImgButton);
+		addBackImgButton.setOnClickListener(mAddBackImgButtonClick);
 
 		Button previewButton = (Button) findViewById(R.id.previewButton);
 		previewButton.setOnClickListener(mPreviewClickListener);
@@ -132,9 +153,16 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			marginLeftBar.setProgress(card.marginLeft);
 			int position = -1;
 			for (int i = 0; i < list.size(); i++) {
-				if (list.get(i).resouceId == card.backImageResourceId) {
-					position = i;
-					break;
+				if (card.backImageResourceId == 0) {
+					if (card.backImagePath.equals(list.get(i).bitmapPath)) {
+						position = i;
+						break;
+					}
+				} else {
+					if (list.get(i).resouceId == card.backImageResourceId) {
+						position = i;
+						break;
+					}
 				}
 			}
 			if (position == -1) {
@@ -159,6 +187,60 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 		imageView.setLayoutParams(new ImageSwitcher.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 		return imageView;
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == INTENT_REQUEST_PICTURE && resultCode == RESULT_OK) {
+			Bitmap bitmap = null;
+			try {
+				// 戻り値からInputStreamを取得
+				InputStream in = getContentResolver().openInputStream(data.getData());
+				// 読み込む際のオプション
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				// 画像を読み込まずサイズを調整するだけにする
+				options.inJustDecodeBounds = true;
+				// optionsに画像情報を入れる
+				BitmapFactory.decodeStream(in, null, options);
+				// InputStreamは1回クローズする(もう中身が無い為、再利用は出来無い)
+				in.close();
+				// Displayに収まるサイズに調整するための割合を取得
+				Pair<Integer, Integer> size = MyImage.getScreenWidthAndHeight(this);
+				int width = options.outWidth / size.first + 1;
+				int height = options.outHeight / size.second + 1;
+				// 画像を 1 / Math.max(width, height) のサイズで取得するように調整
+				options.inSampleSize = Math.max(width, height);
+				// 実際に画像を読み込ませる
+				options.inJustDecodeBounds = false;
+				// もう1回InputStreamを取得
+				in = getContentResolver().openInputStream(data.getData());
+				// Bitmapの取得
+				bitmap = BitmapFactory.decodeStream(in, null, options);
+				// InputStreamのクローズ
+				in.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			//ファイル名用フォーマット  
+			Date today = new Date();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+			String filename = "img_" + dateFormat.format(today) + ".jpg";
+			String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
+					+ "YumekaNow" + File.separator + filename;
+			Log.d("taoka", "path=" + path);
+			File file = new File(path);
+			try {
+				MyImage.saveImage(file, bitmap);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -211,7 +293,9 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			CardEntity card = new CardEntity();
 			card.id = mCardId;
 			card.affirmationText = mAffirmationText.getText().toString();
-			card.backImageResourceId = ((BackImageEntity) mGallery.getSelectedItem()).resouceId;
+			BackImageEntity backImage = (BackImageEntity) mGallery.getSelectedItem();
+			card.backImageResourceId = backImage.resouceId;
+			card.backImagePath = backImage.bitmapPath;
 			card.textColor = (Integer) mTextColor.getTag();
 			card.shadowColor = (Integer) mShadowColor.getTag();
 			card.textSize = Integer.parseInt(mTextSize.getText().toString());
@@ -234,7 +318,9 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 				Dao<CardEntity, Integer> cardDao = mHelper.getDao(CardEntity.class);
 				CardEntity cardEntity = new CardEntity();
 				cardEntity.id = mCardId;
-				cardEntity.backImageResourceId = ((BackImageEntity) mGallery.getSelectedItem()).resouceId;
+				BackImageEntity backImage = (BackImageEntity) mGallery.getSelectedItem();
+				cardEntity.backImageResourceId = backImage.resouceId;
+				cardEntity.backImagePath = backImage.bitmapPath;
 				cardEntity.affirmationText = mAffirmationText.getText().toString();
 				cardEntity.textColor = (Integer) mTextColor.getTag();
 				cardEntity.shadowColor = (Integer) mShadowColor.getTag();
@@ -250,7 +336,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 				//				mHelper.close();
 			}
 			finish();
-			
+
 			Intent intent = new Intent(getApplication(), MainActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
@@ -268,6 +354,18 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			Intent intent = new Intent(getApplication(), MainActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
+		}
+	};
+
+	/**
+	 * 背景画像の追加ボタンのクリックリスナー
+	 */
+	private final OnClickListener mAddBackImgButtonClick = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Intent intent = new Intent(Intent.ACTION_PICK);
+			intent.setType("image/*");
+			startActivityForResult(intent, INTENT_REQUEST_PICTURE);
 		}
 	};
 
@@ -367,7 +465,11 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 
 			BackImageEntity item = mItems.get(position);
 			ImageView imageView = (ImageView) convertView.findViewWithTag("image");
-			imageView.setImageResource(item.resouceId);
+			if (item.resouceId == 0) {
+				imageView.setImageBitmap(BitmapFactory.decodeFile(item.bitmapPath));
+			} else {
+				imageView.setImageResource(item.resouceId);
+			}
 
 			return convertView;
 		}

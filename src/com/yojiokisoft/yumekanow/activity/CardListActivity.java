@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -103,7 +104,11 @@ public class CardListActivity extends Activity {
 			}
 
 			CardEntity item = mItems.get(position);
-			wrapper.image.setImageResource(item.backImageResourceId);
+			if (item.backImageResourceId == 0) {
+				wrapper.image.setImageURI(Uri.parse("file:///" + item.backImagePath));
+			} else {
+				wrapper.image.setImageResource(item.backImageResourceId);
+			}
 			wrapper.label.setText(item.affirmationText);
 
 			return view;

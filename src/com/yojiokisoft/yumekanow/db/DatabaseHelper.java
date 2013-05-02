@@ -14,7 +14,7 @@ import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.entity.CounterEntity;
 
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
-	private static final String DATABASE_NAME = Environment.getExternalStorageDirectory() + "/yumekanow.db";
+	private static final String DATABASE_NAME = Environment.getExternalStorageDirectory() + "/YumekaNow/yumekanow.db";
 	private static final int DATABASE_VERSION = 1;
 
 	private static DatabaseHelper mInstance = null;

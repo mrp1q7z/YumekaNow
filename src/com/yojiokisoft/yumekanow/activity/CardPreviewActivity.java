@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -89,7 +90,11 @@ public class CardPreviewActivity extends Activity {
 		mTextView.setLayoutParams(params);
 
 		mImageView = (ImageView) findViewById(R.id.backImage);
-		mImageView.setImageResource(mCard.backImageResourceId);
+		if (mCard.backImageResourceId == 0) {
+			mImageView.setImageURI(Uri.parse("file:///" + mCard.backImagePath));
+		} else {
+			mImageView.setImageResource(mCard.backImageResourceId);
+		}
 
 		mScaleGestureDetector = new ScaleGestureDetector(this, mOnScaleGestureListener);
 		mTextView.setOnTouchListener(mAffirmationTextOnTouch);

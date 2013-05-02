@@ -12,6 +12,8 @@ public class CardEntity implements Serializable {
 	@DatabaseField
 	public int backImageResourceId; // 背景画像のリソースID
 	@DatabaseField
+	public String backImagePath; // 背景画像のパス
+	@DatabaseField
 	public String affirmationText; // アファーメーションの言葉
 	@DatabaseField
 	public int textColor; // 文字の色

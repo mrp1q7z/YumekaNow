@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
@@ -86,10 +87,10 @@ public class CardDetailActivity extends Activity {
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
 			sp.edit().putInt("UseCard", card.id).commit();
 			finish();
-			
+
 			Intent intent = new Intent(getApplication(), MainActivity.class);
-		    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		    startActivity(intent);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
 		}
 	};
 
@@ -195,7 +196,11 @@ public class CardDetailActivity extends Activity {
 			mTextView.setTextSize(card.textSize);
 			mTextContainer.setPadding(card.marginLeft, card.marginTop, 0, 0);
 
-			mImageView.setImageResource(card.backImageResourceId);
+			if (card.backImageResourceId == 0) {
+				mImageView.setImageURI(Uri.parse("file:///" + card.backImagePath));
+			} else {
+				mImageView.setImageResource(card.backImageResourceId);
+			}
 		}
 
 		public CardEntity getCard(int position) {

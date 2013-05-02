@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -61,7 +62,15 @@ public class CardFragment extends Fragment {
 			cardDao = helper.getDao(CardEntity.class);
 			cardList = cardDao.queryForEq("id", cardId);
 			if (cardList.size() < 1) {
-				throw new ClassCastException("Card not found id=" + cardId);
+				CardEntity emptyCard = new CardEntity();
+				emptyCard.affirmationText = "カードを作成してください";
+				emptyCard.textColor = Color.BLACK;
+				emptyCard.shadowColor = Color.WHITE;
+				emptyCard.textSize = 20;
+				emptyCard.marginLeft = 10;
+				emptyCard.marginTop = 50;
+				emptyCard.backImageResourceId = R.drawable.back_img01;
+				cardList.add(emptyCard);
 			}
 			if (cardList.size() > 1) {
 				throw new ClassCastException("Card is multi id=" + cardId);
@@ -80,7 +89,12 @@ public class CardFragment extends Fragment {
 		mAffirmationText.setLayoutParams(params);
 		mAffirmationText.setShadowLayer(1.5f, 1.0f, 1.0f, card.shadowColor);
 
-		mBackImage.setBackgroundResource(card.backImageResourceId);
+		if (card.backImageResourceId == 0) {
+			Drawable drawable = Drawable.createFromPath(card.backImagePath);
+			mBackImage.setBackgroundDrawable(drawable);
+		} else {
+			mBackImage.setBackgroundResource(card.backImageResourceId);
+		}
 
 		return view;
 	}
