@@ -14,6 +14,7 @@
     <EditTextPreference
         android:defaultValue="@string/goalCnt"
         android:dialogTitle="目標回数"
+        android:inputType="number"
         android:key="GOAL_CNT"
         android:summary="アファーメーションを唱えた回数がこの値になったら目標達成とみなします"
         android:title="目標回数" />
