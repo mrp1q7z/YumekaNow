@@ -173,6 +173,7 @@ containing a value of this type.
     public static final class string {
         public static final int app_name=0x7f060000;
         public static final int cancel=0x7f060004;
+        public static final int goalCnt=0x7f060008;
         public static final int hello_world=0x7f060001;
         public static final int init_msg=0x7f060005;
         public static final int menu_settings=0x7f060002;

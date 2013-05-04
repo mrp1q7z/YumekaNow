@@ -12,7 +12,7 @@
         android:title="表示間隔" />
 
     <EditTextPreference
-        android:defaultValue="999"
+        android:defaultValue="@string/goalCnt"
         android:dialogTitle="目標回数"
         android:key="GOAL_CNT"
         android:summary="アファーメーションを唱えた回数がこの値になったら目標達成とみなします"

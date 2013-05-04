@@ -13,5 +13,7 @@
     <string name="title_activity_tab">TabActivity</string>
 
     <integer name="colorGridColumnWidth">32</integer>
+    
+    <string name="goalCnt">997</string>
 
 </resources>

@@ -40,7 +40,7 @@ public class StateFragment extends Fragment {
 		mView = inflater.inflate(R.layout.fragment_state, container, false);
 
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mActivity);
-		int goalCnt = Integer.parseInt(sp.getString("GOAL_CNT", "-1"));
+		int goalCnt = Integer.parseInt(sp.getString("GOAL_CNT", getString(R.string.goalCnt)));
 		CounterDao counter = new CounterDao(mActivity);
 		int okCnt = counter.getOkCnt();
 
