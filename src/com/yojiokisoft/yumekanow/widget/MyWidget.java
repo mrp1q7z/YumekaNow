@@ -1,16 +1,15 @@
 package com.yojiokisoft.yumekanow.widget;
 
-import com.yojiokisoft.yumekanow.service.MyWidgetService;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.yojiokisoft.yumekanow.model.SettingDao;
+import com.yojiokisoft.yumekanow.service.MyWidgetService;
 
 public class MyWidget extends AppWidgetProvider {
 	@Override
@@ -34,10 +33,8 @@ public class MyWidget extends AppWidgetProvider {
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		long now = System.currentTimeMillis();
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-		String dispInterval = sp.getString("DISP_INTERVAL", "60");
-		Log.d("taoka", "MyWidget.onUpdate : Interval=" + dispInterval);
-		long interval = Integer.parseInt(dispInterval) * 60 * 1000;
+		SettingDao settingDao = SettingDao.getInstance(context);
+		long interval = settingDao.getDispInterval() * 60 * 1000;
 		alarmManager.setRepeating(AlarmManager.RTC, now, interval, pendingIntent);
 
 		// サービスが起動してないなら起動する

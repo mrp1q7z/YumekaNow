@@ -16,11 +16,10 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
-import android.util.Log;
 
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.model.SettingDao;
 import com.yojiokisoft.yumekanow.service.MyWidgetService;
 
 public class MyPreference extends PreferenceActivity implements OnSharedPreferenceChangeListener,
@@ -124,14 +123,8 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 		if (key == null || "Alarm".equals(key)) {
 			RingtonePreference prefAlarm = (RingtonePreference) getPreferenceScreen().findPreference("Alarm");
 			summary = indexOfBr(prefAlarm.getSummary().toString());
-			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-			String url = sp.getString("Alarm", "");
-			if (url.length() <= 0) {
-				summary += BR + "現在値：サイレント";
-			} else {
-				Ringtone rm = RingtoneManager.getRingtone(this, Uri.parse(url));
-				summary += BR + "現在値：" + rm.getTitle(this);
-			}
+			SettingDao settingDao = SettingDao.getInstance(this);
+			summary += BR + "現在値：" + settingDao.getAlarm();
 			prefAlarm.setSummary(summary);
 		}
 	}
@@ -145,10 +138,8 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 			AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 			alarmManager.cancel(pendingIntent);
 
-			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-			String dispInterval = sp.getString("DISP_INTERVAL", "60");
-			Log.d("taoka", "onSharedPreferrnceChanged:dispInterval=" + dispInterval);
-			long interval = Integer.parseInt(dispInterval) * 60 * 1000;
+			SettingDao settingDao = SettingDao.getInstance(this);
+			long interval = settingDao.getDispInterval() * 60 * 1000;
 			alarmManager.setRepeating(AlarmManager.RTC, interval, interval, pendingIntent);
 		}
 	}

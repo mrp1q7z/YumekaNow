@@ -7,10 +7,8 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -28,6 +26,7 @@ import com.j256.ormlite.dao.Dao;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
+import com.yojiokisoft.yumekanow.model.SettingDao;
 
 public class CardDetailActivity extends Activity {
 	private Context mContext;
@@ -84,8 +83,8 @@ public class CardDetailActivity extends Activity {
 		public void onClick(View v) {
 			CustomPagerAdapter adapter = (CustomPagerAdapter) mViewPager.getAdapter();
 			CardEntity card = adapter.getCard(mViewPager.getCurrentItem());
-			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
-			sp.edit().putInt("UseCard", card.id).commit();
+			SettingDao settingDao = SettingDao.getInstance(mContext);
+			settingDao.setUseCard(card.id);
 			finish();
 
 			Intent intent = new Intent(getApplication(), MainActivity.class);

@@ -4,11 +4,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +19,7 @@ import com.j256.ormlite.dao.Dao;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
+import com.yojiokisoft.yumekanow.model.SettingDao;
 
 public class CardFragment extends Fragment {
 	private View view;
@@ -49,8 +48,7 @@ public class CardFragment extends Fragment {
 		mBackImage = (LinearLayout) view.findViewById(R.id.affirmationBack);
 
 		// カード情報を取得
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mActivity);
-		int cardId = sp.getInt("UseCard", -1);
+		int cardId = SettingDao.getInstance(mActivity).getUseCard();
 		if (cardId == -1) {
 			setDefalutCard();
 			return view;

@@ -6,8 +6,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
@@ -32,8 +30,7 @@ public class CounterDao {
 			e.printStackTrace();
 		}
 
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-		mCurrentCardId = sp.getInt("UseCard", -1);
+		mCurrentCardId = SettingDao.getInstance(context).getUseCard();
 		Log.d("taoka", "CounterDao.constractor:UseCard=" + mCurrentCardId);
 	}
 

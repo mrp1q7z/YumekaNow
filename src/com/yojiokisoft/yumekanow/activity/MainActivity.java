@@ -9,13 +9,11 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -42,6 +40,7 @@ import com.yojiokisoft.yumekanow.fragment.CardFragment;
 import com.yojiokisoft.yumekanow.fragment.SleepFragment;
 import com.yojiokisoft.yumekanow.fragment.StateFragment;
 import com.yojiokisoft.yumekanow.model.CounterDao;
+import com.yojiokisoft.yumekanow.model.SettingDao;
 import com.yojiokisoft.yumekanow.service.MyWidgetService;
 
 public class MainActivity extends FragmentActivity implements CardFragment.OnCardClickListener {
@@ -85,16 +84,15 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 			adapter.addTab(spec, "tab" + i);
 		}
 
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-		boolean isVibrator = sp.getBoolean("Vibrator", false);
-		if (isVibrator) {
+		SettingDao settingDao = SettingDao.getInstance(this);
+		if (settingDao.getVibrator()) {
 			mVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 			long[] pattern = { 0, 500, 250, 500, 250, 500 }; // OFF/ON/OFF/ON...
 			mVibrator.vibrate(pattern, -1);
 		}
 
-		String url = sp.getString("Alarm", "");
-		if (url.length() > 0) {
+		String url = settingDao.getAlarmUrl();
+		if (url != null) {
 			mRingtone = RingtoneManager.getRingtone(this, Uri.parse(url));
 			mRingtone.play();
 		}

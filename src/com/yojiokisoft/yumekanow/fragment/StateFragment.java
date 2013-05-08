@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +19,7 @@ import android.widget.TextView;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.entity.DayCntEntity;
 import com.yojiokisoft.yumekanow.model.CounterDao;
+import com.yojiokisoft.yumekanow.model.SettingDao;
 import com.yojiokisoft.yumekanow.mycomponent.MyProgress;
 
 public class StateFragment extends Fragment {
@@ -39,9 +38,16 @@ public class StateFragment extends Fragment {
 		Log.d("taoka", "onCreateView");
 		mView = inflater.inflate(R.layout.fragment_state, container, false);
 
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mActivity);
-		int goalCnt = Integer.parseInt(sp.getString("GOAL_CNT", getString(R.string.goalCnt)));
+		setProgress();
+
+		return mView;
+	}
+
+	private void setProgress() {
+		SettingDao settingDao = SettingDao.getInstance(mActivity);
 		CounterDao counter = new CounterDao(mActivity);
+
+		int goalCnt = settingDao.getGoalCnt();
 		int okCnt = counter.getOkCnt();
 
 		MyProgress progress = (MyProgress) mView.findViewById(R.id.totalProgress);
@@ -49,8 +55,6 @@ public class StateFragment extends Fragment {
 		progress.setDescription(okCnt + "/" + goalCnt);
 		progress.setMax(100);
 		progress.setProgress(okCnt * 100 / goalCnt);
-
-		return mView;
 	}
 
 	@Override
@@ -142,7 +146,12 @@ public class StateFragment extends Fragment {
 		if (item.totalOkCnt > 900) {
 			return "あと少し";
 		}
-//		return null;
+		//		return null;
 		return String.valueOf(item.totalOkCnt);
+	}
+
+	@Override
+	public void onResume() {
+		setProgress();
 	}
 }
