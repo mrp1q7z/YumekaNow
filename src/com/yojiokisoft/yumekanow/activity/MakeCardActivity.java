@@ -241,6 +241,12 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 				e.printStackTrace();
 			}
 		}
+		// ギャラリーの再読み込み
+		BackImageDao backImageDao = new BackImageDao(this.getResources());
+		List<BackImageEntity> list = backImageDao.queryForAll();
+		MyListArrayAdapter adapter = (MyListArrayAdapter)mGallery.getAdapter();
+		adapter.setData(list);
+		adapter.notifyDataSetChanged();
 	}
 
 	/**
@@ -472,6 +478,13 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			}
 
 			return convertView;
+		}
+		
+		public void setData(List<BackImageEntity> items) {
+			if (mItems != null) {
+				mItems = null;
+			}
+			mItems = items;
 		}
 	}
 }
