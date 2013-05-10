@@ -127,7 +127,7 @@
                     android:id="@+id/textColor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#33ee88"
+                    android:background="@color/textColor"
                     android:gravity="center"
                     android:padding="5dip"
                     android:text="whitesmoke"
@@ -167,7 +167,7 @@
                     android:id="@+id/shadowColor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#ff00ff"
+                    android:background="@color/shadowColor"
                     android:gravity="center"
                     android:padding="5dip"
                     android:text="Black" />

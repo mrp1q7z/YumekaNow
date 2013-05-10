@@ -114,11 +114,15 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		cancelButton.setOnClickListener(mCancelButtonClick);
 
 		mTextColor = (TextView) findViewById(R.id.textColor);
-		mTextColor.setTag(0x33ee88);
+		int color = getResources().getColor(R.color.textColor);
+		mTextColor.setBackgroundColor(color);
+		mTextColor.setTag(color);
 		mTextColor.setOnClickListener(mTextColorClick);
 
 		mShadowColor = (TextView) findViewById(R.id.shadowColor);
-		mShadowColor.setTag(0x000001);
+		color = getResources().getColor(R.color.shadowColor);
+		mShadowColor.setBackgroundColor(color);
+		mShadowColor.setTag(color);
 		mShadowColor.setOnClickListener(mShadowColorClick);
 
 		SeekBar textSizeBar = (SeekBar) findViewById(R.id.textSizeBar);
