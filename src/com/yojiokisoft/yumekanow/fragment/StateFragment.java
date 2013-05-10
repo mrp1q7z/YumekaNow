@@ -152,6 +152,7 @@ public class StateFragment extends Fragment {
 
 	@Override
 	public void onResume() {
+		super.onResume();
 		setProgress();
 	}
 }
