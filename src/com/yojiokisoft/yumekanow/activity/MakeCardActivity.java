@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -47,12 +49,14 @@ import com.yojiokisoft.yumekanow.dialog.ColorPickerDialog;
 import com.yojiokisoft.yumekanow.entity.BackImageEntity;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.model.BackImageDao;
+import com.yojiokisoft.yumekanow.model.CardDao;
 import com.yojiokisoft.yumekanow.utils.MyImage;
 
 public class MakeCardActivity extends Activity implements ViewFactory {
 	private final int TEXT_SIZE_MIN = 10;
 	private final int INTENT_REQUEST_PICTURE = 3;
 
+	private Activity mActivity;
 	private BaseAdapter mAdapter;
 	// GUI items
 	private ImageSwitcher mImageSwitcher;
@@ -63,6 +67,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	private TextView mTextSize;
 	private TextView mMarginTop;
 	private TextView mMarginLeft;
+	private Button mDelBackImgButton;
 
 	private final DatabaseHelper mHelper = DatabaseHelper.getInstance(this);
 	private int mCardId;
@@ -71,6 +76,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_make_card);
+		mActivity = this;
 
 		mImageSwitcher = (ImageSwitcher) findViewById(R.id.backImgSwitcher);
 		mImageSwitcher.setFactory(this);
@@ -87,8 +93,15 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 				BackImageEntity backImage = (BackImageEntity) mGallery.getItemAtPosition(position);
 				if (backImage.resouceId == 0) {
 					mImageSwitcher.setImageURI(Uri.parse("file:///" + backImage.bitmapPath));
+					CardDao cardDao = new CardDao(mActivity);
+					if (cardDao.isUsed(backImage.bitmapPath)) {
+						mDelBackImgButton.setVisibility(View.GONE);
+					} else {
+						mDelBackImgButton.setVisibility(View.VISIBLE);
+					}
 				} else {
 					mImageSwitcher.setImageResource(backImage.resouceId);
+					mDelBackImgButton.setVisibility(View.GONE);
 				}
 			}
 
@@ -100,6 +113,9 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		List<BackImageEntity> list = backImageDao.queryForAll();
 		mAdapter = new MyListArrayAdapter(this, list);
 		mGallery.setAdapter(mAdapter);
+
+		mDelBackImgButton = (Button) findViewById(R.id.delBackImgButton);
+		mDelBackImgButton.setOnClickListener(mDelBackImgButtonClick);
 
 		Button addBackImgButton = (Button) findViewById(R.id.addBackImgButton);
 		addBackImgButton.setOnClickListener(mAddBackImgButtonClick);
@@ -248,7 +264,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		// ギャラリーの再読み込み
 		BackImageDao backImageDao = new BackImageDao(this.getResources());
 		List<BackImageEntity> list = backImageDao.queryForAll();
-		MyListArrayAdapter adapter = (MyListArrayAdapter)mGallery.getAdapter();
+		MyListArrayAdapter adapter = (MyListArrayAdapter) mGallery.getAdapter();
 		adapter.setData(list);
 		adapter.notifyDataSetChanged();
 	}
@@ -379,6 +395,39 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		}
 	};
 
+	/**
+	 * 背景画像の削除ボタンのクリックリスナー
+	 */
+	private final OnClickListener mDelBackImgButtonClick = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+			builder.setMessage("削除します。よろしいですか？")
+					.setCancelable(false)
+					.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							BackImageEntity backImage = (BackImageEntity) mGallery.getSelectedItem();
+							File file = new File(backImage.bitmapPath);
+							file.delete();
+							// ギャラリーの再読み込み
+							BackImageDao backImageDao = new BackImageDao(mActivity.getResources());
+							List<BackImageEntity> list = backImageDao.queryForAll();
+							mGallery.setSelection(0);
+							MyListArrayAdapter adapter = (MyListArrayAdapter) mGallery.getAdapter();
+							adapter.setData(list);
+							adapter.notifyDataSetChanged();
+						}
+					})
+					.setNegativeButton("No", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
+						}
+					});
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
+	};
+
 	private final OnSeekBarChangeListener mTextSizeOnSeekBarChange = new OnSeekBarChangeListener() {
 		@Override
 		public void onStopTrackingTouch(SeekBar seekBar) {
@@ -483,7 +532,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 
 			return convertView;
 		}
-		
+
 		public void setData(List<BackImageEntity> items) {
 			if (mItems != null) {
 				mItems = null;
