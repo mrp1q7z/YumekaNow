@@ -8,10 +8,12 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.view.ViewGroup.MarginLayoutParams;
+import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
@@ -25,7 +27,7 @@ public class CardFragment extends Fragment {
 	private View view;
 	private Activity mActivity;
 	private TextView mAffirmationText;
-	private LinearLayout mBackImage;
+	private ImageView mBackImage;
 	private OnCardClickListener mListener;
 
 	// Container Activity must implement this interface  
@@ -45,7 +47,7 @@ public class CardFragment extends Fragment {
 
 		mAffirmationText = (TextView) view.findViewById(R.id.affirmationText);
 		mAffirmationText.setOnClickListener(mAffirmationTextClick);
-		mBackImage = (LinearLayout) view.findViewById(R.id.affirmationBack);
+		mBackImage = (ImageView) view.findViewById(R.id.affirmationBack);
 
 		// カード情報を取得
 		int cardId = SettingDao.getInstance(mActivity).getUseCard();
@@ -82,16 +84,21 @@ public class CardFragment extends Fragment {
 		mAffirmationText.setText(card.affirmationText);
 		mAffirmationText.setTextColor(card.textColor);
 		mAffirmationText.setTextSize(card.textSize);
-		LayoutParams params = (LayoutParams) mAffirmationText.getLayoutParams();
-		params.setMargins(card.marginLeft, card.marginTop, 0, 0);
-		mAffirmationText.setLayoutParams(params);
 		mAffirmationText.setShadowLayer(1.5f, 1.0f, 1.0f, card.shadowColor);
+
+		DisplayMetrics metrics = new DisplayMetrics();
+		mActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		int tabHeight = metrics.widthPixels / 7;
+		MarginLayoutParams params = (MarginLayoutParams) mAffirmationText.getLayoutParams();
+		params.leftMargin = card.marginLeft;
+		params.topMargin = card.marginTop - (tabHeight / 2);
+		mAffirmationText.setLayoutParams(params);
 
 		if (card.backImageResourceId == 0) {
 			Drawable drawable = Drawable.createFromPath(card.backImagePath);
-			mBackImage.setBackgroundDrawable(drawable);
+			mBackImage.setImageDrawable(drawable);
 		} else {
-			mBackImage.setBackgroundResource(card.backImageResourceId);
+			mBackImage.setImageResource(card.backImageResourceId);
 		}
 
 		return view;
@@ -107,7 +114,7 @@ public class CardFragment extends Fragment {
 		mAffirmationText.setShadowLayer(1.5f, 1.0f, 1.0f, Color.WHITE);
 		mAffirmationText.setText("カードを選択してください");
 
-		mBackImage.setBackgroundResource(R.drawable.back_img01);
+		mBackImage.setImageResource(R.drawable.back_img01);
 	}
 
 	@Override

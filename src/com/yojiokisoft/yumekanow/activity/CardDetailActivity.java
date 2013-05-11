@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -150,7 +151,6 @@ public class CardDetailActivity extends Activity {
 			FrameLayout layout = (FrameLayout) this.mInflter.inflate(R.layout.card_detail, null);
 
 			mTextView = (TextView) layout.findViewById(R.id.affirmationText);
-			mTextContainer = (LinearLayout) layout.findViewById(R.id.textContainer);
 			mImageView = (ImageView) layout.findViewById(R.id.backImage);
 
 			// リストから取得
@@ -193,7 +193,10 @@ public class CardDetailActivity extends Activity {
 			mTextView.setTextColor(card.textColor);
 			mTextView.setShadowLayer(1.5f, 1.5f, 1.5f, card.shadowColor);
 			mTextView.setTextSize(card.textSize);
-			mTextContainer.setPadding(card.marginLeft, card.marginTop, 0, 0);
+			MarginLayoutParams params = (MarginLayoutParams) mTextView.getLayoutParams();
+			params.leftMargin = card.marginLeft;
+			params.topMargin = card.marginTop;
+			mTextView.setLayoutParams(params);
 
 			if (card.backImageResourceId == 0) {
 				mImageView.setImageURI(Uri.parse("file:///" + card.backImagePath));
