@@ -36,14 +36,15 @@ import android.widget.Toast;
 
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.entity.CounterEntity;
-import com.yojiokisoft.yumekanow.fragment.CardFragment;
+import com.yojiokisoft.yumekanow.fragment.CardFragment_;
 import com.yojiokisoft.yumekanow.fragment.SleepFragment;
-import com.yojiokisoft.yumekanow.fragment.StateFragment;
+import com.yojiokisoft.yumekanow.fragment.SleepFragment_;
+import com.yojiokisoft.yumekanow.fragment.StateFragment_;
 import com.yojiokisoft.yumekanow.model.CounterDao;
 import com.yojiokisoft.yumekanow.model.SettingDao;
 import com.yojiokisoft.yumekanow.service.MyWidgetService;
 
-public class MainActivity extends FragmentActivity implements CardFragment.OnCardClickListener {
+public class MainActivity extends FragmentActivity {
 
 	// メニューアイテム
 	private static final int MENU_CREATE_CARD = 0; // カードを作る
@@ -126,7 +127,7 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 		private final TabHost tabHost;
 		private final ViewPager pager;
 		private final ArrayList<String> tabs = new ArrayList<String>();
-		private SleepFragment mSleepFragment;
+		private SleepFragment_ mSleepFragment;
 
 		// dummy contents class
 		class DummyTabFactory implements TabHost.TabContentFactory {
@@ -164,11 +165,11 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 		@Override
 		public Fragment getItem(int position) {
 			if (position == 0) {
-				return new CardFragment();
+				return new CardFragment_();
 			} else if (position == 1) {
-				return new StateFragment();
+				return new StateFragment_();
 			} else {
-				mSleepFragment = new SleepFragment();
+				mSleepFragment = new SleepFragment_();
 				return mSleepFragment;
 			}
 		}
@@ -266,8 +267,8 @@ public class MainActivity extends FragmentActivity implements CardFragment.OnCar
 		return true;
 	}
 
-	@Override
-	public void onCardClick() {
+	public void onCardClick(View view) {
+		Log.d("taoka", "onCardClick");
 		if (mVibrator != null) {
 			mVibrator.cancel();
 		}

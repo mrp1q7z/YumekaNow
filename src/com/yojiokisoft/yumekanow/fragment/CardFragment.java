@@ -17,43 +17,37 @@ import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
+import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.EFragment;
+import com.googlecode.androidannotations.annotations.ViewById;
 import com.j256.ormlite.dao.Dao;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.model.SettingDao;
 
+@EFragment(R.layout.fragment_card)
 public class CardFragment extends Fragment {
-	private View view;
 	private Activity mActivity;
-	private TextView mAffirmationText;
-	private ImageView mBackImage;
-	private OnCardClickListener mListener;
 
-	// Container Activity must implement this interface  
-	public interface OnCardClickListener {
-		public void onCardClick();
-	}
+	@ViewById(R.id.affirmationText)
+	TextView mAffirmationText;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		view = null;
-	}
+	@ViewById(R.id.affirmationBack)
+	ImageView mBackImage;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		view = inflater.inflate(R.layout.fragment_card, container, false);
+		return null;
+	}
 
-		mAffirmationText = (TextView) view.findViewById(R.id.affirmationText);
-		mAffirmationText.setOnClickListener(mAffirmationTextClick);
-		mBackImage = (ImageView) view.findViewById(R.id.affirmationBack);
-
+	@AfterViews
+	public void printCard() {
 		// カード情報を取得
 		int cardId = SettingDao.getInstance(mActivity).getUseCard();
 		if (cardId == -1) {
 			setDefalutCard();
-			return view;
+			return;
 		}
 		DatabaseHelper helper = DatabaseHelper.getInstance(mActivity);
 		Dao<CardEntity, Integer> cardDao;
@@ -100,12 +94,9 @@ public class CardFragment extends Fragment {
 		} else {
 			mBackImage.setImageResource(card.backImageResourceId);
 		}
-
-		return view;
 	}
 
 	private void setDefalutCard() {
-		mAffirmationText = (TextView) view.findViewById(R.id.affirmationText);
 		mAffirmationText.setTextColor(0xff333333);
 		mAffirmationText.setTextSize(20.0f);
 		LayoutParams params = (LayoutParams) mAffirmationText.getLayoutParams();
@@ -120,18 +111,6 @@ public class CardFragment extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		try {
-			mListener = (OnCardClickListener) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString() + " must implement OnCardClickListener");
-		}
 		mActivity = activity;
 	}
-
-	private final View.OnClickListener mAffirmationTextClick = new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			mListener.onCardClick();
-		}
-	};
 }
