@@ -205,7 +205,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		ImageView imageView = new ImageView(this);
 		imageView.setBackgroundColor(0xFF000000);
 		imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-		imageView.setLayoutParams(new ImageSwitcher.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+		imageView.setLayoutParams(new ImageSwitcher.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		return imageView;
 	}
 
