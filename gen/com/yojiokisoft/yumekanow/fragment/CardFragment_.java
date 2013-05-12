@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.yojiokisoft.yumekanow.R.layout;
 
 public final class CardFragment_
