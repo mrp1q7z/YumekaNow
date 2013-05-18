@@ -35,7 +35,7 @@
         </service>
 
         <activity
-            android:name="com.yojiokisoft.yumekanow.activity.InitActivity"
+            android:name="com.yojiokisoft.yumekanow.activity.InitActivity_"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,25 +43,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.yojiokisoft.yumekanow.activity.CardListActivity" >
+        <activity android:name="com.yojiokisoft.yumekanow.activity.CardListActivity_" >
         </activity>
         <activity
-            android:name="com.yojiokisoft.yumekanow.activity.MakeCardActivity"
+            android:name="com.yojiokisoft.yumekanow.activity.MakeCardActivity_"
             android:theme="@android:style/Theme.Black" >
         </activity>
         <activity
-            android:name="com.yojiokisoft.yumekanow.activity.MyPreference"
+            android:name="com.yojiokisoft.yumekanow.activity.MyPreference_"
             android:theme="@android:style/Theme.Black" >
         </activity>
-        <activity android:name="com.yojiokisoft.yumekanow.activity.UsageActivity" >
+        <activity android:name="com.yojiokisoft.yumekanow.activity.UsageActivity_" >
         </activity>
-        <activity android:name="com.yojiokisoft.yumekanow.activity.CardPreviewActivity" >
+        <activity android:name="com.yojiokisoft.yumekanow.activity.CardPreviewActivity_" >
         </activity>
-        <activity android:name="com.yojiokisoft.yumekanow.activity.CardDetailActivity" >
+        <activity android:name="com.yojiokisoft.yumekanow.activity.CardDetailActivity_" >
         </activity>
-        <activity android:name="com.yojiokisoft.yumekanow.activity.MainActivity" >
+        <activity android:name="com.yojiokisoft.yumekanow.activity.MainActivity_" >
         </activity>
-        <activity android:name="com.yojiokisoft.yumekanow.activity.WakeUpActivity" >
+        <activity android:name="com.yojiokisoft.yumekanow.activity.WakeUpActivity_" >
         </activity>
     </application>
 

@@ -6,30 +6,29 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.EActivity;
+import com.googlecode.androidannotations.annotations.ItemClick;
+import com.googlecode.androidannotations.annotations.ViewById;
 import com.j256.ormlite.dao.Dao;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 
+@EActivity(R.layout.activity_card_list)
 public class CardListActivity extends Activity {
-	private BaseAdapter adapter;
+	@ViewById(R.id.cardList)
+	ListView mListView;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_card_list);
-		ListView listView = (ListView) findViewById(R.id.cardList);
+	@AfterViews
+	public void initActivity() {
 		DatabaseHelper helper = DatabaseHelper.getInstance(this);
 		List<CardEntity> cardList = null;
 		try {
@@ -39,27 +38,16 @@ public class CardListActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		adapter = new MyListArrayAdapter(this, cardList);
-		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				ListView listView = (ListView) parent;
-				Intent myIntent = new Intent(getApplicationContext(), CardDetailActivity.class);
-				CardEntity card = (CardEntity) listView.getItemAtPosition(position);
-				myIntent.putExtra("Card", card);
-				myIntent.putExtra("Position", position);
-				myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(myIntent);
-			}
-		});
+		BaseAdapter adapter = new MyListArrayAdapter(this, cardList);
+		mListView.setAdapter(adapter);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_cardlist, menu);
-		return true;
+	@ItemClick
+	public void cardListItemClicked(CardEntity card) {
+		Intent myIntent = new Intent(getApplicationContext(), CardDetailActivity_.class);
+		myIntent.putExtra("Card", card);
+		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(myIntent);
 	}
 
 	/**

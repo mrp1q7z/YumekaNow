@@ -10,9 +10,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.yojiokisoft.yumekanow.R;
-import com.yojiokisoft.yumekanow.R.id;
-import com.yojiokisoft.yumekanow.R.layout;
-import com.yojiokisoft.yumekanow.activity.MainActivity;
+import com.yojiokisoft.yumekanow.activity.MainActivity_;
 import com.yojiokisoft.yumekanow.model.CounterDao;
 import com.yojiokisoft.yumekanow.widget.MyWidget;
 
@@ -42,7 +40,7 @@ public class MyWidgetService extends Service {
 		super.onStart(intent, startId);
 
 		if (ACTION_MY_CLICK.equals(intent.getAction())) {
-			Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+			Intent myIntent = new Intent(getApplicationContext(), MainActivity_.class);
 			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(myIntent);
 		}
@@ -75,7 +73,7 @@ public class MyWidgetService extends Service {
 		AppWidgetManager manager = AppWidgetManager.getInstance(this);
 		manager.updateAppWidget(thisWidget, remoteViews);
 
-		Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+		Intent myIntent = new Intent(getApplicationContext(), MainActivity_.class);
 		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(myIntent);
 

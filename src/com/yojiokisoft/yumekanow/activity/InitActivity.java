@@ -1,31 +1,18 @@
 package com.yojiokisoft.yumekanow.activity;
 
 import android.app.Activity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
 
+import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.EActivity;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.model.SettingDao;
 
+@EActivity(R.layout.activity_init)
 public class InitActivity extends Activity {
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_init);
-
+	@AfterViews
+	public void initActiviy() {
 		DatabaseHelper.getInstance(this);
 		SettingDao.getInstance(this);
-		Log.d("taoak", "InitActivity.onCreate");
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_init, menu);
-		return true;
-	}
-
 }

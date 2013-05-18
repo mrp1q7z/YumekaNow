@@ -1,18 +1,12 @@
 package com.yojiokisoft.yumekanow.activity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -20,57 +14,44 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioGroup;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.EActivity;
+import com.googlecode.androidannotations.annotations.OptionsItem;
+import com.googlecode.androidannotations.annotations.OptionsMenu;
+import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
-import com.yojiokisoft.yumekanow.entity.CounterEntity;
 import com.yojiokisoft.yumekanow.fragment.CardFragment_;
-import com.yojiokisoft.yumekanow.fragment.SleepFragment;
 import com.yojiokisoft.yumekanow.fragment.SleepFragment_;
 import com.yojiokisoft.yumekanow.fragment.StateFragment_;
-import com.yojiokisoft.yumekanow.model.CounterDao;
 import com.yojiokisoft.yumekanow.model.SettingDao;
-import com.yojiokisoft.yumekanow.service.MyWidgetService;
+import com.yojiokisoft.yumekanow.utils.MyLog;
 
+@EActivity(R.layout.activity_main)
+@OptionsMenu(R.menu.activity_main)
 public class MainActivity extends FragmentActivity {
+	private Vibrator mVibrator = null;
+	private Ringtone mRingtone = null;
 
-	// メニューアイテム
-	private static final int MENU_CREATE_CARD = 0; // カードを作る
-	private static final int MENU_SELECT_CARD = 1; // カードを選ぶ
-	private static final int MENU_SETTING = 2; // 設定
-	private static final int MENU_USAGE = 3; // 使い方
+	@ViewById(android.R.id.tabhost)
+	TabHost mTabHost;
 
-	Vibrator mVibrator = null;
-	Ringtone mRingtone = null;
+	@ViewById(R.id.pager)
+	ViewPager mPager;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-
+	@AfterViews
+	public void initActivity() {
 		FragmentManager manager = getSupportFragmentManager();
-
-		// tabhost
-		TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
-		tabHost.setup();
-
-		// viewpager
-		final ViewPager pager = (ViewPager) findViewById(R.id.pager);
-
-		final MyAdapter1 adapter = new MyAdapter1(manager, this, tabHost, pager);
-		//pager.setAdapter(adapter);
+		mTabHost.setup();
+		final MyPagerAdapter adapter = new MyPagerAdapter(manager, this, mTabHost, mPager);
 
 		// tab size from screen size
 		DisplayMetrics metrics = new DisplayMetrics();
@@ -80,7 +61,7 @@ public class MainActivity extends FragmentActivity {
 
 		String tabTitle[] = { "カード", "情報", "スリープ" };
 		for (int i = 0; i < 3; i++) {
-			TabSpec spec = tabHost.newTabSpec("tab" + i);
+			TabSpec spec = mTabHost.newTabSpec("tab" + i);
 			spec.setIndicator(getTabView(tabWidth, tabHeight, tabTitle[i]));
 			adapter.addTab(spec, "tab" + i);
 		}
@@ -101,13 +82,8 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	protected void onDestroy() {
-		if (mVibrator != null) {
-			mVibrator.cancel();
-		}
-		if (mRingtone != null) {
-			mRingtone.stop();
-		}
 		super.onDestroy();
+		stopVibrator();
 	}
 
 	private TextView getTabView(int width, int height, String title) {
@@ -120,14 +96,13 @@ public class MainActivity extends FragmentActivity {
 		return view;
 	}
 
-	private class MyAdapter1 extends FragmentPagerAdapter
+	private class MyPagerAdapter extends FragmentPagerAdapter
 			implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
 
 		private final Context context;
 		private final TabHost tabHost;
 		private final ViewPager pager;
 		private final ArrayList<String> tabs = new ArrayList<String>();
-		private SleepFragment_ mSleepFragment;
 
 		// dummy contents class
 		class DummyTabFactory implements TabHost.TabContentFactory {
@@ -145,7 +120,7 @@ public class MainActivity extends FragmentActivity {
 			}
 		}
 
-		public MyAdapter1(FragmentManager fm, Context context, TabHost tabHost, ViewPager pager) {
+		public MyPagerAdapter(FragmentManager fm, Context context, TabHost tabHost, ViewPager pager) {
 			super(fm);
 			this.context = context;
 			this.tabHost = tabHost;
@@ -169,8 +144,7 @@ public class MainActivity extends FragmentActivity {
 			} else if (position == 1) {
 				return new StateFragment_();
 			} else {
-				mSleepFragment = new SleepFragment_();
-				return mSleepFragment;
+				return new SleepFragment_();
 			}
 		}
 
@@ -203,72 +177,46 @@ public class MainActivity extends FragmentActivity {
 
 			pager.setCurrentItem(position);
 		}
-
-		public SleepFragment getSeepFragment() {
-			return mSleepFragment;
-		}
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		//		getMenuInflater().inflate(R.menu.activity_tab, menu);
-		super.onCreateOptionsMenu(menu);
-
-		MenuItem item0 = menu.add(0, MENU_CREATE_CARD, 0, "カードを作る");
-		item0.setIcon(android.R.drawable.ic_menu_add);
-
-		MenuItem item1 = menu.add(0, MENU_SELECT_CARD, 0, "カードを選ぶ");
-		item1.setIcon(android.R.drawable.ic_menu_gallery);
-
-		MenuItem item2 = menu.add(0, MENU_SETTING, 0, "設定");
-		item2.setIcon(android.R.drawable.ic_menu_preferences);
-
-		MenuItem item3 = menu.add(0, MENU_USAGE, 0, "使い方");
-		item3.setIcon(android.R.drawable.ic_menu_help);
-
-		return true;
+	@OptionsItem(R.id.make_card)
+	void onMenuMakeCard() {
+		Toast toast = Toast.makeText(this, "カードを作るが選択されました", Toast.LENGTH_LONG);
+		toast.show();
+		Intent myIntent = new Intent(getApplicationContext(), MakeCardActivity_.class);
+		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(myIntent);
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Toast toast;
-		Intent myIntent;
-		switch (item.getItemId()) {
-		case MENU_CREATE_CARD:
-			toast = Toast.makeText(this, "カードを作るが選択されました", Toast.LENGTH_LONG);
-			toast.show();
-			myIntent = new Intent(getApplicationContext(), MakeCardActivity.class);
-			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(myIntent);
-			break;
-		case MENU_SELECT_CARD:
-			toast = Toast.makeText(this, "カードを選ぶが選択されました", Toast.LENGTH_LONG);
-			toast.show();
-			myIntent = new Intent(getApplicationContext(), CardListActivity.class);
-			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(myIntent);
-			break;
-		case MENU_SETTING:
-			toast = Toast.makeText(this, "設定が選択されました", Toast.LENGTH_LONG);
-			toast.show();
-			myIntent = new Intent(getApplicationContext(), MyPreference.class);
-			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(myIntent);
-			break;
-		case MENU_USAGE:
-			toast = Toast.makeText(this, "使い方が選択されました", Toast.LENGTH_LONG);
-			toast.show();
-			myIntent = new Intent(getApplicationContext(), UsageActivity.class);
-			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(myIntent);
-			break;
-		}
-		return true;
+	@OptionsItem(R.id.select_card)
+	void onMenuSelectCard() {
+		Toast toast = Toast.makeText(this, "カードを選ぶが選択されました", Toast.LENGTH_LONG);
+		toast.show();
+		Intent myIntent = new Intent(getApplicationContext(), CardListActivity_.class);
+		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(myIntent);
 	}
 
-	public void onCardClick(View view) {
-		Log.d("taoka", "onCardClick");
+	@OptionsItem(R.id.settings)
+	void onMenuSettings() {
+		Toast toast = Toast.makeText(this, "設定が選択されました", Toast.LENGTH_LONG);
+		toast.show();
+		Intent myIntent = new Intent(getApplicationContext(), MyPreference_.class);
+		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(myIntent);
+	}
+
+	@OptionsItem(R.id.usage)
+	void onMenuUsage() {
+		Toast toast = Toast.makeText(this, "使い方が選択されました", Toast.LENGTH_LONG);
+		toast.show();
+		Intent myIntent = new Intent(getApplicationContext(), UsageActivity_.class);
+		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(myIntent);
+	}
+
+	public void stopVibrator() {
+		MyLog.d("stopVibrator");
 		if (mVibrator != null) {
 			mVibrator.cancel();
 		}
@@ -277,76 +225,7 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	public void cancelButtonOnClick(View view) {
-		CounterDao counterDao = new CounterDao(this);
-		if (counterDao.getCurrentCardId() != -1) {
-			CounterEntity cnt = new CounterEntity();
-			cnt.cardId = counterDao.getCurrentCardId();
-			cnt.procTime = System.currentTimeMillis();
-			cnt.okCnt = 0;
-			cnt.ngCnt = 1;
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-			cnt.procDay = sdf.format(new Date(cnt.procTime));
-			counterDao.setCounter(cnt);
-		}
-
-		finish();
-	}
-
-	public void okButtonOnClick(View view) {
-		CounterDao counterDao = new CounterDao(this);
-		if (counterDao.getCurrentCardId() != -1) {
-			CounterEntity cnt = new CounterEntity();
-			cnt.cardId = counterDao.getCurrentCardId();
-			cnt.procTime = System.currentTimeMillis();
-			cnt.okCnt = 1;
-			cnt.ngCnt = 0;
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-			cnt.procDay = sdf.format(new Date(cnt.procTime));
-			counterDao.setCounter(cnt);
-		}
-
-		finish();
-	}
-
-	public void setTimerButtonOnClick(View view) {
-		// アファーメーションアラームの解除
-		Intent intent = new Intent(this, MyWidgetService.class);
-		PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent,
-				PendingIntent.FLAG_UPDATE_CURRENT);
-		AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-		alarmManager.cancel(pendingIntent);
-
-		// タイマーのアラームをセット
-		final ViewPager pager = (ViewPager) findViewById(R.id.pager);
-		SleepFragment sleepFragment = ((MyAdapter1) pager.getAdapter()).getSeepFragment();
-		TimePicker wakeUpTime = (TimePicker) sleepFragment.getView().findViewById(R.id.wakeUpTime);
-		int hour = wakeUpTime.getCurrentHour();
-		int min = wakeUpTime.getCurrentMinute();
-		Calendar calendar = Calendar.getInstance(); // Calendar取得
-		calendar.setTimeInMillis(System.currentTimeMillis()); // 現在時刻を取得
-		RadioGroup timeKind = (RadioGroup) findViewById(R.id.timeKind);
-		if (timeKind.getCheckedRadioButtonId() == R.id.jikan) {
-			// 時間指定
-			if (hour < calendar.get(calendar.HOUR_OF_DAY)
-					|| (hour <= calendar.get(calendar.HOUR_OF_DAY) && min < calendar.get(calendar.MINUTE))) {
-				calendar.add(calendar.DAY_OF_MONTH, 1);
-			}
-			calendar.set(calendar.get(calendar.YEAR), calendar.get(calendar.MONTH),
-					calendar.get(calendar.DAY_OF_MONTH), hour, min, 0);
-		} else {
-			// タイマー指定
-			calendar.add(Calendar.MINUTE, 60 * hour + min); // 現時刻 + 指定時間
-		}
-		intent = new Intent(this, WakeUpActivity.class);
-		pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		Log.d("taoka", "MainActivity.setTimerButtonOnClick : calendar=" + calendar.toString());
-		// TODO:タイマーはキャンセルしなくても上書きされる？
-		alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
-
-		Toast toast = Toast.makeText(this, "おやすみなさい", Toast.LENGTH_LONG);
-		toast.show();
-
+	public void closeActivity() {
 		finish();
 	}
 }

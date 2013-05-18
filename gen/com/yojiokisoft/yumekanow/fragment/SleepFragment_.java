@@ -8,7 +8,9 @@ package com.yojiokisoft.yumekanow.fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
 import android.widget.TimePicker;
 import com.yojiokisoft.yumekanow.R.layout;
 
@@ -29,6 +31,22 @@ public final class SleepFragment_
 
     private void afterSetContentView_() {
         mWakeUpTime = ((TimePicker) findViewById(com.yojiokisoft.yumekanow.R.id.wakeUpTime));
+        mTimeKind = ((RadioGroup) findViewById(com.yojiokisoft.yumekanow.R.id.timeKind));
+        {
+            View view = findViewById(com.yojiokisoft.yumekanow.R.id.setTimerButton);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        SleepFragment_.this.setTimerButtonClicked();
+                    }
+
+                }
+                );
+            }
+        }
         printWakuUpTime();
     }
 

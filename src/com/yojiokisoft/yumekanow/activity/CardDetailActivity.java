@@ -14,41 +14,42 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.Click;
+import com.googlecode.androidannotations.annotations.EActivity;
+import com.googlecode.androidannotations.annotations.Extra;
+import com.googlecode.androidannotations.annotations.ViewById;
 import com.j256.ormlite.dao.Dao;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.model.SettingDao;
 
+@EActivity(R.layout.activity_card_detail)
 public class CardDetailActivity extends Activity {
 	private Context mContext;
-	private ViewPager mViewPager;
+
+	@ViewById(R.id.pager)
+	ViewPager mViewPager;
+
+	@Extra("Card")
+	CardEntity mCard;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_card_detail);
 
 		mContext = this;
+	}
 
-		Bundle extras = getIntent().getExtras();
-		if (extras == null) {
-			return;
-		}
-		CardEntity card = (CardEntity) extras.getSerializable("Card");
-
-		Button useButton = (Button) findViewById(R.id.useButton);
-		Button editButton = (Button) findViewById(R.id.editButton);
-
+	@AfterViews
+	public void initActivity() {
 		DatabaseHelper helper = DatabaseHelper.getInstance(this);
 		Dao<CardEntity, Integer> cardDao;
 		List<CardEntity> list = null;
@@ -59,8 +60,6 @@ public class CardDetailActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		useButton.setOnClickListener(mUseButtonOnClick);
-		editButton.setOnClickListener(mEditButtonOnClick);
 
 		CustomPagerAdapter adapter = new CustomPagerAdapter(this);
 		CardEntity cardEntity;
@@ -68,50 +67,44 @@ public class CardDetailActivity extends Activity {
 		for (int i = 0; i < list.size(); i++) {
 			cardEntity = list.get(i);
 			adapter.add(cardEntity.id);
-			if (cardEntity.id == card.id) {
+			if (cardEntity.id == mCard.id) {
 				page = i;
 			}
 		}
 
-		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(adapter);
 		mViewPager.setCurrentItem(page);
 	}
 
 	// このカードを使うボタンクリック
-	private final OnClickListener mUseButtonOnClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			CustomPagerAdapter adapter = (CustomPagerAdapter) mViewPager.getAdapter();
-			CardEntity card = adapter.getCard(mViewPager.getCurrentItem());
-			SettingDao settingDao = SettingDao.getInstance(mContext);
-			settingDao.setUseCard(card.id);
-			finish();
+	@Click(R.id.useButton)
+	void useButtonOnClick() {
+		CustomPagerAdapter adapter = (CustomPagerAdapter) mViewPager.getAdapter();
+		CardEntity card = adapter.getCard(mViewPager.getCurrentItem());
+		SettingDao settingDao = SettingDao.getInstance(mContext);
+		settingDao.setUseCard(card.id);
+		finish();
 
-			Intent intent = new Intent(getApplication(), MainActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-		}
-	};
+		Intent intent = new Intent(getApplication(), MainActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+	}
 
 	// 編集ボタンクリック
-	private final OnClickListener mEditButtonOnClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			CustomPagerAdapter adapter = (CustomPagerAdapter) mViewPager.getAdapter();
-			CardEntity card = adapter.getCard(mViewPager.getCurrentItem());
-			Intent myIntent = new Intent(getApplicationContext(), MakeCardActivity.class);
-			myIntent.putExtra("Card", card);
-			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(myIntent);
-		}
-	};
+	@Click(R.id.editButton)
+	void editButtonOnClick() {
+		CustomPagerAdapter adapter = (CustomPagerAdapter) mViewPager.getAdapter();
+		CardEntity card = adapter.getCard(mViewPager.getCurrentItem());
+		Intent myIntent = new Intent(getApplicationContext(), MakeCardActivity_.class);
+		myIntent.putExtra("Card", card);
+		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(myIntent);
+	}
 
 	public class CustomPagerAdapter extends PagerAdapter {
 
 		private TextView mTextView;
 		private ImageView mImageView;
-		private LinearLayout mTextContainer;
 		private Dao<CardEntity, Integer> mCardDao;
 		/** コンテキスト. */
 		private Context mContext;

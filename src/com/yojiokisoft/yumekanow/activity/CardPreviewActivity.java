@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,23 +14,36 @@ import android.view.ScaleGestureDetector;
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup.MarginLayoutParams;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.Click;
+import com.googlecode.androidannotations.annotations.EActivity;
+import com.googlecode.androidannotations.annotations.Extra;
+import com.googlecode.androidannotations.annotations.Touch;
+import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.dialog.ColorPickerDialog;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 
+@EActivity(R.layout.activity_card_preview)
 public class CardPreviewActivity extends Activity {
 	private final int LONG_PRESS_TIMEOUT = ViewConfiguration.getLongPressTimeout();
 
 	private ScaleGestureDetector mScaleGestureDetector;
-	private TextView mTextView;
-	private ImageView mImageView;
+
+	@ViewById(R.id.affirmationText)
+	TextView mTextView;
+
+	@ViewById(R.id.backImage)
+	ImageView mImageView;
+
+	@Extra("Card")
+	CardEntity mCard;
+
 	private LayoutInflater mInflater;
 	private Context mContext;
 
@@ -47,7 +59,6 @@ public class CardPreviewActivity extends Activity {
 	private float[] mTextSize;
 	private int mTextSizeIndex = 0;
 	private long mDownTime;
-	private CardEntity mCard;
 
 	private final Runnable mLongPressRunnable = new Runnable() {
 		@Override
@@ -60,11 +71,8 @@ public class CardPreviewActivity extends Activity {
 		}
 	};
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_card_preview);
-
+	@AfterViews
+	public void initActivity() {
 		mTextSize = new float[50];
 		for (int i = 10; i <= mTextSize.length; i++) {
 			mTextSize[i - 1] = i;
@@ -72,13 +80,6 @@ public class CardPreviewActivity extends Activity {
 		mInflater = this.getLayoutInflater();
 		mContext = this;
 
-		Bundle extras = getIntent().getExtras();
-		if (extras == null) {
-			return;
-		}
-		mCard = (CardEntity) extras.getSerializable("Card");
-
-		mTextView = (TextView) findViewById(R.id.affirmationText);
 		mTextView.setText(mCard.affirmationText);
 		mTextView.setTextColor(mCard.textColor);
 		mTextView.setShadowLayer(1.5f, 1.5f, 1.5f, mCard.shadowColor);
@@ -89,7 +90,6 @@ public class CardPreviewActivity extends Activity {
 		params.topMargin = mCard.marginTop;
 		mTextView.setLayoutParams(params);
 
-		mImageView = (ImageView) findViewById(R.id.backImage);
 		if (mCard.backImageResourceId == 0) {
 			mImageView.setImageURI(Uri.parse("file:///" + mCard.backImagePath));
 		} else {
@@ -97,13 +97,7 @@ public class CardPreviewActivity extends Activity {
 		}
 
 		mScaleGestureDetector = new ScaleGestureDetector(this, mOnScaleGestureListener);
-		mTextView.setOnTouchListener(mAffirmationTextOnTouch);
 		mDragView = mTextView;
-
-		Button okButton = (Button) findViewById(R.id.okButton);
-		okButton.setOnClickListener(mOkButtonClick);
-		Button cancelButton = (Button) findViewById(R.id.cancelButton);
-		cancelButton.setOnClickListener(mCancelButtonClick);
 	}
 
 	@Override
@@ -116,66 +110,62 @@ public class CardPreviewActivity extends Activity {
 		return super.onTouchEvent(event);
 	}
 
-	private final OnTouchListener mAffirmationTextOnTouch = new OnTouchListener() {
-		@Override
-		public boolean onTouch(View v, MotionEvent event) {
-			if (mDragView == null) {
-				return false;
-			}
-			// タッチしている位置取得
-			int x = (int) event.getRawX();
-			int y = (int) event.getRawY();
-
-			final int action = event.getAction();
-			switch (action) {
-			case MotionEvent.ACTION_DOWN:
-				Log.v("taoka", "ACTION_DOWN: x=" + x + ",y=" + y);
-				mIsLongPress = true;
-				mHandler.postDelayed(mLongPressRunnable, LONG_PRESS_TIMEOUT);
-				mDownTime = System.currentTimeMillis();
-				break;
-			case MotionEvent.ACTION_MOVE:
-				Log.v("taoka", "ACTION_MOVE: x=" + x + ",y=" + y);
-				if (x < mOldX - 5 || mOldX + 5 < x ||
-						y < mOldY - 5 || mOldY + 5 < y) {
-					mIsLongPress = false;
-				}
-				if (mDragging) {
-					// 今回イベントでのView移動先の位置
-					int left = mDragView.getLeft() + (x - mOldX);
-					int top = mDragView.getTop() + (y - mOldY);
-					// Viewを移動する
-					mDragView.layout(left, top, left + mDragView.getWidth(), top + mDragView.getHeight());
-				}
-				break;
-			case MotionEvent.ACTION_CANCEL:
-				Log.v("taoka", "ACTION_CANCEL");
-				mIsLongPress = false;
-				mDragging = false;
-				mDragView.setBackgroundColor(0x00000000);
-				mHandler.removeCallbacks(mLongPressRunnable);
-				break;
-			case MotionEvent.ACTION_UP:
-				Log.v("taoka", "ACTION_UP");
-				mIsLongPress = false;
-				mDragging = false;
-				mDragView.setBackgroundColor(0x00000000);
-				mHandler.removeCallbacks(mLongPressRunnable);
-				if (System.currentTimeMillis() - mDownTime < LONG_PRESS_TIMEOUT) {
-					setTextColor();
-				} else {
-					mCard.marginLeft = mDragView.getLeft();
-					mCard.marginTop = mDragView.getTop();
-				}
-				break;
-			}
-			// 今回のタッチ位置を保持
-			mOldX = x;
-			mOldY = y;
-			// イベント処理完了
-			return true;
+	@Touch(R.id.affirmationText)
+	public void affirmationTextOnTouch(MotionEvent event) {
+		if (mDragView == null) {
+			return;
 		}
-	};
+		// タッチしている位置取得
+		int x = (int) event.getRawX();
+		int y = (int) event.getRawY();
+
+		final int action = event.getAction();
+		switch (action) {
+		case MotionEvent.ACTION_DOWN:
+			Log.v("taoka", "ACTION_DOWN: x=" + x + ",y=" + y);
+			mIsLongPress = true;
+			mHandler.postDelayed(mLongPressRunnable, LONG_PRESS_TIMEOUT);
+			mDownTime = System.currentTimeMillis();
+			break;
+		case MotionEvent.ACTION_MOVE:
+			Log.v("taoka", "ACTION_MOVE: x=" + x + ",y=" + y);
+			if (x < mOldX - 5 || mOldX + 5 < x ||
+					y < mOldY - 5 || mOldY + 5 < y) {
+				mIsLongPress = false;
+			}
+			if (mDragging) {
+				// 今回イベントでのView移動先の位置
+				int left = mDragView.getLeft() + (x - mOldX);
+				int top = mDragView.getTop() + (y - mOldY);
+				// Viewを移動する
+				mDragView.layout(left, top, left + mDragView.getWidth(), top + mDragView.getHeight());
+			}
+			break;
+		case MotionEvent.ACTION_CANCEL:
+			Log.v("taoka", "ACTION_CANCEL");
+			mIsLongPress = false;
+			mDragging = false;
+			mDragView.setBackgroundColor(0x00000000);
+			mHandler.removeCallbacks(mLongPressRunnable);
+			break;
+		case MotionEvent.ACTION_UP:
+			Log.v("taoka", "ACTION_UP");
+			mIsLongPress = false;
+			mDragging = false;
+			mDragView.setBackgroundColor(0x00000000);
+			mHandler.removeCallbacks(mLongPressRunnable);
+			if (System.currentTimeMillis() - mDownTime < LONG_PRESS_TIMEOUT) {
+				setTextColor();
+			} else {
+				mCard.marginLeft = mDragView.getLeft();
+				mCard.marginTop = mDragView.getTop();
+			}
+			break;
+		}
+		// 今回のタッチ位置を保持
+		mOldX = x;
+		mOldY = y;
+	}
 
 	// スケールジェスチャー
 	private final SimpleOnScaleGestureListener mOnScaleGestureListener = new SimpleOnScaleGestureListener() {
@@ -266,21 +256,17 @@ public class CardPreviewActivity extends Activity {
 		builder.show();
 	}
 
-	private final OnClickListener mOkButtonClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			Intent myIntent = new Intent(getApplicationContext(), MakeCardActivity.class);
-			myIntent.putExtra("Card", mCard);
-			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(myIntent);
-			finish();
-		}
-	};
+	@Click
+	public void okButtonClicked() {
+		Intent myIntent = new Intent(getApplicationContext(), MakeCardActivity_.class);
+		myIntent.putExtra("Card", mCard);
+		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(myIntent);
+		finish();
+	}
 
-	private final OnClickListener mCancelButtonClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			finish();
-		}
-	};
+	@Click
+	public void cancelButtonClicked() {
+		finish();
+	}
 }

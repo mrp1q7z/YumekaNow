@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/make_card"
+        android:orderInCategory="10"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="カードを作る"/>
+    <item
+        android:id="@+id/select_card"
+        android:orderInCategory="20"
+        android:icon="@android:drawable/ic_menu_gallery"
+        android:title="カードを選ぶ"/>
+    <item
+        android:id="@+id/settings"
+        android:orderInCategory="30"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="設定"/>
+    <item
+        android:id="@+id/usage"
+        android:orderInCategory="40"
+        android:icon="@android:drawable/ic_menu_help"
+        android:title="使い方"/>
+
+</menu>

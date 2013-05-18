@@ -1,6 +1,8 @@
 package com.yojiokisoft.yumekanow.fragment;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -18,12 +20,16 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.j256.ormlite.dao.Dao;
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.activity.MainActivity;
 import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
+import com.yojiokisoft.yumekanow.entity.CounterEntity;
+import com.yojiokisoft.yumekanow.model.CounterDao;
 import com.yojiokisoft.yumekanow.model.SettingDao;
 
 @EFragment(R.layout.fragment_card)
@@ -112,5 +118,53 @@ public class CardFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		mActivity = activity;
+	}
+
+	private void setCounter(int okFlag) {
+		CounterDao counterDao = new CounterDao(mActivity);
+		if (counterDao.getCurrentCardId() != -1) {
+			CounterEntity cnt = new CounterEntity();
+			cnt.cardId = counterDao.getCurrentCardId();
+			cnt.procTime = System.currentTimeMillis();
+			if (okFlag != 0) {
+				cnt.okCnt = 1;
+				cnt.ngCnt = 0;
+			} else {
+				cnt.okCnt = 0;
+				cnt.ngCnt = 1;
+			}
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+			cnt.procDay = sdf.format(new Date(cnt.procTime));
+			counterDao.setCounter(cnt);
+		}
+	}
+
+	@Click(R.id.okButton)
+	void okButtonClicked() {
+		setCounter(1);
+		try {
+			((MainActivity) mActivity).closeActivity();
+		} catch (ClassCastException e) {
+			throw new ClassCastException("activity が closeActivity を実装していません.");
+		}
+	}
+
+	@Click(R.id.cancelButton)
+	void cancelButtonClicked() {
+		setCounter(0);
+		try {
+			((MainActivity) mActivity).closeActivity();
+		} catch (ClassCastException e) {
+			throw new ClassCastException("activity が closeActivity を実装していません.");
+		}
+	}
+
+	@Click(R.id.cardContainer)
+	void cardContainerClicked() {
+		try {
+			((MainActivity) mActivity).stopVibrator();
+		} catch (ClassCastException e) {
+			throw new ClassCastException("activity が stopVibrator を実装していません.");
+		}
 	}
 }

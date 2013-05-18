@@ -18,27 +18,33 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.RingtonePreference;
 
+import com.googlecode.androidannotations.annotations.EActivity;
+import com.googlecode.androidannotations.annotations.res.StringArrayRes;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.model.SettingDao;
 import com.yojiokisoft.yumekanow.service.MyWidgetService;
 
+@EActivity
 public class MyPreference extends PreferenceActivity implements OnSharedPreferenceChangeListener,
 		OnPreferenceChangeListener {
 	private final static String BR = System.getProperty("line.separator");
-	private static String[] mDispIntervalKey;
-	private static String[] mDispIntervalVal;
-	private static String[] mAnimationKey;
-	private static String[] mAnimationVal;
+
+	@StringArrayRes(R.array.disp_interval_key)
+	String[] mDispIntervalKey;
+
+	@StringArrayRes(R.array.disp_interval_val)
+	String[] mDispIntervalVal;
+
+	@StringArrayRes(R.array.animation_key)
+	String[] mAnimationKey;
+
+	@StringArrayRes(R.array.animation_val)
+	String[] mAnimationVal;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings);
-
-		mDispIntervalKey = getResources().getStringArray(R.array.disp_interval_key);
-		mDispIntervalVal = getResources().getStringArray(R.array.disp_interval_val);
-		mAnimationKey = getResources().getStringArray(R.array.animation_key);
-		mAnimationVal = getResources().getStringArray(R.array.animation_val);
 
 		setSummary(null);
 	}
@@ -94,12 +100,6 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 			ListPreference prefDispInterval = (ListPreference) getPreferenceScreen().findPreference("DISP_INTERVAL");
 			summary = indexOfBr(prefDispInterval.getSummary().toString());
 			summary += BR + "現在値：" + dispIntervalVal2Key(prefDispInterval.getValue());
-			/*
-			SpannableString nowVal;
-			nowVal = new SpannableString("現在地：" + preDispInterval.getValue());
-			nowVal.setSpan(new ForegroundColorSpan(Color.RED), 0, nowVal.length(), 0);
-			preDispInterval.setSummary(nowVal);
-			*/
 			prefDispInterval.setSummary(summary);
 		}
 		if (key == null || "GOAL_CNT".equals(key)) {

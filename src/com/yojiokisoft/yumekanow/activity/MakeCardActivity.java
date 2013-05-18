@@ -21,14 +21,10 @@ import android.os.Environment;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,10 +33,16 @@ import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.ViewSwitcher.ViewFactory;
 
+import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.Click;
+import com.googlecode.androidannotations.annotations.EActivity;
+import com.googlecode.androidannotations.annotations.Extra;
+import com.googlecode.androidannotations.annotations.ItemSelect;
+import com.googlecode.androidannotations.annotations.SeekBarProgressChange;
+import com.googlecode.androidannotations.annotations.ViewById;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.yojiokisoft.yumekanow.R;
@@ -52,134 +54,103 @@ import com.yojiokisoft.yumekanow.model.BackImageDao;
 import com.yojiokisoft.yumekanow.model.CardDao;
 import com.yojiokisoft.yumekanow.utils.MyImage;
 
+@EActivity(R.layout.activity_make_card)
 public class MakeCardActivity extends Activity implements ViewFactory {
 	private final int TEXT_SIZE_MIN = 10;
 	private final int INTENT_REQUEST_PICTURE = 3;
-
+	private final DatabaseHelper mHelper = DatabaseHelper.getInstance(this);
 	private Activity mActivity;
 	private BaseAdapter mAdapter;
-	// GUI items
-	private ImageSwitcher mImageSwitcher;
-	private Gallery mGallery;
-	private EditText mAffirmationText;
-	private TextView mTextColor;
-	private TextView mShadowColor;
-	private TextView mTextSize;
-	private TextView mMarginTop;
-	private TextView mMarginLeft;
-	private Button mDelBackImgButton;
 
-	private final DatabaseHelper mHelper = DatabaseHelper.getInstance(this);
-	private int mCardId;
+	@ViewById(R.id.backImgSwitcher)
+	ImageSwitcher mImageSwitcher;
+
+	@ViewById(R.id.backImgGallery)
+	Gallery mGallery;
+
+	@ViewById(R.id.affirmationText)
+	EditText mAffirmationText;
+
+	@ViewById(R.id.textColor)
+	TextView mTextColor;
+
+	@ViewById(R.id.shadowColor)
+	TextView mShadowColor;
+
+	@ViewById(R.id.textSize)
+	TextView mTextSize;
+
+	@ViewById(R.id.marginTop)
+	TextView mMarginTop;
+
+	@ViewById(R.id.marginLeft)
+	TextView mMarginLeft;
+
+	@ViewById(R.id.delBackImgButton)
+	Button mDelBackImgButton;
+
+	@ViewById(R.id.textSizeBar)
+	SeekBar mTextSizeBar;
+
+	@ViewById(R.id.marginTopBar)
+	SeekBar mMarginTopBar;
+
+	@ViewById(R.id.marginLeftBar)
+	SeekBar mMarginLeftBar;
+
+	@Extra("Card")
+	CardEntity mCard;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_make_card);
 		mActivity = this;
+	}
 
-		mImageSwitcher = (ImageSwitcher) findViewById(R.id.backImgSwitcher);
+	@AfterViews
+	void initActivity() {
 		mImageSwitcher.setFactory(this);
 		mImageSwitcher.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
 		mImageSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
-		mImageSwitcher.setImageResource(R.drawable.image_1);
 
-		mGallery = (Gallery) findViewById(R.id.backImgGallery);
-		mAffirmationText = (EditText) findViewById(R.id.affirmationText);
-
-		mGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				BackImageEntity backImage = (BackImageEntity) mGallery.getItemAtPosition(position);
-				if (backImage.resouceId == 0) {
-					mImageSwitcher.setImageURI(Uri.parse("file:///" + backImage.bitmapPath));
-					CardDao cardDao = new CardDao(mActivity);
-					if (cardDao.isUsed(backImage.bitmapPath)) {
-						mDelBackImgButton.setVisibility(View.GONE);
-					} else {
-						mDelBackImgButton.setVisibility(View.VISIBLE);
-					}
-				} else {
-					mImageSwitcher.setImageResource(backImage.resouceId);
-					mDelBackImgButton.setVisibility(View.GONE);
-				}
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
 		BackImageDao backImageDao = new BackImageDao(this.getResources());
 		List<BackImageEntity> list = backImageDao.queryForAll();
 		mAdapter = new MyListArrayAdapter(this, list);
 		mGallery.setAdapter(mAdapter);
 
-		mDelBackImgButton = (Button) findViewById(R.id.delBackImgButton);
-		mDelBackImgButton.setOnClickListener(mDelBackImgButtonClick);
-
-		Button addBackImgButton = (Button) findViewById(R.id.addBackImgButton);
-		addBackImgButton.setOnClickListener(mAddBackImgButtonClick);
-
-		Button previewButton = (Button) findViewById(R.id.previewButton);
-		previewButton.setOnClickListener(mPreviewClickListener);
-
-		Button okButton = (Button) findViewById(R.id.okButton);
-		okButton.setOnClickListener(mOkButtonClick);
-
-		Button cancelButton = (Button) findViewById(R.id.cancelButton);
-		cancelButton.setOnClickListener(mCancelButtonClick);
-
-		mTextColor = (TextView) findViewById(R.id.textColor);
 		int color = getResources().getColor(R.color.textColor);
 		mTextColor.setBackgroundColor(color);
 		mTextColor.setTag(color);
-		mTextColor.setOnClickListener(mTextColorClick);
 
-		mShadowColor = (TextView) findViewById(R.id.shadowColor);
 		color = getResources().getColor(R.color.shadowColor);
 		mShadowColor.setBackgroundColor(color);
 		mShadowColor.setTag(color);
-		mShadowColor.setOnClickListener(mShadowColorClick);
 
-		SeekBar textSizeBar = (SeekBar) findViewById(R.id.textSizeBar);
-		textSizeBar.setOnSeekBarChangeListener(mTextSizeOnSeekBarChange);
+		mTextSize.setText(String.valueOf(mTextSizeBar.getProgress() + TEXT_SIZE_MIN));
+		mMarginTop.setText(String.valueOf(mMarginTopBar.getProgress()));
+		mMarginLeft.setText(String.valueOf(mMarginLeftBar.getProgress()));
 
-		SeekBar marginTopBar = (SeekBar) findViewById(R.id.marginTopBar);
-		marginTopBar.setOnSeekBarChangeListener(mMarginTopOnSeekBarChange);
-
-		SeekBar marginLeftBar = (SeekBar) findViewById(R.id.marginLeftBar);
-		marginLeftBar.setOnSeekBarChangeListener(mMarginLeftOnSeekBarChange);
-
-		mTextSize = (TextView) findViewById(R.id.textSize);
-		mTextSize.setText(String.valueOf(textSizeBar.getProgress() + TEXT_SIZE_MIN));
-		mMarginTop = (TextView) findViewById(R.id.marginTop);
-		mMarginTop.setText(String.valueOf(marginTopBar.getProgress()));
-		mMarginLeft = (TextView) findViewById(R.id.marginLeft);
-		mMarginLeft.setText(String.valueOf(marginLeftBar.getProgress()));
-
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			CardEntity card = (CardEntity) extras.getSerializable("Card");
-			mAffirmationText.setText(card.affirmationText);
-			mTextColor.setBackgroundColor(card.textColor);
-			mTextColor.setTag(card.textColor);
-			mShadowColor.setBackgroundColor(card.shadowColor);
-			mShadowColor.setTag(card.shadowColor);
-			mTextSize.setText(String.valueOf(card.textSize));
-			textSizeBar.setProgress(card.textSize - TEXT_SIZE_MIN);
-			mMarginTop.setText(String.valueOf(card.marginTop));
-			marginTopBar.setProgress(card.marginTop);
-			mMarginLeft.setText(String.valueOf(card.marginLeft));
-			marginLeftBar.setProgress(card.marginLeft);
+		if (mCard != null) {
+			mAffirmationText.setText(mCard.affirmationText);
+			mTextColor.setBackgroundColor(mCard.textColor);
+			mTextColor.setTag(mCard.textColor);
+			mShadowColor.setBackgroundColor(mCard.shadowColor);
+			mShadowColor.setTag(mCard.shadowColor);
+			mTextSize.setText(String.valueOf(mCard.textSize));
+			mTextSizeBar.setProgress(mCard.textSize - TEXT_SIZE_MIN);
+			mMarginTop.setText(String.valueOf(mCard.marginTop));
+			mMarginTopBar.setProgress(mCard.marginTop);
+			mMarginLeft.setText(String.valueOf(mCard.marginLeft));
+			mMarginLeftBar.setProgress(mCard.marginLeft);
 			int position = -1;
 			for (int i = 0; i < list.size(); i++) {
-				if (card.backImageResourceId == 0) {
-					if (card.backImagePath.equals(list.get(i).bitmapPath)) {
+				if (mCard.backImageResourceId == 0) {
+					if (mCard.backImagePath.equals(list.get(i).bitmapPath)) {
 						position = i;
 						break;
 					}
 				} else {
-					if (list.get(i).resouceId == card.backImageResourceId) {
+					if (list.get(i).resouceId == mCard.backImageResourceId) {
 						position = i;
 						break;
 					}
@@ -190,14 +161,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			} else {
 				mGallery.setSelection(position, false);
 			}
-			mCardId = card.id;
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		return true;
 	}
 
 	@Override
@@ -272,212 +236,180 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	/**
 	 * 文字色の設定
 	 */
-	private final OnClickListener mTextColorClick = new OnClickListener() {
-		final ColorPickerDialog.DialogCallback textColorOnDialgOk = new ColorPickerDialog.DialogCallback() {
-			@Override
-			public void onDialogOk(int color) {
-				mTextColor.setBackgroundColor(color);
-				mTextColor.setTag(color);
-			}
-		};
-
+	final ColorPickerDialog.DialogCallback mTextColorOnDialgOk = new ColorPickerDialog.DialogCallback() {
 		@Override
-		public void onClick(View v) {
-			ColorPickerDialog dialog = new ColorPickerDialog(MakeCardActivity.this);
-			dialog.setDialogOkClickListener(textColorOnDialgOk);
-			dialog.show();
+		public void onDialogOk(int color) {
+			mTextColor.setBackgroundColor(color);
+			mTextColor.setTag(color);
 		}
 	};
+
+	/**
+	 * 文字色のクリック
+	 */
+	@Click(R.id.textColor)
+	void textColorClicked() {
+		ColorPickerDialog dialog = new ColorPickerDialog(MakeCardActivity.this);
+		dialog.setDialogOkClickListener(mTextColorOnDialgOk);
+		dialog.show();
+	}
 
 	/**
 	 * 影の色の設定
 	 */
-	private final OnClickListener mShadowColorClick = new OnClickListener() {
-		final ColorPickerDialog.DialogCallback textColorOnDialgOk = new ColorPickerDialog.DialogCallback() {
-			@Override
-			public void onDialogOk(int color) {
-				mShadowColor.setBackgroundColor(color);
-				mShadowColor.setTag(color);
-			}
-		};
-
+	final ColorPickerDialog.DialogCallback mShadowColorOnDialgOk = new ColorPickerDialog.DialogCallback() {
 		@Override
-		public void onClick(View v) {
-			ColorPickerDialog dialog = new ColorPickerDialog(MakeCardActivity.this);
-			dialog.setDialogOkClickListener(textColorOnDialgOk);
-			dialog.show();
+		public void onDialogOk(int color) {
+			mShadowColor.setBackgroundColor(color);
+			mShadowColor.setTag(color);
 		}
 	};
+
+	/**
+	 * 影の色のクリック
+	 */
+	@Click(R.id.shadowColor)
+	void shadowColorClicked() {
+		ColorPickerDialog dialog = new ColorPickerDialog(MakeCardActivity.this);
+		dialog.setDialogOkClickListener(mShadowColorOnDialgOk);
+		dialog.show();
+	}
+
+	private CardEntity getInputCard() {
+		CardEntity card = new CardEntity();
+		card.id = (mCard == null) ? 0 : mCard.id;
+		card.affirmationText = mAffirmationText.getText().toString();
+		BackImageEntity backImage = (BackImageEntity) mGallery.getSelectedItem();
+		card.backImageResourceId = backImage.resouceId;
+		card.backImagePath = backImage.bitmapPath;
+		card.textColor = (Integer) mTextColor.getTag();
+		card.shadowColor = (Integer) mShadowColor.getTag();
+		card.textSize = Integer.parseInt(mTextSize.getText().toString());
+		card.marginTop = Integer.parseInt(mMarginTop.getText().toString());
+		card.marginLeft = Integer.parseInt(mMarginLeft.getText().toString());
+
+		return card;
+	}
 
 	/**
 	 * プレビューボタンのクリックリスナー
 	 */
-	private final OnClickListener mPreviewClickListener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			Intent myIntent = new Intent(getApplicationContext(), CardPreviewActivity.class);
-			CardEntity card = new CardEntity();
-			card.id = mCardId;
-			card.affirmationText = mAffirmationText.getText().toString();
-			BackImageEntity backImage = (BackImageEntity) mGallery.getSelectedItem();
-			card.backImageResourceId = backImage.resouceId;
-			card.backImagePath = backImage.bitmapPath;
-			card.textColor = (Integer) mTextColor.getTag();
-			card.shadowColor = (Integer) mShadowColor.getTag();
-			card.textSize = Integer.parseInt(mTextSize.getText().toString());
-			card.marginTop = Integer.parseInt(mMarginTop.getText().toString());
-			card.marginLeft = Integer.parseInt(mMarginLeft.getText().toString());
-			myIntent.putExtra("Card", card);
-			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(myIntent);
-		}
-	};
+	@Click(R.id.previewButton)
+	void previewButtonClicked() {
+		Intent myIntent = new Intent(getApplicationContext(), CardPreviewActivity_.class);
+		CardEntity card = getInputCard();
+		myIntent.putExtra("Card", card);
+		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(myIntent);
+	}
 
 	/**
 	 * OKボタンのクリックリスナー
 	 */
-	private final OnClickListener mOkButtonClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			Log.d("taoka", "MakeCardActivity#mOkButtonClick#onClick:bigin");
-			try {
-				Dao<CardEntity, Integer> cardDao = mHelper.getDao(CardEntity.class);
-				CardEntity cardEntity = new CardEntity();
-				cardEntity.id = mCardId;
-				BackImageEntity backImage = (BackImageEntity) mGallery.getSelectedItem();
-				cardEntity.backImageResourceId = backImage.resouceId;
-				cardEntity.backImagePath = backImage.bitmapPath;
-				cardEntity.affirmationText = mAffirmationText.getText().toString();
-				cardEntity.textColor = (Integer) mTextColor.getTag();
-				cardEntity.shadowColor = (Integer) mShadowColor.getTag();
-				cardEntity.textSize = Integer.parseInt(mTextSize.getText().toString());
-				cardEntity.marginTop = Integer.parseInt(mMarginTop.getText().toString());
-				cardEntity.marginLeft = Integer.parseInt(mMarginLeft.getText().toString());
-				CreateOrUpdateStatus ret = cardDao.createOrUpdate(cardEntity);
-				Log.d("taoka", "MakeCardActivity#mOkButtonClick#onClick:createOrUpdate ret=" + ret.toString());
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} finally {
-				//				mHelper.close();
-			}
-			finish();
-
-			Intent intent = new Intent(getApplication(), MainActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+	@Click(R.id.okButton)
+	void okButtonClicked() {
+		Log.d("taoka", "MakeCardActivity#mOkButtonClick#onClick:bigin");
+		try {
+			Dao<CardEntity, Integer> cardDao = mHelper.getDao(CardEntity.class);
+			CardEntity cardEntity = getInputCard();
+			CreateOrUpdateStatus ret = cardDao.createOrUpdate(cardEntity);
+			Log.d("taoka", "MakeCardActivity#mOkButtonClick#onClick:createOrUpdate ret=" + ret.toString());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			//				mHelper.close();
 		}
-	};
+		finish();
+
+		Intent intent = new Intent(getApplication(), MainActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+	}
 
 	/**
 	 * Cancelボタンのクリックリスナー
 	 */
-	private final OnClickListener mCancelButtonClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			finish();
+	@Click(R.id.cancelButton)
+	void cancelButtonClicked() {
+		finish();
 
-			Intent intent = new Intent(getApplication(), MainActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-		}
-	};
+		Intent intent = new Intent(getApplication(), MainActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+	}
 
 	/**
 	 * 背景画像の追加ボタンのクリックリスナー
 	 */
-	private final OnClickListener mAddBackImgButtonClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			Intent intent = new Intent(Intent.ACTION_PICK);
-			intent.setType("image/*");
-			startActivityForResult(intent, INTENT_REQUEST_PICTURE);
-		}
-	};
+	@Click(R.id.addBackImgButton)
+	void addBackImgButtonClicked() {
+		Intent intent = new Intent(Intent.ACTION_PICK);
+		intent.setType("image/*");
+		startActivityForResult(intent, INTENT_REQUEST_PICTURE);
+	}
 
 	/**
 	 * 背景画像の削除ボタンのクリックリスナー
 	 */
-	private final OnClickListener mDelBackImgButtonClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-			builder.setMessage("削除します。よろしいですか？")
-					.setCancelable(false)
-					.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							BackImageEntity backImage = (BackImageEntity) mGallery.getSelectedItem();
-							File file = new File(backImage.bitmapPath);
-							file.delete();
-							// ギャラリーの再読み込み
-							BackImageDao backImageDao = new BackImageDao(mActivity.getResources());
-							List<BackImageEntity> list = backImageDao.queryForAll();
-							mGallery.setSelection(0);
-							MyListArrayAdapter adapter = (MyListArrayAdapter) mGallery.getAdapter();
-							adapter.setData(list);
-							adapter.notifyDataSetChanged();
-						}
-					})
-					.setNegativeButton("No", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							dialog.cancel();
-						}
-					});
-			AlertDialog alert = builder.create();
-			alert.show();
-		}
-	};
+	@Click(R.id.delBackImgButton)
+	void delBackImgButtonClicked() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+		builder.setMessage("削除します。よろしいですか？")
+				.setCancelable(false)
+				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						BackImageEntity backImage = (BackImageEntity) mGallery.getSelectedItem();
+						File file = new File(backImage.bitmapPath);
+						file.delete();
+						// ギャラリーの再読み込み
+						BackImageDao backImageDao = new BackImageDao(mActivity.getResources());
+						List<BackImageEntity> list = backImageDao.queryForAll();
+						mGallery.setSelection(0);
+						MyListArrayAdapter adapter = (MyListArrayAdapter) mGallery.getAdapter();
+						adapter.setData(list);
+						adapter.notifyDataSetChanged();
+					}
+				})
+				.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
 
-	private final OnSeekBarChangeListener mTextSizeOnSeekBarChange = new OnSeekBarChangeListener() {
-		@Override
-		public void onStopTrackingTouch(SeekBar seekBar) {
-			// TODO Auto-generated method stub
-		}
+	@SeekBarProgressChange(R.id.textSizeBar)
+	void textSizeChanged(SeekBar seekBar, int progress) {
+		mTextSize.setText(String.valueOf(progress + TEXT_SIZE_MIN));
+	}
 
-		@Override
-		public void onStartTrackingTouch(SeekBar seekBar) {
-			// TODO Auto-generated method stub
-		}
+	@SeekBarProgressChange(R.id.marginTopBar)
+	void marginTopChanged(SeekBar seekBar, int progress) {
+		mMarginTop.setText(String.valueOf(progress));
+	}
 
-		@Override
-		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-			mTextSize.setText(String.valueOf(progress + TEXT_SIZE_MIN));
-		}
-	};
+	@SeekBarProgressChange(R.id.marginLeftBar)
+	void marginLeftChanged(SeekBar seekBar, int progress) {
+		mMarginLeft.setText(String.valueOf(progress));
+	}
 
-	private final OnSeekBarChangeListener mMarginTopOnSeekBarChange = new OnSeekBarChangeListener() {
-		@Override
-		public void onStopTrackingTouch(SeekBar seekBar) {
-			// TODO Auto-generated method stub
+	@ItemSelect
+	void backImgGalleryItemSelected(boolean selected, BackImageEntity backImage) {
+		if (backImage.resouceId == 0) {
+			mImageSwitcher.setImageURI(Uri.parse("file:///" + backImage.bitmapPath));
+			CardDao cardDao = new CardDao(mActivity);
+			if (cardDao.isUsed(backImage.bitmapPath)) {
+				mDelBackImgButton.setVisibility(View.GONE);
+			} else {
+				mDelBackImgButton.setVisibility(View.VISIBLE);
+			}
+		} else {
+			mImageSwitcher.setImageResource(backImage.resouceId);
+			mDelBackImgButton.setVisibility(View.GONE);
 		}
-
-		@Override
-		public void onStartTrackingTouch(SeekBar seekBar) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-			mMarginTop.setText(String.valueOf(progress));
-		}
-	};
-
-	private final OnSeekBarChangeListener mMarginLeftOnSeekBarChange = new OnSeekBarChangeListener() {
-		@Override
-		public void onStopTrackingTouch(SeekBar seekBar) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void onStartTrackingTouch(SeekBar seekBar) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-			mMarginLeft.setText(String.valueOf(progress));
-		}
-	};
+	}
 
 	/**
 	 * アダプタークラス
