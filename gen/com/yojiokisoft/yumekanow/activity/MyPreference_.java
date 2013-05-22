@@ -29,8 +29,8 @@ public final class MyPreference_
         Resources resources_ = this.getResources();
         mDispIntervalVal = resources_.getStringArray(array.disp_interval_val);
         mAnimationKey = resources_.getStringArray(array.animation_key);
-        mAnimationVal = resources_.getStringArray(array.animation_val);
         mDispIntervalKey = resources_.getStringArray(array.disp_interval_key);
+        mAnimationVal = resources_.getStringArray(array.animation_val);
     }
 
     private void afterSetContentView_() {

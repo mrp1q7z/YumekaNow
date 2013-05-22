@@ -15,5 +15,6 @@
     <integer name="colorGridColumnWidth">32</integer>
     
     <string name="goalCnt">997</string>
+    <string name="version">Version 0.0.2</string>
 
 </resources>

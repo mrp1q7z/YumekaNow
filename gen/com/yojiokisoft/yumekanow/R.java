@@ -188,6 +188,7 @@ containing a value of this type.
         public static final int ok=0x7f070003;
         public static final int title_activity_pager=0x7f070006;
         public static final int title_activity_tab=0x7f070007;
+        public static final int version=0x7f070009;
     }
     public static final class style {
         /** 
