@@ -30,8 +30,8 @@ public final class SleepFragment_
     }
 
     private void afterSetContentView_() {
-        mTimeKind = ((RadioGroup) findViewById(com.yojiokisoft.yumekanow.R.id.timeKind));
         mWakeUpTime = ((TimePicker) findViewById(com.yojiokisoft.yumekanow.R.id.wakeUpTime));
+        mTimeKind = ((RadioGroup) findViewById(com.yojiokisoft.yumekanow.R.id.timeKind));
         {
             View view = findViewById(com.yojiokisoft.yumekanow.R.id.setTimerButton);
             if (view!= null) {

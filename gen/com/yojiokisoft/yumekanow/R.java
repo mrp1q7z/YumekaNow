@@ -13,6 +13,8 @@ public final class R {
         public static final int animation_val=0x7f050002;
         public static final int disp_interval_key=0x7f050001;
         public static final int disp_interval_val=0x7f050000;
+        public static final int inquiry_key=0x7f050005;
+        public static final int inquiry_val=0x7f050004;
     }
     public static final class attr {
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.

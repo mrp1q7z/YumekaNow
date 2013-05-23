@@ -35,5 +35,17 @@
         <item>花</item>
         <item>水滴</item>
     </string-array>
+    <string-array name="inquiry_val">
+        <item>comments</item>
+        <item>questions</item>
+        <item>complaint</item>
+        <item>other</item>
+    </string-array>
+    <string-array name="inquiry_key">
+        <item>ご意見</item>
+        <item>ご質問</item>
+        <item>苦情</item>
+        <item>その他</item>
+    </string-array>
 
 </resources>

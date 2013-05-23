@@ -49,9 +49,11 @@
             android:key="Version"
             android:summary="@string/version"
             android:title="バージョン" />
-        <com.yojiokisoft.yumekanow.dialog.VersionDialogPreference
-            android:dialogMessage="お問い合わせ内容"
+
+        <ListPreference
             android:dialogTitle="お問い合わせ"
+            android:entries="@array/inquiry_key"
+            android:entryValues="@array/inquiry_val"
             android:key="Inquiry"
             android:summary="ご意見、ご質問、苦情など、お気軽にお問い合わせください"
             android:title="お問い合わせ" />

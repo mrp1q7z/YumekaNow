@@ -16,6 +16,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 
 import com.googlecode.androidannotations.annotations.EActivity;
@@ -23,6 +24,8 @@ import com.googlecode.androidannotations.annotations.res.StringArrayRes;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.model.SettingDao;
 import com.yojiokisoft.yumekanow.service.MyWidgetService;
+import com.yojiokisoft.yumekanow.utils.MyLog;
+import com.yojiokisoft.yumekanow.utils.MyMail;
 
 @EActivity
 public class MyPreference extends PreferenceActivity implements OnSharedPreferenceChangeListener,
@@ -41,12 +44,27 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 	@StringArrayRes(R.array.animation_val)
 	String[] mAnimationVal;
 
+	@StringArrayRes(R.array.inquiry_key)
+	String[] mInquiryKey;
+
+	@StringArrayRes(R.array.inquiry_val)
+	String[] mInquiryVal;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings);
 
 		setSummary(null);
+
+		clearPreference("Inquiry");
+	}
+
+	private void clearPreference(String key) {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.remove(key);
+		editor.commit();
 	}
 
 	private String indexOfBr(String str) {
@@ -129,6 +147,19 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 		}
 	}
 
+	private String inquiryVal2Key(String val) {
+		String key = null;
+
+		for (int i = 0; i < mInquiryVal.length; i++) {
+			if (mInquiryVal[i].equals(val)) {
+				key = mInquiryKey[i];
+				break;
+			}
+		}
+
+		return key;
+	}
+
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		setSummary(key);
 		if ("DISP_INTERVAL".equals(key)) {
@@ -142,8 +173,20 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 			long interval = settingDao.getDispInterval() * 60 * 1000;
 			alarmManager.setRepeating(AlarmManager.RTC, interval, interval, pendingIntent);
 		}
+		if ("Inquiry".equals(key)) {
+			String inquiry = sharedPreferences.getString(key, "");
+			if (!"".equals(inquiry)) {
+				String inquiryKey = inquiryVal2Key(inquiry);
+				String subject = getResources().getString(R.string.app_name) + ":" + inquiryKey;
+				MyLog.d("Inquiry=" + inquiry);
+				// メール送信
+				MyMail mail = new MyMail(getApplicationContext());
+				mail.setTo("mrp1q7z@gmail.com").setSubject(subject).send();
+				clearPreference("Inquiry");
+			}
+		}
 	}
-
+	
 	@Override
 	protected void onPause() {
 		super.onPause();
