@@ -67,6 +67,10 @@ public class SettingDao {
 		return ret;
 	}
 
+	public String getAnimationId() {
+		return mSharedPref.getString("ANIMATION", "");
+	}
+	
 	public boolean getVibrator() {
 		return mSharedPref.getBoolean("Vibrator", false);
 	}
