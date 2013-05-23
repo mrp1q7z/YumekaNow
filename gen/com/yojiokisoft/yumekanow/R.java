@@ -76,24 +76,15 @@ containing a value of this type.
         public static final int ic_anim_flower_12=0x7f020012;
         public static final int ic_launcher=0x7f020013;
         public static final int ic_menu_mark=0x7f020014;
-        public static final int radiobuttoncenter=0x7f020015;
-        public static final int radiobuttoncenterselect=0x7f020016;
-        public static final int radiobuttonleft=0x7f020017;
-        public static final int radiobuttonleftselect=0x7f020018;
-        public static final int radiobuttonright=0x7f020019;
-        public static final int radiobuttonrightselect=0x7f02001a;
-        public static final int radiocenter=0x7f02001b;
-        public static final int radioleft=0x7f02001c;
-        public static final int radioright=0x7f02001d;
-        public static final int start_flag=0x7f02001e;
-        public static final int tab_indicator_holo=0x7f02001f;
-        public static final int tab_selected_focused_holo=0x7f020020;
-        public static final int tab_selected_holo=0x7f020021;
-        public static final int tab_selected_pressed_holo=0x7f020022;
-        public static final int tab_unselected_focused_holo=0x7f020023;
-        public static final int tab_unselected_holo=0x7f020024;
-        public static final int tab_unselected_pressed_holo=0x7f020025;
-        public static final int waku=0x7f020026;
+        public static final int start_flag=0x7f020015;
+        public static final int tab_indicator_holo=0x7f020016;
+        public static final int tab_selected_focused_holo=0x7f020017;
+        public static final int tab_selected_holo=0x7f020018;
+        public static final int tab_selected_pressed_holo=0x7f020019;
+        public static final int tab_unselected_focused_holo=0x7f02001a;
+        public static final int tab_unselected_holo=0x7f02001b;
+        public static final int tab_unselected_pressed_holo=0x7f02001c;
+        public static final int waku=0x7f02001d;
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f0b0024;
