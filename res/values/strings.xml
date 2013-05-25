@@ -2,10 +2,6 @@
 <resources>
 
     <string name="app_name">夢かNow</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
-    <string name="ok">よし！</string>
-    <string name="cancel">やんぺ</string>
     <string name="init_msg">        この度は「夢かNow」をダウンロードして頂き誠にありがとうございます。\n
         このアプリケーションはあなたの夢の実現をお手伝いします。\n
         このアプリケーションはウジェットとして動作します。</string>
@@ -16,5 +12,34 @@
     
     <string name="goalCnt">997</string>
     <string name="version">Version 0.0.2</string>
+    
+    <string name="use_this_card">このカードを使う</string>
+    <string name="edit">編集</string>
+    <string name="ok">OK</string>
+    <string name="cancel">キャンセル</string>
+    <string name="back_image_description">背景画像</string>
+    <string name="back_image">背景画像</string>
+    <string name="add">追加</string>
+    <string name="del">削除</string>
+    <string name="affirmation_text">アファーメーションの言葉</string>
+    <string name="text_color">文字の色</string>
+    <string name="text_color_comment">文字の色はプレビュー画面で文字をタップすることによっても変更できます</string>
+    <string name="shadow_color">文字の影</string>
+    <string name="shadow_color_comment">文字の影はプレビュー画面で文字をタップすることによっても変更できます</string>
+    <string name="text_size">文字の大きさ</string>
+    <string name="text_size_comment">文字の大きさはプレビュー画面で文字をピンチイン／ピンチアウトすることによっても変更できます</string>
+    <string name="text_position">文字の位置</string>
+    <string name="text_position_comment">文字の位置はプレビュー画面で文字を長押してドラッグすることによっても変更できます</string>
+    <string name="margin_top">上マージン</string>
+    <string name="margin_left">左マージン</string>
+    <string name="preview">プレビュー</string>
+    <string name="kome">※</string>
+    <string name="affirmation_text_hint">ここにアファーメーションの言葉を入力してください</string>
+    <string name="start">開始</string>
+    <string name="wake_up_msg">おはようございます。\n指定の時間になりました。\n今日も一日よろしくお願いします。</string>
+    <string name="sleep_comment">おやすみなさい。\nスリープ時間を設定してください</string>
+    <string name="sleep_time">時間（指定の時間に起動します）</string>
+    <string name="sleep_timer">タイマー（指定の時間経過後に起動します）</string>
+    <string name="set">セット</string>
 
 </resources>

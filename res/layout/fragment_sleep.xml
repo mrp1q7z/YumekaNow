@@ -14,10 +14,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:gravity="center_vertical|left"
             android:padding="10sp"
-            android:text="おやすみなさい。\nスリープ時間を設定してください"
+            android:text="@string/sleep_comment"
             android:textColor="#6790a4" />
 
         <RadioGroup
@@ -31,14 +30,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="時間（指定の時間に起動します）"
+                android:text="@string/sleep_time"
                 android:textColor="#c7c5c6" />
 
             <RadioButton
                 android:id="@+id/timer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="タイマー（指定の時間経過後に起動します）"
+                android:text="@string/sleep_timer"
                 android:textColor="#c7c5c6" />
         </RadioGroup>
 
@@ -56,10 +55,10 @@
 
         <Button
             android:id="@+id/setTimerButton"
-            android:layout_width="800dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="セット" />
+            android:text="@string/set" />
     </LinearLayout>
 
 </LinearLayout>

@@ -12,7 +12,7 @@
             android:id="@+id/backImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/back_img01" />
+            android:contentDescription="@string/back_image_description" />
 
         <LinearLayout
             android:id="@+id/textContainer"
@@ -22,14 +22,7 @@
             <TextView
                 android:id="@+id/affirmationText"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="50dp"
-                android:shadowColor="#fff"
-                android:shadowDx="1.5"
-                android:shadowDy="1.5"
-                android:shadowRadius="1.5"
-                android:text="TextView" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </FrameLayout>
 
@@ -45,14 +38,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="OK" />
+            android:text="@string/ok" />
 
         <Button
             android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cancel" />
+            android:text="@string/cancel" />
     </LinearLayout>
 
 </RelativeLayout>

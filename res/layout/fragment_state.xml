@@ -12,8 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         mycustom:goal_image="@drawable/goal_flag"
-        mycustom:start_image="@drawable/start_flag" >
-    </com.yojiokisoft.yumekanow.mycomponent.MyProgress>
+        mycustom:start_image="@drawable/start_flag" />
 
     <ListView
         android:id="@+id/dayToDayList"

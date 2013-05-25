@@ -1,8 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MakeCardActivity" >
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <ScrollView
         android:layout_width="match_parent"
@@ -22,21 +18,21 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/kome"
                     android:src="@android:drawable/ic_menu_info_details" />
 
                 <TextView
-                    android:id="@+id/textView1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="背景画像" />
+                    android:text="@string/back_image" />
 
                 <Button
                     android:id="@+id/addBackImgButton"
                     android:layout_width="100sp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5sp"
-                    android:text="追加" />
+                    android:text="@string/add" />
             </LinearLayout>
 
             <LinearLayout
@@ -59,30 +55,20 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
                 </ImageSwitcher>
-                
+
                 <Button
                     android:id="@+id/delBackImgButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Delete" />
+                    android:text="@string/del" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_menu_info_details" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="アファーメーションの言葉" />
-            </LinearLayout>
+                android:drawableLeft="@android:drawable/ic_menu_info_details"
+                android:gravity="center_vertical"
+                android:text="@string/affirmation_text" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,27 +81,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
+                    android:hint="@string/affirmation_text_hint"
                     android:maxLines="5"
                     android:minLines="5" >
                 </EditText>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_menu_info_details" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="文字の色" />
-            </LinearLayout>
+                android:drawableLeft="@android:drawable/ic_menu_info_details"
+                android:gravity="center_vertical"
+                android:text="@string/text_color" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -127,7 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dip"
-                    android:text="文字の色はプレビュー画面で文字をタップすることによっても変更できます" />
+                    android:text="@string/text_color_comment" />
 
                 <TextView
                     android:id="@+id/textColor"
@@ -136,26 +113,16 @@
                     android:background="@color/textColor"
                     android:gravity="center"
                     android:padding="5dip"
-                    android:text="whitesmoke"
-                    android:textColor="#000000" />
+                    android:text="@string/text_color"
+                    android:textColor="@color/textColor" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_menu_info_details" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="文字の影" />
-            </LinearLayout>
+                android:drawableLeft="@android:drawable/ic_menu_info_details"
+                android:gravity="center_vertical"
+                android:text="@string/shadow_color" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -167,7 +134,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dip"
-                    android:text="文字の影はプレビュー画面で文字をタップすることによっても変更できます" />
+                    android:text="@string/shadow_color_comment" />
 
                 <TextView
                     android:id="@+id/shadowColor"
@@ -176,25 +143,15 @@
                     android:background="@color/shadowColor"
                     android:gravity="center"
                     android:padding="5dip"
-                    android:text="Black" />
+                    android:text="@string/shadow_color" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_menu_info_details" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="文字の大きさ" />
-            </LinearLayout>
+                android:drawableLeft="@android:drawable/ic_menu_info_details"
+                android:gravity="center_vertical"
+                android:text="@string/text_size" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -206,7 +163,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dip"
-                    android:text="文字の大きさはプレビュー画面で文字をピンチイン／ピンチアウトすることによっても変更できます" />
+                    android:text="@string/text_size_comment" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -218,7 +175,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5sp"
-                        android:text="文字サイズ" />
+                        android:text="@string/text_size" />
 
                     <TextView
                         android:id="@+id/textSize"
@@ -237,22 +194,12 @@
                     android:progress="10" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_menu_info_details" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="文字の位置" />
-            </LinearLayout>
+                android:drawableLeft="@android:drawable/ic_menu_info_details"
+                android:gravity="center_vertical"
+                android:text="@string/text_position" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -264,7 +211,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dip"
-                    android:text="文字の位置はプレビュー画面で文字を長押してドラッグすることによっても変更できます" />
+                    android:text="@string/text_position_comment" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -276,7 +223,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5sp"
-                        android:text="上マージン" />
+                        android:text="@string/margin_top" />
 
                     <TextView
                         android:id="@+id/marginTop"
@@ -304,7 +251,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5sp"
-                        android:text="左マージン" />
+                        android:text="@string/margin_left" />
 
                     <TextView
                         android:id="@+id/marginLeft"
@@ -333,23 +280,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="プレビュー" />
+                    android:text="@string/preview" />
 
                 <Button
                     android:id="@+id/okButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="OK" />
+                    android:text="@string/ok" />
 
                 <Button
                     android:id="@+id/cancelButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Cancel" />
+                    android:text="@string/cancel" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-</RelativeLayout>
+</merge>
