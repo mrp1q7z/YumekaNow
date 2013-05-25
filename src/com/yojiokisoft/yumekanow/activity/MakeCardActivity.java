@@ -322,7 +322,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		}
 		finish();
 
-		Intent intent = new Intent(getApplication(), MainActivity.class);
+		Intent intent = new Intent(getApplication(), MainActivity_.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 	}
@@ -334,7 +334,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	void cancelButtonClicked() {
 		finish();
 
-		Intent intent = new Intent(getApplication(), MainActivity.class);
+		Intent intent = new Intent(getApplication(), MainActivity_.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 	}

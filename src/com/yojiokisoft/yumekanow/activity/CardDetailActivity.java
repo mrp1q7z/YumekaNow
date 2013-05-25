@@ -85,7 +85,7 @@ public class CardDetailActivity extends Activity {
 		settingDao.setUseCard(card.id);
 		finish();
 
-		Intent intent = new Intent(getApplication(), MainActivity.class);
+		Intent intent = new Intent(getApplication(), MainActivity_.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 	}
