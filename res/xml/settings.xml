@@ -3,19 +3,19 @@
     android:title="設定画面" >
 
     <ListPreference
-        android:defaultValue="60"
+        android:defaultValue="@string/defaultDispInterval"
         android:dialogTitle="表示間隔"
         android:entries="@array/disp_interval_key"
         android:entryValues="@array/disp_interval_val"
-        android:key="DISP_INTERVAL"
+        android:key="DispInterval"
         android:summary="アファーメーションの表示間隔を設定します"
         android:title="表示間隔" />
 
     <EditTextPreference
-        android:defaultValue="@string/goalCnt"
+        android:defaultValue="@string/defaultGoalCnt"
         android:dialogTitle="目標回数"
         android:inputType="number"
-        android:key="GOAL_CNT"
+        android:key="GoalCnt"
         android:summary="アファーメーションを唱えた回数がこの値になったら目標達成とみなします"
         android:title="目標回数" />
 
@@ -24,7 +24,7 @@
         android:dialogTitle="アニメーション"
         android:entries="@array/animation_key"
         android:entryValues="@array/animation_val"
-        android:key="ANIMATION"
+        android:key="Animation"
         android:summary="ウジェットのアイコンに表示されるアニメーションを設定します"
         android:title="アニメーション" />
 

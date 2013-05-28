@@ -21,6 +21,7 @@ import com.j256.ormlite.dao.Dao;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
+import com.yojiokisoft.yumekanow.utils.MyConst;
 
 @EActivity(R.layout.activity_card_list)
 public class CardListActivity extends Activity {
@@ -44,10 +45,10 @@ public class CardListActivity extends Activity {
 
 	@ItemClick
 	public void cardListItemClicked(CardEntity card) {
-		Intent myIntent = new Intent(getApplicationContext(), CardDetailActivity_.class);
-		myIntent.putExtra("Card", card);
-		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(myIntent);
+		Intent intent = new Intent(getApplicationContext(), CardDetailActivity_.class);
+		intent.putExtra(MyConst.CARD, card);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
 	}
 
 	/**

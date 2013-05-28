@@ -52,6 +52,7 @@ import com.yojiokisoft.yumekanow.entity.BackImageEntity;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.model.BackImageDao;
 import com.yojiokisoft.yumekanow.model.CardDao;
+import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.utils.MyImage;
 
 @EActivity(R.layout.activity_make_card)
@@ -98,7 +99,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	@ViewById(R.id.marginLeftBar)
 	SeekBar mMarginLeftBar;
 
-	@Extra("Card")
+	@Extra(MyConst.CARD)
 	CardEntity mCard;
 
 	@Override
@@ -296,11 +297,11 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	 */
 	@Click(R.id.previewButton)
 	void previewButtonClicked() {
-		Intent myIntent = new Intent(getApplicationContext(), CardPreviewActivity_.class);
+		Intent intent = new Intent(getApplicationContext(), CardPreviewActivity_.class);
 		CardEntity card = getInputCard();
-		myIntent.putExtra("Card", card);
-		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(myIntent);
+		intent.putExtra(MyConst.CARD, card);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
 	}
 
 	/**
@@ -355,9 +356,9 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	@Click(R.id.delBackImgButton)
 	void delBackImgButtonClicked() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-		builder.setMessage("削除します。よろしいですか？")
+		builder.setMessage(getString(R.string.del_confirm_msg))
 				.setCancelable(false)
-				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+				.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						BackImageEntity backImage = (BackImageEntity) mGallery.getSelectedItem();
 						File file = new File(backImage.bitmapPath);
@@ -371,7 +372,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 						adapter.notifyDataSetChanged();
 					}
 				})
-				.setNegativeButton("No", new DialogInterface.OnClickListener() {
+				.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						dialog.cancel();
 					}

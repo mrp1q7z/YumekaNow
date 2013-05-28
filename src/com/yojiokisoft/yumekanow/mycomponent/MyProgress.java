@@ -58,7 +58,7 @@ public class MyProgress extends LinearLayout {
 		// パーセント
 		mPercentText = new TextView(context, attrs);
 		mPercentText.setGravity(Gravity.CENTER);
-		mPercentText.setTextColor(0xff6790a4);
+		mPercentText.setTextColor(getResources().getColor(R.color.theme_headerTextColor));
 		setShowPercent(showPersent);
 		mProgressContainer.addView(mPercentText);
 		// プログレスバー
@@ -70,7 +70,7 @@ public class MyProgress extends LinearLayout {
 		// 注釈
 		mDescriptionText = new TextView(context, attrs);
 		mDescriptionText.setGravity(Gravity.CENTER);
-		mDescriptionText.setTextColor(0xff6790a4);
+		mDescriptionText.setTextColor(getResources().getColor(R.color.theme_headerTextColor));
 		setDescription(description);
 		mProgressContainer.addView(mDescriptionText);
 		addView(mProgressContainer);

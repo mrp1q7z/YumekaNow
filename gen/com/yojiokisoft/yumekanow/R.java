@@ -51,8 +51,23 @@ containing a value of this type.
         public static final int start_image=0x7f010000;
     }
     public static final class color {
-        public static final int shadowColor=0x7f060001;
-        public static final int textColor=0x7f060000;
+        public static final int basic_blue1=0x7f06000a;
+        public static final int basic_blue2=0x7f06000b;
+        public static final int basic_blue3=0x7f06000c;
+        public static final int basic_orange1=0x7f06000d;
+        public static final int basic_orange2=0x7f06000e;
+        public static final int basic_white1=0x7f06000f;
+        public static final int basic_white2=0x7f060010;
+        public static final int shadowColor=0x7f060002;
+        public static final int textColor=0x7f060001;
+        public static final int theme_backColor=0x7f060005;
+        public static final int theme_dialogBody=0x7f060008;
+        public static final int theme_dialogFooter=0x7f060009;
+        public static final int theme_dialogHead=0x7f060007;
+        public static final int theme_headerTextColor=0x7f060003;
+        public static final int theme_lineColor=0x7f060006;
+        public static final int theme_textColor=0x7f060004;
+        public static final int transparentButton=0x7f060000;
     }
     public static final class drawable {
         public static final int back_img01=0x7f020000;
@@ -97,8 +112,12 @@ containing a value of this type.
         public static final int cancelButton=0x7f0b0008;
         public static final int cardContainer=0x7f0b0019;
         public static final int cardList=0x7f0b0003;
-        public static final int cnt=0x7f0b0029;
-        public static final int date=0x7f0b0028;
+        public static final int cnt=0x7f0b002d;
+        public static final int custom_list_view_row_radio_button=0x7f0b0028;
+        public static final int custom_list_view_row_table_layout=0x7f0b0025;
+        public static final int custom_list_view_row_table_row=0x7f0b0026;
+        public static final int custom_list_view_row_text_view=0x7f0b0027;
+        public static final int date=0x7f0b002c;
         public static final int dayToDayList=0x7f0b0021;
         public static final int delBackImgButton=0x7f0b000d;
         public static final int editButton=0x7f0b0002;
@@ -107,19 +126,19 @@ containing a value of this type.
         public static final int item_row_txt=0x7f0b0024;
         public static final int jikan=0x7f0b001c;
         public static final int lyt_main=0x7f0b0009;
-        public static final int make_card=0x7f0b002b;
+        public static final int make_card=0x7f0b002f;
         public static final int marginLeft=0x7f0b0014;
         public static final int marginLeftBar=0x7f0b0015;
         public static final int marginTop=0x7f0b0012;
         public static final int marginTopBar=0x7f0b0013;
-        public static final int nday=0x7f0b0027;
+        public static final int nday=0x7f0b002b;
         public static final int okButton=0x7f0b0007;
         public static final int pager=0x7f0b0000;
-        public static final int percent=0x7f0b002a;
+        public static final int percent=0x7f0b002e;
         public static final int previewButton=0x7f0b0016;
-        public static final int select_card=0x7f0b002c;
+        public static final int select_card=0x7f0b0030;
         public static final int setTimerButton=0x7f0b001f;
-        public static final int settings=0x7f0b002d;
+        public static final int settings=0x7f0b0031;
         public static final int shadowColor=0x7f0b000f;
         public static final int textColor=0x7f0b000e;
         public static final int textContainer=0x7f0b0005;
@@ -128,12 +147,12 @@ containing a value of this type.
         public static final int timeKind=0x7f0b001b;
         public static final int timer=0x7f0b001d;
         public static final int totalProgress=0x7f0b0020;
-        public static final int usage=0x7f0b002e;
+        public static final int usage=0x7f0b0032;
         public static final int useButton=0x7f0b0001;
         public static final int wakeUpTime=0x7f0b001e;
         public static final int webView=0x7f0b0017;
-        public static final int widgetImage=0x7f0b0025;
-        public static final int widgetName=0x7f0b0026;
+        public static final int widgetImage=0x7f0b0029;
+        public static final int widgetName=0x7f0b002a;
     }
     public static final class integer {
         public static final int colorGridColumnWidth=0x7f080000;
@@ -154,49 +173,57 @@ containing a value of this type.
         public static final int fragment_sleep=0x7f03000c;
         public static final int fragment_state=0x7f03000d;
         public static final int item_row=0x7f03000e;
-        public static final int my_widget=0x7f03000f;
-        public static final int row_state_list=0x7f030010;
+        public static final int my_list_preference_row=0x7f03000f;
+        public static final int my_widget=0x7f030010;
+        public static final int row_state_list=0x7f030011;
     }
     public static final class menu {
         public static final int activity_main=0x7f0a0000;
     }
     public static final class string {
-        public static final int add=0x7f07000c;
-        public static final int affirmation_text=0x7f07000e;
-        public static final int affirmation_text_hint=0x7f07001b;
+        public static final int add=0x7f07000d;
+        public static final int affirmation_text=0x7f07000f;
+        public static final int affirmation_text_hint=0x7f07001c;
         public static final int app_name=0x7f070000;
-        public static final int back_image=0x7f07000b;
-        public static final int back_image_description=0x7f07000a;
-        public static final int cancel=0x7f070009;
-        public static final int del=0x7f07000d;
-        public static final int edit=0x7f070007;
-        public static final int goalCnt=0x7f070004;
+        public static final int back_image=0x7f07000c;
+        public static final int back_image_description=0x7f07000b;
+        public static final int cancel=0x7f07000a;
+        public static final int color_dialog_title=0x7f070024;
+        public static final int defaultDispInterval=0x7f070004;
+        public static final int defaultGoalCnt=0x7f070005;
+        public static final int del=0x7f07000e;
+        public static final int del_confirm_msg=0x7f070027;
+        public static final int divider_description=0x7f070023;
+        public static final int edit=0x7f070008;
         public static final int init_msg=0x7f070001;
-        public static final int kome=0x7f07001a;
-        public static final int margin_left=0x7f070018;
-        public static final int margin_top=0x7f070017;
-        public static final int ok=0x7f070008;
-        public static final int preview=0x7f070019;
-        public static final int set=0x7f070021;
-        public static final int shadow_color=0x7f070011;
-        public static final int shadow_color_comment=0x7f070012;
-        public static final int sleep_comment=0x7f07001e;
-        public static final int sleep_time=0x7f07001f;
-        public static final int sleep_timer=0x7f070020;
-        public static final int start=0x7f07001c;
-        public static final int text_color=0x7f07000f;
-        public static final int text_color_comment=0x7f070010;
-        public static final int text_position=0x7f070015;
-        public static final int text_position_comment=0x7f070016;
-        public static final int text_size=0x7f070013;
-        public static final int text_size_comment=0x7f070014;
+        public static final int kome=0x7f07001b;
+        public static final int margin_left=0x7f070019;
+        public static final int margin_top=0x7f070018;
+        public static final int no=0x7f070026;
+        public static final int ok=0x7f070009;
+        public static final int preview=0x7f07001a;
+        public static final int set=0x7f070022;
+        public static final int shadow_color=0x7f070012;
+        public static final int shadow_color_comment=0x7f070013;
+        public static final int sleep_comment=0x7f07001f;
+        public static final int sleep_time=0x7f070020;
+        public static final int sleep_timer=0x7f070021;
+        public static final int start=0x7f07001d;
+        public static final int text_color=0x7f070010;
+        public static final int text_color_comment=0x7f070011;
+        public static final int text_position=0x7f070016;
+        public static final int text_position_comment=0x7f070017;
+        public static final int text_size=0x7f070014;
+        public static final int text_size_comment=0x7f070015;
         public static final int title_activity_pager=0x7f070002;
         public static final int title_activity_tab=0x7f070003;
-        public static final int use_this_card=0x7f070006;
-        public static final int version=0x7f070005;
-        public static final int wake_up_msg=0x7f07001d;
+        public static final int use_this_card=0x7f070007;
+        public static final int version=0x7f070006;
+        public static final int wake_up_msg=0x7f07001e;
+        public static final int yes=0x7f070025;
     }
     public static final class style {
+        public static final int AlertDialog=0x7f090002;
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
@@ -209,7 +236,6 @@ containing a value of this type.
          */
         public static final int AppBaseTheme=0x7f090000;
         /**  Application theme. 
- All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f090001;
     }

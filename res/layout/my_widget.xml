@@ -9,8 +9,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingBottom="0sp"
-        android:paddingTop="0sp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_launcher" />
 
@@ -19,8 +17,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="#800a0a0a"
-        android:text="@string/app_name"
-        android:textColor="#fcfcfc" />
+        android:text="@string/app_name" />
 
 </LinearLayout>

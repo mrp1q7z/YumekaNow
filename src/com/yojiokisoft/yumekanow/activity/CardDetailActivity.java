@@ -30,6 +30,7 @@ import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.model.SettingDao;
+import com.yojiokisoft.yumekanow.utils.MyConst;
 
 @EActivity(R.layout.activity_card_detail)
 public class CardDetailActivity extends Activity {
@@ -38,7 +39,7 @@ public class CardDetailActivity extends Activity {
 	@ViewById(R.id.pager)
 	ViewPager mViewPager;
 
-	@Extra("Card")
+	@Extra(MyConst.CARD)
 	CardEntity mCard;
 
 	@Override
@@ -96,7 +97,7 @@ public class CardDetailActivity extends Activity {
 		CustomPagerAdapter adapter = (CustomPagerAdapter) mViewPager.getAdapter();
 		CardEntity card = adapter.getCard(mViewPager.getCurrentItem());
 		Intent myIntent = new Intent(getApplicationContext(), MakeCardActivity_.class);
-		myIntent.putExtra("Card", card);
+		myIntent.putExtra(MyConst.CARD, card);
 		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(myIntent);
 	}

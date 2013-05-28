@@ -45,13 +45,9 @@
         </activity>
         <activity android:name="com.yojiokisoft.yumekanow.activity.CardListActivity_" >
         </activity>
-        <activity
-            android:name="com.yojiokisoft.yumekanow.activity.MakeCardActivity_"
-            android:theme="@android:style/Theme.Black" >
+        <activity android:name="com.yojiokisoft.yumekanow.activity.MakeCardActivity_" >
         </activity>
-        <activity
-            android:name="com.yojiokisoft.yumekanow.activity.MyPreference_"
-            android:theme="@android:style/Theme.Black" >
+        <activity android:name="com.yojiokisoft.yumekanow.activity.MyPreference_" >
         </activity>
         <activity android:name="com.yojiokisoft.yumekanow.activity.UsageActivity_" >
         </activity>

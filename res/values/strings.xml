@@ -9,10 +9,10 @@
     <string name="title_activity_tab">TabActivity</string>
 
     <integer name="colorGridColumnWidth">32</integer>
-    
-    <string name="goalCnt">997</string>
+
+    <string name="defaultDispInterval">60</string>
+    <string name="defaultGoalCnt">997</string>
     <string name="version">Version 0.0.2</string>
-    
     <string name="use_this_card">このカードを使う</string>
     <string name="edit">編集</string>
     <string name="ok">OK</string>
@@ -38,8 +38,13 @@
     <string name="start">開始</string>
     <string name="wake_up_msg">おはようございます。\n指定の時間になりました。\n今日も一日よろしくお願いします。</string>
     <string name="sleep_comment">おやすみなさい。\nスリープ時間を設定してください</string>
-    <string name="sleep_time">時間（指定の時間に起動します）</string>
-    <string name="sleep_timer">タイマー（指定の時間経過後に起動します）</string>
+    <string name="sleep_time">【時間】\n指定の時間に起動します\n例 6:30 → 6時30分に起動</string>
+    <string name="sleep_timer">【タイマー】\n指定の時間経過後に起動します\n例 0:15 → 15分後に起動</string>
     <string name="set">セット</string>
+    <string name="divider_description">---</string>
+    <string name="color_dialog_title">色の設定</string>
+    <string name="yes">はい</string>
+    <string name="no">いいえ</string>
+	<string name="del_confirm_msg">削除します。よろしいですか？</string>
 
 </resources>

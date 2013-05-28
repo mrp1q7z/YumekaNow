@@ -3,7 +3,6 @@
     xmlns:mycustom="http://schemas.android.com/apk/res/com.yojiokisoft.yumekanow"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#212121"
     android:orientation="vertical" >
 
     <com.yojiokisoft.yumekanow.mycomponent.MyProgress
@@ -17,9 +16,6 @@
     <ListView
         android:id="@+id/dayToDayList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#212121"
-        android:cacheColorHint="#212121" >
-    </ListView>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

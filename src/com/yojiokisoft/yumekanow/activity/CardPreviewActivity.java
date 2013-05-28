@@ -28,6 +28,7 @@ import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.dialog.ColorPickerDialog;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
+import com.yojiokisoft.yumekanow.utils.MyConst;
 
 @EActivity(R.layout.activity_card_preview)
 public class CardPreviewActivity extends Activity {
@@ -41,7 +42,7 @@ public class CardPreviewActivity extends Activity {
 	@ViewById(R.id.backImage)
 	ImageView mImageView;
 
-	@Extra("Card")
+	@Extra(MyConst.CARD)
 	CardEntity mCard;
 
 	private LayoutInflater mInflater;
@@ -230,9 +231,9 @@ public class CardPreviewActivity extends Activity {
 		});
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-		builder.setTitle("色の設定");
+		builder.setTitle(getString(R.string.color_dialog_title));
 		builder.setView(view);
-		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				int color;
@@ -248,7 +249,7 @@ public class CardPreviewActivity extends Activity {
 				}
 			}
 		});
-		builder.setNegativeButton("Cancel", null);
+		builder.setNegativeButton(getString(R.string.cancel), null);
 		textColor.setBackgroundColor(mCard.textColor);
 		textColor.setTag(mCard.textColor);
 		shadowColor.setBackgroundColor(mCard.shadowColor);
@@ -258,10 +259,10 @@ public class CardPreviewActivity extends Activity {
 
 	@Click
 	public void okButtonClicked() {
-		Intent myIntent = new Intent(getApplicationContext(), MakeCardActivity_.class);
-		myIntent.putExtra("Card", mCard);
-		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(myIntent);
+		Intent intent = new Intent(getApplicationContext(), MakeCardActivity_.class);
+		intent.putExtra(MyConst.CARD, mCard);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
 		finish();
 	}
 

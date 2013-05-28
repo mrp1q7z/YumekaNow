@@ -20,11 +20,9 @@
             android:id="@+id/textColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#33ee88"
             android:gravity="center"
             android:padding="5dip"
-            android:text="@string/text_color"
-            android:textColor="#000000" />
+            android:text="@string/text_color" />
     </LinearLayout>
 
     <TextView
@@ -44,7 +42,6 @@
             android:id="@+id/shadowColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ff00ff"
             android:gravity="center"
             android:padding="5dip"
             android:text="@string/shadow_color" />

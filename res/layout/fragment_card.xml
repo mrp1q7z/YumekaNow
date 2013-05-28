@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#33000000"
+            android:background="@color/transparentButton"
             android:contentDescription="@string/ok"
             android:src="@drawable/ic_menu_mark" />
 
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#33000000"
+            android:background="@color/transparentButton"
             android:contentDescription="@string/cancel"
             android:src="@android:drawable/ic_menu_close_clear_cancel" />
     </LinearLayout>

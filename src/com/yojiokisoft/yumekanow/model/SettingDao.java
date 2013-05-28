@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.utils.MyConst;
 
 public class SettingDao {
 	private static SettingDao mInstance = null;
@@ -35,12 +36,12 @@ public class SettingDao {
 	}
 
 	public int getDispInterval() {
-		String val = mSharedPref.getString("DISP_INTERVAL", "");
+		String val = mSharedPref.getString(MyConst.DISP_INTERVAL, mContext.getString(R.string.defaultDispInterval));
 		return Integer.parseInt(val);
 	}
 
 	public String getDispIntervalString() {
-		String val = mSharedPref.getString("DISP_INTERVAL", "");
+		String val = mSharedPref.getString(MyConst.DISP_INTERVAL, mContext.getString(R.string.defaultDispInterval));
 		String ret = null;
 		for (int i = 0; i < mDispIntervalVal.length; i++) {
 			if (mDispIntervalVal[i].equals(val)) {
@@ -52,11 +53,11 @@ public class SettingDao {
 	}
 
 	public int getGoalCnt() {
-		return Integer.parseInt(mSharedPref.getString("GOAL_CNT", mContext.getString(R.string.goalCnt)));
+		return Integer.parseInt(mSharedPref.getString(MyConst.GOAL_CNT, mContext.getString(R.string.defaultGoalCnt)));
 	}
 
 	public String getAnimation() {
-		String val = mSharedPref.getString("ANIMATION", "");
+		String val = mSharedPref.getString(MyConst.ANIMATION, "");
 		String ret = null;
 		for (int i = 0; i < mAnimationVal.length; i++) {
 			if (mAnimationVal[i].equals(val)) {
@@ -68,24 +69,24 @@ public class SettingDao {
 	}
 
 	public String getAnimationId() {
-		return mSharedPref.getString("ANIMATION", "");
+		return mSharedPref.getString(MyConst.ANIMATION, "");
 	}
-	
+
 	public boolean getVibrator() {
-		return mSharedPref.getBoolean("Vibrator", false);
+		return mSharedPref.getBoolean(MyConst.VIBRATOR, false);
 	}
 
 	public String getAlarmUrl() {
-		String url = mSharedPref.getString("Alarm", "");
+		String url = mSharedPref.getString(MyConst.ALARM, "");
 		String ret = null;
 		if (url.length() > 0) {
 			ret = url;
 		}
 		return ret;
 	}
-	
+
 	public String getAlarm() {
-		String url = mSharedPref.getString("Alarm", "");
+		String url = mSharedPref.getString(MyConst.ALARM, "");
 		String ret = null;
 		if (url.length() <= 0) {
 			ret = "サイレント";
@@ -95,11 +96,11 @@ public class SettingDao {
 		}
 		return ret;
 	}
-	
+
 	public int getUseCard() {
 		return mSharedPref.getInt("UseCard", -1);
 	}
-	
+
 	public void setUseCard(int cardId) {
 		mSharedPref.edit().putInt("UseCard", cardId).commit();
 	}
