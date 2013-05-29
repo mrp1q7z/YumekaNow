@@ -1,5 +1,7 @@
 package com.yojiokisoft.yumekanow.service;
 
+import java.sql.SQLException;
+
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
@@ -83,10 +85,18 @@ public class MyWidgetService extends Service {
 	}
 
 	private int getWidgetImageResource() {
-		CounterDao counterDao = new CounterDao(this);
-		int okCnt = counterDao.getGrowLevel();
+		CounterDao counterDao;
+		int okCnt = 0;
+		try {
+			counterDao = new CounterDao(this);
+			okCnt = counterDao.getGrowLevel();
+		} catch (SQLException ignored) {
+			okCnt = -1;
+		}
 		int imageNo;
-		if (okCnt < 10) {
+		if (okCnt < 0) {
+			imageNo = 0;
+		} else if (okCnt < 10) {
 			imageNo = 1;
 		} else if (10 <= okCnt && okCnt <= 30) {
 			imageNo = 2;

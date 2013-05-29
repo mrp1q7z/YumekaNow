@@ -18,17 +18,9 @@ public class CounterDao {
 	private Dao<CounterEntity, Integer> mCounterDao = null;
 	private int mCurrentCardId;
 
-	private CounterDao() {
-	}
-
-	public CounterDao(Context context) {
+	public CounterDao(Context context) throws SQLException {
 		DatabaseHelper helper = DatabaseHelper.getInstance(context);
-		try {
-			mCounterDao = helper.getDao(CounterEntity.class);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		mCounterDao = helper.getDao(CounterEntity.class);
 
 		mCurrentCardId = SettingDao.getInstance(context).getUseCard();
 		Log.d("taoka", "CounterDao.constractor:UseCard=" + mCurrentCardId);
@@ -41,23 +33,19 @@ public class CounterDao {
 	/**
 	 * 成長レベル(1〜100)の取得
 	 * @return
+	 * @throws SQLException 
 	 */
-	public int getGrowLevel() {
+	public int getGrowLevel() throws SQLException {
 		GenericRawResults<String[]> rawResults = null;
 		int ret = 0;
-		try {
-			rawResults = mCounterDao
-					.queryRaw(
-					"select case when sum(okCnt) is null then 0 else sum(okCnt) end as okCntSum from counter where cardId = "
-							+ mCurrentCardId);
-			List<String[]> results = rawResults.getResults();
-			String[] resultArray = results.get(0);
-			Log.d("taoka", "getGrowLevel=" + resultArray[0]);
-			ret = Integer.parseInt(resultArray[0]);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		rawResults = mCounterDao
+				.queryRaw(
+				"select case when sum(okCnt) is null then 0 else sum(okCnt) end as okCntSum from counter where cardId = "
+						+ mCurrentCardId);
+		List<String[]> results = rawResults.getResults();
+		String[] resultArray = results.get(0);
+		Log.d("taoka", "getGrowLevel=" + resultArray[0]);
+		ret = Integer.parseInt(resultArray[0]);
 
 		return ret;
 	}
@@ -65,23 +53,19 @@ public class CounterDao {
 	/**
 	 * OKカウントの取得
 	 * @return
+	 * @throws SQLException 
 	 */
-	public int getOkCnt() {
+	public int getOkCnt() throws SQLException {
 		GenericRawResults<String[]> rawResults = null;
 		int ret = 0;
-		try {
-			rawResults = mCounterDao
-					.queryRaw(
-					"select case when sum(okCnt) is null then 0 else sum(okCnt) end as okCntSum from counter where cardId = "
-							+ mCurrentCardId);
-			List<String[]> results = rawResults.getResults();
-			String[] resultArray = results.get(0);
-			Log.d("taoka", "getGrowLevel=" + resultArray[0]);
-			ret = Integer.parseInt(resultArray[0]);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		rawResults = mCounterDao
+				.queryRaw(
+				"select case when sum(okCnt) is null then 0 else sum(okCnt) end as okCntSum from counter where cardId = "
+						+ mCurrentCardId);
+		List<String[]> results = rawResults.getResults();
+		String[] resultArray = results.get(0);
+		Log.d("taoka", "getGrowLevel=" + resultArray[0]);
+		ret = Integer.parseInt(resultArray[0]);
 
 		return ret;
 	}
@@ -89,51 +73,42 @@ public class CounterDao {
 	/**
 	 * 日々カウントの取得
 	 * @return
+	 * @throws SQLException 
 	 */
-	public List<DayCntEntity> getDayCnt() {
+	public List<DayCntEntity> getDayCnt() throws SQLException {
 		GenericRawResults<String[]> rawResults = null;
 		List<DayCntEntity> ret = new ArrayList<DayCntEntity>();
-		try {
-			rawResults = mCounterDao
-					.queryRaw(
-					"select procDay, sum(okCnt), sum(ngCnt) from counter where cardId = "
-							+ mCurrentCardId + " group by procDay");
-			List<String[]> results = rawResults.getResults();
-			int day = 0;
-			int totalOkCnt = 0;
-			int totalNgCnt = 0;
-			for (String[] resultArray : results) {
-				day++;
-				DayCntEntity dayCnt = new DayCntEntity();
-				dayCnt.day = day;
-				String yyyymmdd = resultArray[0];
-				Calendar date = Calendar.getInstance();
-				date.set(Calendar.YEAR, Integer.parseInt(yyyymmdd.substring(0, 4)));
-				date.set(Calendar.MONTH, Integer.parseInt(yyyymmdd.substring(4, 6)) - 1);
-				date.set(Calendar.DAY_OF_MONTH, Integer.parseInt(yyyymmdd.substring(6, 8)));
-				dayCnt.date = date;
-				dayCnt.okCnt = Integer.parseInt(resultArray[1]);
-				dayCnt.ngCnt = Integer.parseInt(resultArray[2]);
-				totalOkCnt += dayCnt.okCnt;
-				totalNgCnt += dayCnt.ngCnt;
-				dayCnt.totalOkCnt = totalOkCnt;
-				dayCnt.totalNgCnt = totalNgCnt;
-				ret.add(dayCnt);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		rawResults = mCounterDao
+				.queryRaw(
+				"select procDay, sum(okCnt), sum(ngCnt) from counter where cardId = "
+						+ mCurrentCardId + " group by procDay");
+		List<String[]> results = rawResults.getResults();
+		int day = 0;
+		int totalOkCnt = 0;
+		int totalNgCnt = 0;
+		for (String[] resultArray : results) {
+			day++;
+			DayCntEntity dayCnt = new DayCntEntity();
+			dayCnt.day = day;
+			String yyyymmdd = resultArray[0];
+			Calendar date = Calendar.getInstance();
+			date.set(Calendar.YEAR, Integer.parseInt(yyyymmdd.substring(0, 4)));
+			date.set(Calendar.MONTH, Integer.parseInt(yyyymmdd.substring(4, 6)) - 1);
+			date.set(Calendar.DAY_OF_MONTH, Integer.parseInt(yyyymmdd.substring(6, 8)));
+			dayCnt.date = date;
+			dayCnt.okCnt = Integer.parseInt(resultArray[1]);
+			dayCnt.ngCnt = Integer.parseInt(resultArray[2]);
+			totalOkCnt += dayCnt.okCnt;
+			totalNgCnt += dayCnt.ngCnt;
+			dayCnt.totalOkCnt = totalOkCnt;
+			dayCnt.totalNgCnt = totalNgCnt;
+			ret.add(dayCnt);
 		}
 
 		return ret;
 	}
 
-	public void setCounter(CounterEntity counter) {
-		try {
-			mCounterDao.create(counter);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void setCounter(CounterEntity counter) throws SQLException {
+		mCounterDao.create(counter);
 	}
 }

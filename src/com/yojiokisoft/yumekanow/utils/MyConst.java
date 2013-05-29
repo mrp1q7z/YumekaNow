@@ -1,5 +1,7 @@
 package com.yojiokisoft.yumekanow.utils;
 
+import android.os.Environment;
+
 public class MyConst {
 	// 表示間隔
 	public static final String DISP_INTERVAL = "DispInterval";
@@ -21,7 +23,37 @@ public class MyConst {
 
 	// お問い合わせ
 	public static final String INQUIRY = "Inquiry";
-	
+
 	// カード情報
 	public static final String CARD = "Card";
+
+	// SDカードのパス
+	public static final String EX_STORAGE_PATH = Environment.getExternalStorageDirectory().getPath();
+
+	// アプリケーションデータの保存パス
+	public static final String APP_DATA_PATH = "YumekaNow";
+	
+	// バグファイル名(キャッチした)
+	public static final String BUG_CAUGHT_FILE = "bug_caught.txt";
+	
+	// バグファイル名(キャッチされなかった)
+	public static final String BUG_UNCAUGHT_FILE = "bug_uncaught.txt";
+	
+	// キャッチしたバグファイルのフルパス
+	public static String getCaughtBugFilePath() {
+		return EX_STORAGE_PATH + "/" + APP_DATA_PATH + "/" + BUG_CAUGHT_FILE;
+	}
+	
+	// キャッチされなかったバグファイルのフルパス
+	public static String getUncaughtBugFilePath() {
+		return EX_STORAGE_PATH + "/" + APP_DATA_PATH + "/" + BUG_UNCAUGHT_FILE;
+	}
+	
+	// SQLiteのDB名
+	public static final String DATABASE_NAME = "yumekanow.db";
+	
+	// SQLiteのDB名のフルパス
+	public static String getDatabaseName() {
+		return EX_STORAGE_PATH + "/" + APP_DATA_PATH + "/" + DATABASE_NAME;
+	}
 }

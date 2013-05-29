@@ -12,30 +12,29 @@ import com.yojiokisoft.yumekanow.entity.CardEntity;
 public class CardDao {
 	private Dao<CardEntity, Integer> mCardDao = null;
 
-	private CardDao() {
-	}
-
-	public CardDao(Context context) {
+	public CardDao(Context context) throws SQLException {
 		DatabaseHelper helper = DatabaseHelper.getInstance(context);
-		try {
-			mCardDao = helper.getDao(CardEntity.class);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		mCardDao = helper.getDao(CardEntity.class);
 	}
 
-	public boolean isUsed(String backImagePath) {
+	public boolean isUsed(String backImagePath) throws SQLException {
 		List<CardEntity> list = null;
-		try {
-			list = mCardDao.queryForEq("backImagePath", backImagePath);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		list = mCardDao.queryForEq("backImagePath", backImagePath);
 		if (list == null || list.size() <= 0) {
 			return false;
 		}
 		return true;
+	}
+
+	public List<CardEntity> queryForAll() throws SQLException {
+		return mCardDao.queryForAll();
+	}
+
+	public List<CardEntity> queryForEq(String fieldName, Object value) throws SQLException {
+		return mCardDao.queryForEq(fieldName, value);
+	}
+
+	public Dao.CreateOrUpdateStatus createOrUpdate(CardEntity data) throws SQLException {
+		return mCardDao.createOrUpdate(data);
 	}
 }

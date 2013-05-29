@@ -25,10 +25,10 @@ import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.Extra;
 import com.googlecode.androidannotations.annotations.ViewById;
-import com.j256.ormlite.dao.Dao;
 import com.yojiokisoft.yumekanow.R;
-import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
+import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
+import com.yojiokisoft.yumekanow.model.CardDao;
 import com.yojiokisoft.yumekanow.model.SettingDao;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 
@@ -51,15 +51,15 @@ public class CardDetailActivity extends Activity {
 
 	@AfterViews
 	public void initActivity() {
-		DatabaseHelper helper = DatabaseHelper.getInstance(this);
-		Dao<CardEntity, Integer> cardDao;
 		List<CardEntity> list = null;
 		try {
-			cardDao = helper.getDao(CardEntity.class);
+			CardDao cardDao = new CardDao(this);
 			list = cardDao.queryForAll();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			MyUncaughtExceptionHandler.sendBugReport(this, e);
+		}
+		if (list == null) {
+			return;
 		}
 
 		CustomPagerAdapter adapter = new CustomPagerAdapter(this);
@@ -106,7 +106,7 @@ public class CardDetailActivity extends Activity {
 
 		private TextView mTextView;
 		private ImageView mImageView;
-		private Dao<CardEntity, Integer> mCardDao;
+		private CardDao mCardDao = null;
 		/** コンテキスト. */
 		private Context mContext;
 
@@ -123,12 +123,10 @@ public class CardDetailActivity extends Activity {
 			mInflter = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			mList = new ArrayList<Integer>();
 
-			DatabaseHelper helper = DatabaseHelper.getInstance(mContext);
 			try {
-				mCardDao = helper.getDao(CardEntity.class);
+				mCardDao = new CardDao(mContext);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				MyUncaughtExceptionHandler.sendBugReport((Activity) mContext, e);
 			}
 		}
 
@@ -148,14 +146,15 @@ public class CardDetailActivity extends Activity {
 			mImageView = (ImageView) layout.findViewById(R.id.backImage);
 
 			// リストから取得
-			Integer cardId = mList.get(position);
-			Log.d("taoka", "pos=" + position + ",cardId=" + cardId);
-			try {
-				List<CardEntity> list = mCardDao.queryForEq("id", cardId);
-				printCard(list.get(0));
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (mCardDao != null) {
+				Integer cardId = mList.get(position);
+				Log.d("taoka", "pos=" + position + ",cardId=" + cardId);
+				try {
+					List<CardEntity> list = mCardDao.queryForEq("id", cardId);
+					printCard(list.get(0));
+				} catch (SQLException e) {
+					MyUncaughtExceptionHandler.sendBugReport((Activity) mContext, e);
+				}
 			}
 
 			// コンテナに追加
@@ -200,13 +199,14 @@ public class CardDetailActivity extends Activity {
 		}
 
 		public CardEntity getCard(int position) {
-			int cardId = mList.get(position);
-			try {
-				List<CardEntity> list = mCardDao.queryForEq("id", cardId);
-				return list.get(0);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (mCardDao != null) {
+				int cardId = mList.get(position);
+				try {
+					List<CardEntity> list = mCardDao.queryForEq("id", cardId);
+					return list.get(0);
+				} catch (SQLException e) {
+					MyUncaughtExceptionHandler.sendBugReport((Activity) mContext, e);
+				}
 			}
 			return null;
 		}

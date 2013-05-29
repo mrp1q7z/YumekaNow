@@ -39,23 +39,8 @@ public final class CardPreviewActivity_
     }
 
     private void afterSetContentView_() {
-        mImageView = ((ImageView) findViewById(id.backImage));
         mTextView = ((TextView) findViewById(id.affirmationText));
-        {
-            View view = findViewById(id.okButton);
-            if (view!= null) {
-                view.setOnClickListener(new OnClickListener() {
-
-
-                    @Override
-                    public void onClick(View view) {
-                        CardPreviewActivity_.this.okButtonClicked();
-                    }
-
-                }
-                );
-            }
-        }
+        mImageView = ((ImageView) findViewById(id.backImage));
         {
             View view = findViewById(id.cancelButton);
             if (view!= null) {
@@ -65,6 +50,21 @@ public final class CardPreviewActivity_
                     @Override
                     public void onClick(View view) {
                         CardPreviewActivity_.this.cancelButtonClicked();
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            View view = findViewById(id.okButton);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        CardPreviewActivity_.this.okButtonClicked();
                     }
 
                 }

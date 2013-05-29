@@ -13,9 +13,6 @@ import com.yojiokisoft.yumekanow.utils.MyFile;
 public class BackImageDao {
 	private Resources mRes;
 
-	private BackImageDao() {
-	}
-
 	public BackImageDao(Resources res) {
 		mRes = res;
 	}
@@ -42,7 +39,7 @@ public class BackImageDao {
 			item.bitmapPath = path + File.separator + file;
 			list.add(item);
 		}
-		
+
 		return list;
 	}
 }

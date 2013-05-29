@@ -3,82 +3,85 @@ package com.yojiokisoft.yumekanow.utils;
 import android.content.Context;
 import android.content.Intent;
 
-public class MyMail {
-	private class MailParam {
-		String[] to = null;
-		String[] cc = null;
-		String[] bcc = null;
-		String subject = null;
-		String body = null;
-	}
-
-	private MailParam mailParam;
-	private Context mContext;
-
-	private MyMail() {
-		;
-	}
-
-	public MyMail(Context context) {
-		mContext = context;
-		mailParam = new MailParam();
-	}
-
-	public MyMail setTo(String to) {
-		mailParam.to = new String[] { to };
-		return this;
-	}
-
-	public MyMail setCc(String cc) {
-		mailParam.cc = new String[] { cc };
-		return this;
-	}
-
-	public MyMail setBcc(String bcc) {
-		mailParam.bcc = new String[] { bcc };
-		return this;
-	}
-
-	public MyMail setSubject(String subject) {
-		mailParam.subject = subject;
-		return this;
-	}
-
-	public MyMail setBody(String body) {
-		mailParam.body = body;
-		return this;
-	}
-
-	public void send() {
+public final class MyMail {
+	public MyMail(Builder builder) {
 		Intent intent = new Intent();
 
 		intent.setAction(Intent.ACTION_SEND);
 		intent.setType("message/rfc822");
 
 		// 宛先を指定  
-		if (mailParam.to != null) {
-			intent.putExtra(Intent.EXTRA_EMAIL, mailParam.to);
+		if (builder.to != null) {
+			intent.putExtra(Intent.EXTRA_EMAIL, builder.to);
 		}
 		// CCを指定  
-		if (mailParam.cc != null) {
-			intent.putExtra(Intent.EXTRA_CC, mailParam.cc);
+		if (builder.cc != null) {
+			intent.putExtra(Intent.EXTRA_CC, builder.cc);
 		}
 		// BCCを指定  
-		if (mailParam.bcc != null) {
-			intent.putExtra(Intent.EXTRA_BCC, mailParam.bcc);
+		if (builder.bcc != null) {
+			intent.putExtra(Intent.EXTRA_BCC, builder.bcc);
 		}
 		// 件名を指定  
-		if (mailParam.subject != null) {
-			intent.putExtra(Intent.EXTRA_SUBJECT, mailParam.subject);
+		if (builder.subject != null) {
+			intent.putExtra(Intent.EXTRA_SUBJECT, builder.subject);
 		}
 		// 本文を指定  
-		if (mailParam.body != null) {
-			intent.putExtra(Intent.EXTRA_TEXT, mailParam.body);
+		if (builder.body != null) {
+			intent.putExtra(Intent.EXTRA_TEXT, builder.body);
 		}
 
 		// Intentを発行  
 		Intent it = Intent.createChooser(intent, "Choose Email Client");
 		it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		mContext.startActivity(it);
+		builder.mContext.startActivity(it);
+	}
+
+	public static class Builder {
+		private Context mContext;
+		private String[] to = null;
+		private String[] cc = null;
+		private String[] bcc = null;
+		private String subject = null;
+		private String body = null;
+
+		private Builder() {
+			;
+		}
+
+		public static Builder newInstance(Context context) {
+			Builder builder = new Builder();
+			builder.mContext = context;
+			return builder;
+		}
+
+		public Builder setTo(String to) {
+			this.to = new String[] { to };
+			return this;
+		}
+
+		public Builder setCc(String cc) {
+			this.cc = new String[] { cc };
+			return this;
+		}
+
+		public Builder setBcc(String bcc) {
+			this.bcc = new String[] { bcc };
+			return this;
+		}
+
+		public Builder setSubject(String subject) {
+			this.subject = subject;
+			return this;
+		}
+
+		public Builder setBody(String body) {
+			this.body = body;
+			return this;
+		}
+
+		public MyMail send() {
+			return new MyMail(this);
+		}
 	}
 }

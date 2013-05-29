@@ -55,8 +55,8 @@ public class SleepFragment extends Fragment {
 	@Click(R.id.setTimerButton)
 	void setTimerButtonClicked() {
 		// アファーメーションアラームの解除
-		Intent intent = new Intent(mActivity, MyWidgetService.class);
-		PendingIntent pendingIntent = PendingIntent.getService(mActivity, 0, intent,
+		Intent serviceIntent = new Intent(mActivity, MyWidgetService.class);
+		PendingIntent pendingIntent = PendingIntent.getService(mActivity, 0, serviceIntent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarmManager = (AlarmManager) mActivity.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.cancel(pendingIntent);
@@ -68,20 +68,20 @@ public class SleepFragment extends Fragment {
 		calendar.setTimeInMillis(System.currentTimeMillis()); // 現在時刻を取得
 		if (mTimeKind.getCheckedRadioButtonId() == R.id.jikan) {
 			// 時間指定
-			if (hour < calendar.get(calendar.HOUR_OF_DAY)
-					|| (hour <= calendar.get(calendar.HOUR_OF_DAY) && min < calendar.get(calendar.MINUTE))) {
-				calendar.add(calendar.DAY_OF_MONTH, 1);
+			if (hour < calendar.get(Calendar.HOUR_OF_DAY)
+					|| (hour <= calendar.get(Calendar.HOUR_OF_DAY) && min < calendar.get(Calendar.MINUTE))) {
+				calendar.add(Calendar.DAY_OF_MONTH, 1);
 			}
-			calendar.set(calendar.get(calendar.YEAR), calendar.get(calendar.MONTH),
-					calendar.get(calendar.DAY_OF_MONTH), hour, min, 0);
+			calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+					calendar.get(Calendar.DAY_OF_MONTH), hour, min, 0);
 		} else {
 			// タイマー指定
 			calendar.add(Calendar.MINUTE, 60 * hour + min); // 現時刻 + 指定時間
 		}
-		intent = new Intent(mActivity, WakeUpActivity_.class);
-		pendingIntent = PendingIntent.getActivity(mActivity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		Intent wakeUpIntent = new Intent(mActivity, WakeUpActivity_.class);
+		pendingIntent = PendingIntent.getActivity(mActivity, 0, wakeUpIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		Log.d("taoka", "MainActivity.setTimerButtonOnClick : calendar=" + calendar.toString());
-		// TODO:タイマーはキャンセルしなくても上書きされる？
+		// 前回設定したタイマーは上書きされるのでキャンセルする必要はない
 		alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
 
 		Toast toast = Toast.makeText(mActivity, "おやすみなさい", Toast.LENGTH_LONG);

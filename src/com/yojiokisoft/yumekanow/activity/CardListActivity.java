@@ -17,10 +17,10 @@ import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.ItemClick;
 import com.googlecode.androidannotations.annotations.ViewById;
-import com.j256.ormlite.dao.Dao;
 import com.yojiokisoft.yumekanow.R;
-import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
+import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
+import com.yojiokisoft.yumekanow.model.CardDao;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 
 @EActivity(R.layout.activity_card_list)
@@ -30,16 +30,17 @@ public class CardListActivity extends Activity {
 
 	@AfterViews
 	public void initActivity() {
-		DatabaseHelper helper = DatabaseHelper.getInstance(this);
-		List<CardEntity> cardList = null;
+		List<CardEntity> list = null;
 		try {
-			Dao<CardEntity, Integer> cardDao = helper.getDao(CardEntity.class);
-			cardList = cardDao.queryForAll();
+			CardDao cardDao = new CardDao(this);
+			list = cardDao.queryForAll();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			MyUncaughtExceptionHandler.sendBugReport(this, e);
 		}
-		BaseAdapter adapter = new MyListArrayAdapter(this, cardList);
+		if (list == null) {
+			return;
+		}
+		BaseAdapter adapter = new MyListArrayAdapter(this, list);
 		mListView.setAdapter(adapter);
 	}
 

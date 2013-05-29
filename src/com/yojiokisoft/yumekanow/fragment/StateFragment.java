@@ -1,5 +1,6 @@
 package com.yojiokisoft.yumekanow.fragment;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -20,6 +21,7 @@ import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.entity.DayCntEntity;
+import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 import com.yojiokisoft.yumekanow.model.CounterDao;
 import com.yojiokisoft.yumekanow.model.SettingDao;
 import com.yojiokisoft.yumekanow.mycomponent.MyProgress;
@@ -42,10 +44,16 @@ public class StateFragment extends Fragment {
 	@AfterViews
 	void setProgress() {
 		SettingDao settingDao = SettingDao.getInstance(mActivity);
-		CounterDao counter = new CounterDao(mActivity);
+		CounterDao counter;
+		int okCnt = 0;
+		try {
+			counter = new CounterDao(mActivity);
+			okCnt = counter.getOkCnt();
+		} catch (SQLException e) {
+			MyUncaughtExceptionHandler.sendBugReport(mActivity, e);
+		}
 
 		int goalCnt = settingDao.getGoalCnt();
-		int okCnt = counter.getOkCnt();
 
 		mProgress.setShowPercent(true);
 		mProgress.setDescription(okCnt + "/" + goalCnt);
@@ -55,8 +63,17 @@ public class StateFragment extends Fragment {
 
 	@AfterViews
 	void setAdapter() {
-		CounterDao counter = new CounterDao(mActivity);
-		List<DayCntEntity> list = counter.getDayCnt();
+		CounterDao counter;
+		List<DayCntEntity> list = null;
+		try {
+			counter = new CounterDao(mActivity);
+			list = counter.getDayCnt();
+		} catch (SQLException e) {
+			MyUncaughtExceptionHandler.sendBugReport(mActivity, e);
+		}
+		if (list == null) {
+			return;
+		}
 		BaseAdapter adapter = new MyListArrayAdapter(mActivity, list);
 		mListView.setAdapter(adapter);
 	}
@@ -130,7 +147,6 @@ public class StateFragment extends Fragment {
 			holder.date.setText(s);
 			s = String.format("%2d", item.okCnt) + "回";
 			holder.cnt.setText(s);
-			// TODO: ここでパーセンテージを表示（１０％ごとに）
 			s = getComment(item);
 			if (s != null) {
 				holder.comment.setText(s);

@@ -119,7 +119,8 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 	private void setSummary(String key) {
 		String summary;
 		if (key == null || MyConst.DISP_INTERVAL.equals(key)) {
-			ListPreference prefDispInterval = (ListPreference) getPreferenceScreen().findPreference(MyConst.DISP_INTERVAL);
+			ListPreference prefDispInterval = (ListPreference) getPreferenceScreen().findPreference(
+					MyConst.DISP_INTERVAL);
 			summary = indexOfBr(prefDispInterval.getSummary().toString());
 			summary += BR + "現在値：" + dispIntervalVal2Key(prefDispInterval.getValue());
 
@@ -130,7 +131,8 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 			prefDispInterval.setSummary(nowVal);
 		}
 		if (key == null || MyConst.GOAL_CNT.equals(key)) {
-			EditTextPreference prefGoalCnt = (EditTextPreference) getPreferenceScreen().findPreference(MyConst.GOAL_CNT);
+			EditTextPreference prefGoalCnt = (EditTextPreference) getPreferenceScreen()
+					.findPreference(MyConst.GOAL_CNT);
 			summary = indexOfBr(prefGoalCnt.getSummary().toString());
 			summary += BR + "現在値：" + prefGoalCnt.getText();
 
@@ -152,7 +154,8 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 			prefAnimation.setSummary(nowVal);
 		}
 		if (key == null || MyConst.VIBRATOR.equals(key)) {
-			CheckBoxPreference prefVibrator = (CheckBoxPreference) getPreferenceScreen().findPreference(MyConst.VIBRATOR);
+			CheckBoxPreference prefVibrator = (CheckBoxPreference) getPreferenceScreen().findPreference(
+					MyConst.VIBRATOR);
 			summary = indexOfBr(prefVibrator.getSummary().toString());
 			summary += BR + "現在値：" + vibratorVal2Key(prefVibrator.isChecked());
 
@@ -227,11 +230,13 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 			String inquiry = sharedPreferences.getString(key, "");
 			if (!"".equals(inquiry)) {
 				String inquiryKey = inquiryVal2Key(inquiry);
-				String subject = getResources().getString(R.string.app_name) + ":" + inquiryKey;
+				String subject = "[" + inquiryKey + "]" + getString(R.string.app_name);
 				MyLog.d("Inquiry=" + inquiry);
 				// メール送信
-				MyMail mail = new MyMail(getApplicationContext());
-				mail.setTo("mrp1q7z@gmail.com").setSubject(subject).send();
+				MyMail.Builder.newInstance(getApplicationContext())
+						.setTo(getString(R.string.developer_email))
+						.setSubject(subject)
+						.send();
 				clearPreference(MyConst.INQUIRY);
 			}
 		}

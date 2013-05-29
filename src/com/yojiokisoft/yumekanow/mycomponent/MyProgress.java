@@ -81,6 +81,8 @@ public class MyProgress extends LinearLayout {
 		params = (LayoutParams) mGoalImageView.getLayoutParams();
 		mStartImageView.setLayoutParams(params);
 		params.setMargins(5, 5, 5, 5);
+
+		attrsArray.recycle();
 	}
 
 	public void setShowPercent(boolean showFlag) {
@@ -101,13 +103,19 @@ public class MyProgress extends LinearLayout {
 	}
 
 	public void drawableDestroy() {
-		Drawable drawable = mStartImageView.getDrawable();
-		drawable = null;
-		mStartImageView.setImageDrawable(null);
+		Drawable drawable;
+		
+		drawable = mStartImageView.getDrawable();
+		if (drawable != null) {
+			drawable = null;
+			mStartImageView.setImageDrawable(null);
+		}
 
 		drawable = mGoalImageView.getDrawable();
-		drawable = null;
-		mGoalImageView.setImageDrawable(null);
+		if (drawable != null) {
+			drawable = null;
+			mGoalImageView.setImageDrawable(null);
+		}
 	}
 
 	public void setMax(int max) {

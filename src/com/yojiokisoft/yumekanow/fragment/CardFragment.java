@@ -2,8 +2,10 @@ package com.yojiokisoft.yumekanow.fragment;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -16,19 +18,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.ImageView;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
-import com.j256.ormlite.dao.Dao;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.activity.MainActivity;
-import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.entity.CounterEntity;
+import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
+import com.yojiokisoft.yumekanow.model.CardDao;
 import com.yojiokisoft.yumekanow.model.CounterDao;
 import com.yojiokisoft.yumekanow.model.SettingDao;
 
@@ -50,34 +51,24 @@ public class CardFragment extends Fragment {
 	@AfterViews
 	public void printCard() {
 		// カード情報を取得
+		List<CardEntity> cardList = null;
 		int cardId = SettingDao.getInstance(mActivity).getUseCard();
 		if (cardId == -1) {
-			setDefalutCard();
-			return;
+			cardList = new ArrayList<CardEntity>();
+			cardList.add(getDefalutCard());
+		} else {
+			try {
+				CardDao cardDao = new CardDao(mActivity);
+				cardList = cardDao.queryForEq("id", cardId);
+				if (cardList.size() < 1) {
+					cardList.add(getEmptyCard());
+				}
+			} catch (SQLException e) {
+				MyUncaughtExceptionHandler.sendBugReport(mActivity, e);
+			}
 		}
-		DatabaseHelper helper = DatabaseHelper.getInstance(mActivity);
-		Dao<CardEntity, Integer> cardDao;
-		List<CardEntity> cardList = null;
-		try {
-			cardDao = helper.getDao(CardEntity.class);
-			cardList = cardDao.queryForEq("id", cardId);
-			if (cardList.size() < 1) {
-				CardEntity emptyCard = new CardEntity();
-				emptyCard.affirmationText = "カードを作成してください";
-				emptyCard.textColor = Color.BLACK;
-				emptyCard.shadowColor = Color.WHITE;
-				emptyCard.textSize = 20;
-				emptyCard.marginLeft = 10;
-				emptyCard.marginTop = 50;
-				emptyCard.backImageResourceId = R.drawable.back_img01;
-				cardList.add(emptyCard);
-			}
-			if (cardList.size() > 1) {
-				throw new ClassCastException("Card is multi id=" + cardId);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (cardList == null) {
+			return;
 		}
 		CardEntity card = cardList.get(0);
 
@@ -102,16 +93,28 @@ public class CardFragment extends Fragment {
 		}
 	}
 
-	private void setDefalutCard() {
-		mAffirmationText.setTextColor(0xff333333);
-		mAffirmationText.setTextSize(20.0f);
-		LayoutParams params = (LayoutParams) mAffirmationText.getLayoutParams();
-		params.setMargins(30, 120, 0, 0);
-		mAffirmationText.setLayoutParams(params);
-		mAffirmationText.setShadowLayer(1.5f, 1.0f, 1.0f, Color.WHITE);
-		mAffirmationText.setText("カードを選択してください");
+	private CardEntity getEmptyCard() {
+		CardEntity card = new CardEntity();
+		card.affirmationText = "カードを作成してください";
+		card.textColor = Color.BLACK;
+		card.shadowColor = Color.WHITE;
+		card.textSize = 20;
+		card.marginLeft = 10;
+		card.marginTop = 50;
+		card.backImageResourceId = R.drawable.back_img01;
+		return card;
+	}
 
-		mBackImage.setImageResource(R.drawable.back_img01);
+	private CardEntity getDefalutCard() {
+		CardEntity card = new CardEntity();
+		card.affirmationText = "カードを選択してください";
+		card.textColor = Color.RED;
+		card.shadowColor = Color.WHITE;
+		card.textSize = 20;
+		card.marginLeft = 30;
+		card.marginTop = 120;
+		card.backImageResourceId = R.drawable.back_img01;
+		return card;
 	}
 
 	@Override
@@ -121,21 +124,34 @@ public class CardFragment extends Fragment {
 	}
 
 	private void setCounter(int okFlag) {
-		CounterDao counterDao = new CounterDao(mActivity);
-		if (counterDao.getCurrentCardId() != -1) {
-			CounterEntity cnt = new CounterEntity();
-			cnt.cardId = counterDao.getCurrentCardId();
-			cnt.procTime = System.currentTimeMillis();
-			if (okFlag != 0) {
-				cnt.okCnt = 1;
-				cnt.ngCnt = 0;
-			} else {
-				cnt.okCnt = 0;
-				cnt.ngCnt = 1;
-			}
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-			cnt.procDay = sdf.format(new Date(cnt.procTime));
+		CounterDao counterDao = null;
+		int currentCardId = -1;
+		try {
+			counterDao = new CounterDao(mActivity);
+			currentCardId = counterDao.getCurrentCardId();
+		} catch (SQLException e) {
+			MyUncaughtExceptionHandler.sendBugReport(mActivity, e);
+		}
+		if (currentCardId == -1) {
+			return;
+		}
+		
+		CounterEntity cnt = new CounterEntity();
+		cnt.cardId = currentCardId;
+		cnt.procTime = System.currentTimeMillis();
+		if (okFlag != 0) {
+			cnt.okCnt = 1;
+			cnt.ngCnt = 0;
+		} else {
+			cnt.okCnt = 0;
+			cnt.ngCnt = 1;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.JAPANESE);
+		cnt.procDay = sdf.format(new Date(cnt.procTime));
+		try {
 			counterDao.setCounter(cnt);
+		} catch (SQLException e) {
+			MyUncaughtExceptionHandler.sendBugReport(mActivity, e);
 		}
 	}
 

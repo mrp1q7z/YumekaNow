@@ -1,6 +1,7 @@
 package com.yojiokisoft.yumekanow.activity;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EActivity;
@@ -12,7 +13,8 @@ import com.yojiokisoft.yumekanow.model.SettingDao;
 public class InitActivity extends Activity {
 	@AfterViews
 	public void initActiviy() {
-		DatabaseHelper.getInstance(this);
-		SettingDao.getInstance(this);
+		Context context = getApplicationContext();
+		DatabaseHelper.getInstance(context);
+		SettingDao.getInstance(context);
 	}
 }

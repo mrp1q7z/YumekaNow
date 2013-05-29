@@ -29,6 +29,7 @@ import com.googlecode.androidannotations.annotations.OptionsItem;
 import com.googlecode.androidannotations.annotations.OptionsMenu;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 import com.yojiokisoft.yumekanow.fragment.CardFragment_;
 import com.yojiokisoft.yumekanow.fragment.SleepFragment_;
 import com.yojiokisoft.yumekanow.fragment.StateFragment_;
@@ -78,6 +79,12 @@ public class MainActivity extends FragmentActivity {
 			mRingtone = RingtoneManager.getRingtone(this, Uri.parse(url));
 			mRingtone.play();
 		}
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		MyUncaughtExceptionHandler.sendBugReport(this);
 	}
 
 	@Override

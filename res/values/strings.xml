@@ -2,12 +2,17 @@
 <resources>
 
     <string name="app_name">夢かNow</string>
+    <string name="developer_email">mrp1q7z@gmail.com</string>
     <string name="init_msg">        この度は「夢かNow」をダウンロードして頂き誠にありがとうございます。\n
         このアプリケーションはあなたの夢の実現をお手伝いします。\n
         このアプリケーションはウジェットとして動作します。</string>
     <string name="title_activity_pager">PagerActivity</string>
     <string name="title_activity_tab">TabActivity</string>
 
+	<string name="err_dialog_title">エラー報告</string>
+	<string name="err_dialog_msg">前回は、エラーで終了してしまい、大変申し訳ありません。今後の改善に役立てますので、開発元にエラーを送っていただけると大変助かります。プライバシーに関する情報は送信されません</string>
+	<string name="err_dialog_msg2">大変申し訳ありません。予期せぬエラーが発生しました。今後の改善に役立てますので、開発元にエラーを送っていただけると大変助かります。プライバシーに関する情報は送信されません</string>
+		
     <integer name="colorGridColumnWidth">32</integer>
 
     <string name="defaultDispInterval">60</string>
@@ -46,5 +51,6 @@
     <string name="yes">はい</string>
     <string name="no">いいえ</string>
 	<string name="del_confirm_msg">削除します。よろしいですか？</string>
+    <string name="send">送信</string>
 
 </resources>

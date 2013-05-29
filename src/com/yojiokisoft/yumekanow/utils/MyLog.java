@@ -1,5 +1,10 @@
 package com.yojiokisoft.yumekanow.utils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+
 import android.util.Log;
 
 import com.yojiokisoft.yumekanow.BuildConfig;
@@ -9,6 +14,19 @@ public class MyLog {
 	private static final int MAX_TAB_COUNT = 8;
 	private static final int TAB_SIZE = 4;
 	private static final int INDEX = 3;
+
+	public static void writeStackTrace(String fileName, Throwable ex) throws FileNotFoundException {
+		File file = new File(fileName);
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new FileOutputStream(file));
+			ex.printStackTrace(pw);
+		} finally {
+			if (pw != null) {
+				pw.close();
+			}
+		}
+	}
 
 	/*
 	* DEBUG

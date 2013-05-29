@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -43,23 +44,22 @@ import com.googlecode.androidannotations.annotations.Extra;
 import com.googlecode.androidannotations.annotations.ItemSelect;
 import com.googlecode.androidannotations.annotations.SeekBarProgressChange;
 import com.googlecode.androidannotations.annotations.ViewById;
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.yojiokisoft.yumekanow.R;
-import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.dialog.ColorPickerDialog;
 import com.yojiokisoft.yumekanow.entity.BackImageEntity;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
+import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 import com.yojiokisoft.yumekanow.model.BackImageDao;
 import com.yojiokisoft.yumekanow.model.CardDao;
 import com.yojiokisoft.yumekanow.utils.MyConst;
+import com.yojiokisoft.yumekanow.utils.MyDialog;
 import com.yojiokisoft.yumekanow.utils.MyImage;
 
 @EActivity(R.layout.activity_make_card)
 public class MakeCardActivity extends Activity implements ViewFactory {
 	private final int TEXT_SIZE_MIN = 10;
 	private final int INTENT_REQUEST_PICTURE = 3;
-	private final DatabaseHelper mHelper = DatabaseHelper.getInstance(this);
 	private Activity mActivity;
 	private BaseAdapter mAdapter;
 
@@ -177,54 +177,71 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == INTENT_REQUEST_PICTURE && resultCode == RESULT_OK) {
-			Bitmap bitmap = null;
-			try {
-				// 戻り値からInputStreamを取得
-				InputStream in = getContentResolver().openInputStream(data.getData());
-				// 読み込む際のオプション
-				BitmapFactory.Options options = new BitmapFactory.Options();
-				// 画像を読み込まずサイズを調整するだけにする
-				options.inJustDecodeBounds = true;
-				// optionsに画像情報を入れる
-				BitmapFactory.decodeStream(in, null, options);
-				// InputStreamは1回クローズする(もう中身が無い為、再利用は出来無い)
-				in.close();
-				// Displayに収まるサイズに調整するための割合を取得
-				Pair<Integer, Integer> size = MyImage.getScreenWidthAndHeight(this);
-				int width = options.outWidth / size.first + 1;
-				int height = options.outHeight / size.second + 1;
-				// 画像を 1 / Math.max(width, height) のサイズで取得するように調整
-				options.inSampleSize = Math.max(width, height);
-				// 実際に画像を読み込ませる
-				options.inJustDecodeBounds = false;
-				// もう1回InputStreamを取得
-				in = getContentResolver().openInputStream(data.getData());
-				// Bitmapの取得
-				bitmap = BitmapFactory.decodeStream(in, null, options);
-				// InputStreamのクローズ
-				in.close();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if (requestCode != INTENT_REQUEST_PICTURE || resultCode != RESULT_OK) {
+			return;
+		}
 
-			//ファイル名用フォーマット  
-			Date today = new Date();
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
-			String filename = "img_" + dateFormat.format(today) + ".jpg";
-			String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
-					+ "YumekaNow" + File.separator + filename;
-			Log.d("taoka", "path=" + path);
-			File file = new File(path);
-			try {
-				MyImage.saveImage(file, bitmap);
-			} catch (Exception e) {
-				e.printStackTrace();
+		// 画像のサイズを取得
+		InputStream in = null;
+		BitmapFactory.Options options = null;
+		try {
+			in = getContentResolver().openInputStream(data.getData());
+			options = new BitmapFactory.Options();
+			options.inJustDecodeBounds = true;
+			BitmapFactory.decodeStream(in, null, options);
+		} catch (FileNotFoundException e) {
+			MyDialog.showDialog(this, "エラー", "画像ファイルが見つかりません");
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					MyUncaughtExceptionHandler.sendBugReport(this, e);
+				}
 			}
+		}
+		if (options == null) {
+			return;
+		}
+
+		// Displayに収まるサイズで画像を取得
+		Pair<Integer, Integer> size = MyImage.getScreenWidthAndHeight(this);
+		int width = options.outWidth / size.first + 1;
+		int height = options.outHeight / size.second + 1;
+		options.inSampleSize = Math.max(width, height);
+		options.inJustDecodeBounds = false;
+		Bitmap bitmap = null;
+		in = null;
+		try {
+			in = getContentResolver().openInputStream(data.getData());
+			bitmap = BitmapFactory.decodeStream(in, null, options);
+		} catch (FileNotFoundException e) {
+			MyDialog.showDialog(this, "エラー", "画像ファイルが見つかりません");
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					MyUncaughtExceptionHandler.sendBugReport(this, e);
+				}
+			}
+		}
+		if (bitmap == null) {
+			return;
+		}
+
+		//ファイル名用フォーマット  
+		Date today = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.JAPANESE);
+		String filename = "img_" + dateFormat.format(today) + ".jpg";
+		String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
+				+ "YumekaNow" + File.separator + filename;
+		Log.d("taoka", "path=" + path);
+		File file = new File(path);
+		try {
+			MyImage.saveImage(file, bitmap);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		// ギャラリーの再読み込み
 		BackImageDao backImageDao = new BackImageDao(this.getResources());
@@ -311,15 +328,12 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	void okButtonClicked() {
 		Log.d("taoka", "MakeCardActivity#mOkButtonClick#onClick:bigin");
 		try {
-			Dao<CardEntity, Integer> cardDao = mHelper.getDao(CardEntity.class);
+			CardDao cardDao = new CardDao(this);
 			CardEntity cardEntity = getInputCard();
 			CreateOrUpdateStatus ret = cardDao.createOrUpdate(cardEntity);
 			Log.d("taoka", "MakeCardActivity#mOkButtonClick#onClick:createOrUpdate ret=" + ret.toString());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			//				mHelper.close();
+			MyUncaughtExceptionHandler.sendBugReport(this, e);
 		}
 		finish();
 
@@ -400,11 +414,15 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	void backImgGalleryItemSelected(boolean selected, BackImageEntity backImage) {
 		if (backImage.resouceId == 0) {
 			mImageSwitcher.setImageURI(Uri.parse("file:///" + backImage.bitmapPath));
-			CardDao cardDao = new CardDao(mActivity);
-			if (cardDao.isUsed(backImage.bitmapPath)) {
-				mDelBackImgButton.setVisibility(View.GONE);
-			} else {
-				mDelBackImgButton.setVisibility(View.VISIBLE);
+			try {
+				CardDao cardDao = new CardDao(mActivity);
+				if (cardDao.isUsed(backImage.bitmapPath)) {
+					mDelBackImgButton.setVisibility(View.GONE);
+				} else {
+					mDelBackImgButton.setVisibility(View.VISIBLE);
+				}
+			} catch (SQLException e) {
+				MyUncaughtExceptionHandler.sendBugReport(this, e);
 			}
 		} else {
 			mImageSwitcher.setImageResource(backImage.resouceId);
