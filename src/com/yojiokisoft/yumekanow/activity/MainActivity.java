@@ -102,7 +102,7 @@ public class MainActivity extends FragmentActivity {
 		return view;
 	}
 
-	private class MyPagerAdapter extends FragmentPagerAdapter
+	private static class MyPagerAdapter extends FragmentPagerAdapter
 			implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
 
 		private final Context context;
@@ -224,9 +224,11 @@ public class MainActivity extends FragmentActivity {
 	public void stopVibrator() {
 		if (mVibrator != null) {
 			mVibrator.cancel();
+			mVibrator = null;
 		}
 		if (mRingtone != null) {
 			mRingtone.stop();
+			mRingtone = null;
 		}
 	}
 

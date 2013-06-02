@@ -39,6 +39,9 @@ public class MyWidgetService extends Service {
 	 */
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		if (intent == null) {
+			return START_NOT_STICKY;
+		}
 		if (ACTION_MY_CLICK.equals(intent.getAction())) {
 			startMainActivity();
 		}
@@ -72,9 +75,9 @@ public class MyWidgetService extends Service {
 	}
 
 	private void startMainActivity() {
-		Intent myIntent = new Intent(getApplicationContext(), MainActivity_.class);
-		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(myIntent);
+		Intent intent = new Intent(getApplicationContext(), MainActivity_.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
 	}
 
 	private int getWidgetImageResource() {

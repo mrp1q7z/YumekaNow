@@ -59,6 +59,12 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 				}
 			}
 		};
+		DialogInterface.OnClickListener cancelClicked = new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				bugfile.delete();
+			}
+		};
 		//AlertDialogを表示します。
 		MyDialog.Builder.newInstance(activity)
 				.setTitle(activity.getString(R.string.err_dialog_title))
@@ -66,6 +72,7 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 				.setPositiveLabel(activity.getString(R.string.send))
 				.setPositiveClickListener(okClicked)
 				.setNegativeLabel(activity.getString(R.string.cancel))
+				.setNegativeClickListener(cancelClicked)
 				.show();
 	}
 
@@ -95,6 +102,12 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 				}
 			}
 		};
+		DialogInterface.OnClickListener cancelClicked = new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				bugfile.delete();
+			}
+		};
 		//AlertDialogを表示します。  
 		MyDialog.Builder.newInstance(activity)
 				.setTitle(activity.getString(R.string.err_dialog_title))
@@ -102,6 +115,7 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 				.setPositiveLabel(activity.getString(R.string.send))
 				.setPositiveClickListener(okClicked)
 				.setNegativeLabel(activity.getString(R.string.cancel))
+				.setNegativeClickListener(cancelClicked)
 				.show();
 	}
 

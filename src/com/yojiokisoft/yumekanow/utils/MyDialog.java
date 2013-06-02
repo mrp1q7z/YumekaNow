@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import com.yojiokisoft.yumekanow.R;
-
 public class MyDialog {
 	public MyDialog(Builder builder) {
 		AlertDialog.Builder alert = new AlertDialog.Builder(builder.mContext);
@@ -19,7 +17,7 @@ public class MyDialog {
 			alert.setPositiveButton(builder.mPositiveLabel, builder.mPositiveClickListener);
 		}
 		if (builder.mNegativeLabel != null) {
-			alert.setNegativeButton(R.string.cancel, null);
+			alert.setNegativeButton(builder.mNegativeLabel, builder.mNegativeClickListener);
 		}
 		alert.show();
 	}
@@ -31,6 +29,7 @@ public class MyDialog {
 		private String mPositiveLabel = null;
 		private String mNegativeLabel = null;
 		private DialogInterface.OnClickListener mPositiveClickListener = null;
+		private DialogInterface.OnClickListener mNegativeClickListener = null;
 
 		private Builder() {
 			;
@@ -64,6 +63,11 @@ public class MyDialog {
 
 		public Builder setPositiveClickListener(DialogInterface.OnClickListener listener) {
 			this.mPositiveClickListener = listener;
+			return this;
+		}
+
+		public Builder setNegativeClickListener(DialogInterface.OnClickListener listener) {
+			this.mNegativeClickListener = listener;
 			return this;
 		}
 

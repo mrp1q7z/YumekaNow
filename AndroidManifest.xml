@@ -38,28 +38,46 @@
 
         <activity
             android:name="com.yojiokisoft.yumekanow.activity.InitActivity_"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.yojiokisoft.yumekanow.activity.CardListActivity_" >
+        <activity
+            android:name="com.yojiokisoft.yumekanow.activity.CardListActivity_"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.yojiokisoft.yumekanow.activity.MakeCardActivity_" >
+        <activity
+            android:name="com.yojiokisoft.yumekanow.activity.MakeCardActivity_"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.yojiokisoft.yumekanow.activity.MyPreference_" >
+        <activity
+            android:name="com.yojiokisoft.yumekanow.activity.MyPreference_"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.yojiokisoft.yumekanow.activity.UsageActivity_" >
+        <activity
+            android:name="com.yojiokisoft.yumekanow.activity.UsageActivity_"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.yojiokisoft.yumekanow.activity.CardPreviewActivity_" >
+        <activity
+            android:name="com.yojiokisoft.yumekanow.activity.CardPreviewActivity_"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.yojiokisoft.yumekanow.activity.CardDetailActivity_" >
+        <activity
+            android:name="com.yojiokisoft.yumekanow.activity.CardDetailActivity_"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.yojiokisoft.yumekanow.activity.MainActivity_" >
+        <activity
+            android:name="com.yojiokisoft.yumekanow.activity.MainActivity_"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.yojiokisoft.yumekanow.activity.WakeUpActivity_" >
+        <activity
+            android:name="com.yojiokisoft.yumekanow.activity.WakeUpActivity_"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 
