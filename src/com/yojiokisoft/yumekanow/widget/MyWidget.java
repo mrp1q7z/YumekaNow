@@ -10,7 +10,6 @@ import android.content.Intent;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 import com.yojiokisoft.yumekanow.model.SettingDao;
 import com.yojiokisoft.yumekanow.service.MyWidgetService;
-import com.yojiokisoft.yumekanow.utils.MyLog;
 
 public class MyWidget extends AppWidgetProvider {
 	@Override
@@ -20,8 +19,6 @@ public class MyWidget extends AppWidgetProvider {
 		//呼び出されるデフォルトのハンドラを設定します。  
 		Context appCtx = context.getApplicationContext();
 		Thread.setDefaultUncaughtExceptionHandler(new MyUncaughtExceptionHandler(appCtx));
-
-		MyLog.d("MyWidget.onUpdate : bigin");
 
 		Intent intent = new Intent(context, MyWidgetService.class);
 		PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent,
@@ -33,6 +30,5 @@ public class MyWidget extends AppWidgetProvider {
 		alarmManager.setRepeating(AlarmManager.RTC, now, interval, pendingIntent);
 
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
-		MyLog.d("MyWidget.onUpdate : end");
 	}
 }

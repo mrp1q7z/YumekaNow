@@ -18,8 +18,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.View;
@@ -44,7 +42,6 @@ import com.googlecode.androidannotations.annotations.Extra;
 import com.googlecode.androidannotations.annotations.ItemSelect;
 import com.googlecode.androidannotations.annotations.SeekBarProgressChange;
 import com.googlecode.androidannotations.annotations.ViewById;
-import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.dialog.ColorPickerDialog;
 import com.yojiokisoft.yumekanow.entity.BackImageEntity;
@@ -190,7 +187,10 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			options.inJustDecodeBounds = true;
 			BitmapFactory.decodeStream(in, null, options);
 		} catch (FileNotFoundException e) {
-			MyDialog.showDialog(this, "エラー", "画像ファイルが見つかりません");
+			MyDialog.Builder.newInstance(this)
+					.setTitle(getString(R.string.error))
+					.setMessage(getString(R.string.file_not_found))
+					.show();
 		} finally {
 			if (in != null) {
 				try {
@@ -216,7 +216,10 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			in = getContentResolver().openInputStream(data.getData());
 			bitmap = BitmapFactory.decodeStream(in, null, options);
 		} catch (FileNotFoundException e) {
-			MyDialog.showDialog(this, "エラー", "画像ファイルが見つかりません");
+			MyDialog.Builder.newInstance(this)
+					.setTitle(getString(R.string.error))
+					.setMessage(getString(R.string.file_not_found))
+					.show();
 		} finally {
 			if (in != null) {
 				try {
@@ -234,9 +237,8 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		Date today = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.JAPANESE);
 		String filename = "img_" + dateFormat.format(today) + ".jpg";
-		String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
-				+ "YumekaNow" + File.separator + filename;
-		Log.d("taoka", "path=" + path);
+		String path = MyConst.EX_STORAGE_PATH + File.separator
+				+ MyConst.APP_DATA_PATH + File.separator + filename;
 		File file = new File(path);
 		try {
 			MyImage.saveImage(file, bitmap);
@@ -326,12 +328,10 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	 */
 	@Click(R.id.okButton)
 	void okButtonClicked() {
-		Log.d("taoka", "MakeCardActivity#mOkButtonClick#onClick:bigin");
 		try {
 			CardDao cardDao = new CardDao(this);
 			CardEntity cardEntity = getInputCard();
-			CreateOrUpdateStatus ret = cardDao.createOrUpdate(cardEntity);
-			Log.d("taoka", "MakeCardActivity#mOkButtonClick#onClick:createOrUpdate ret=" + ret.toString());
+			cardDao.createOrUpdate(cardEntity);
 		} catch (SQLException e) {
 			MyUncaughtExceptionHandler.sendBugReport(this, e);
 		}

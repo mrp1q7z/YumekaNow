@@ -8,14 +8,12 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.activity.MainActivity_;
 import com.yojiokisoft.yumekanow.model.CounterDao;
 import com.yojiokisoft.yumekanow.model.SettingDao;
-import com.yojiokisoft.yumekanow.utils.MyLog;
 import com.yojiokisoft.yumekanow.widget.MyWidget;
 
 public class MyWidgetService extends Service {
@@ -28,13 +26,11 @@ public class MyWidgetService extends Service {
 
 	@Override
 	public void onCreate() {
-		Log.d("TAG", "Serviceを生成しました");
 		super.onCreate();
 	}
 
 	@Override
 	public void onDestroy() {
-		Log.d("TAG", "Serviceを破棄しました");
 		super.onDestroy();
 	}
 
@@ -43,8 +39,6 @@ public class MyWidgetService extends Service {
 	 */
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		MyLog.d("onStartCommand begin");
-
 		if (ACTION_MY_CLICK.equals(intent.getAction())) {
 			startMainActivity();
 		}
@@ -53,7 +47,6 @@ public class MyWidgetService extends Service {
 		setAnimation();
 		startMainActivity();
 
-		MyLog.d("onStartCommand end");
 		return super.onStartCommand(intent, flags, startId);
 	}
 

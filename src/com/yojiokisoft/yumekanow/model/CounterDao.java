@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
@@ -23,7 +22,6 @@ public class CounterDao {
 		mCounterDao = helper.getDao(CounterEntity.class);
 
 		mCurrentCardId = SettingDao.getInstance(context).getUseCard();
-		Log.d("taoka", "CounterDao.constractor:UseCard=" + mCurrentCardId);
 	}
 
 	public int getCurrentCardId() {
@@ -44,7 +42,6 @@ public class CounterDao {
 						+ mCurrentCardId);
 		List<String[]> results = rawResults.getResults();
 		String[] resultArray = results.get(0);
-		Log.d("taoka", "getGrowLevel=" + resultArray[0]);
 		ret = Integer.parseInt(resultArray[0]);
 
 		return ret;
@@ -64,7 +61,6 @@ public class CounterDao {
 						+ mCurrentCardId);
 		List<String[]> results = rawResults.getResults();
 		String[] resultArray = results.get(0);
-		Log.d("taoka", "getGrowLevel=" + resultArray[0]);
 		ret = Integer.parseInt(resultArray[0]);
 
 		return ret;

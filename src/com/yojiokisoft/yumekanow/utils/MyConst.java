@@ -28,7 +28,7 @@ public class MyConst {
 	public static final String CARD = "Card";
 
 	// SDカードのパス
-	public static final String EX_STORAGE_PATH = Environment.getExternalStorageDirectory().getPath();
+	public static final String EX_STORAGE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
 
 	// アプリケーションデータの保存パス
 	public static final String APP_DATA_PATH = "YumekaNow";

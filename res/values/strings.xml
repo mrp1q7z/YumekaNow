@@ -52,5 +52,7 @@
     <string name="no">いいえ</string>
 	<string name="del_confirm_msg">削除します。よろしいですか？</string>
     <string name="send">送信</string>
+	<string name="error">エラー</string>
+	<string name="file_not_found">画像ファイルが見つかりません</string>
 
 </resources>

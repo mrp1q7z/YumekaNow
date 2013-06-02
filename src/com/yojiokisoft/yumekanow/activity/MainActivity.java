@@ -34,7 +34,6 @@ import com.yojiokisoft.yumekanow.fragment.CardFragment_;
 import com.yojiokisoft.yumekanow.fragment.SleepFragment_;
 import com.yojiokisoft.yumekanow.fragment.StateFragment_;
 import com.yojiokisoft.yumekanow.model.SettingDao;
-import com.yojiokisoft.yumekanow.utils.MyLog;
 
 @EActivity(R.layout.activity_main)
 @OptionsMenu(R.menu.activity_main)
@@ -223,7 +222,6 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	public void stopVibrator() {
-		MyLog.d("stopVibrator");
 		if (mVibrator != null) {
 			mVibrator.cancel();
 		}

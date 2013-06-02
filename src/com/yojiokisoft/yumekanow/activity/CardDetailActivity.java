@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -148,7 +147,6 @@ public class CardDetailActivity extends Activity {
 			// リストから取得
 			if (mCardDao != null) {
 				Integer cardId = mList.get(position);
-				Log.d("taoka", "pos=" + position + ",cardId=" + cardId);
 				try {
 					List<CardEntity> list = mCardDao.queryForEq("id", cardId);
 					printCard(list.get(0));

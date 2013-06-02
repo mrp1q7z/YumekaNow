@@ -7,14 +7,6 @@ import android.content.DialogInterface;
 import com.yojiokisoft.yumekanow.R;
 
 public class MyDialog {
-	public static void showDialog(Context context, String title, String message) {
-		AlertDialog.Builder alert = new AlertDialog.Builder(context);
-		alert.setTitle(title);
-		alert.setMessage(message);
-		alert.setPositiveButton(R.string.ok, null);
-		alert.show();
-	}
-
 	public MyDialog(Builder builder) {
 		AlertDialog.Builder alert = new AlertDialog.Builder(builder.mContext);
 		if (builder.mTitle != null) {

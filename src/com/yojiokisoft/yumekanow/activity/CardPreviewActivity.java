@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -123,13 +122,11 @@ public class CardPreviewActivity extends Activity {
 		final int action = event.getAction();
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
-			Log.v("taoka", "ACTION_DOWN: x=" + x + ",y=" + y);
 			mIsLongPress = true;
 			mHandler.postDelayed(mLongPressRunnable, LONG_PRESS_TIMEOUT);
 			mDownTime = System.currentTimeMillis();
 			break;
 		case MotionEvent.ACTION_MOVE:
-			Log.v("taoka", "ACTION_MOVE: x=" + x + ",y=" + y);
 			if (x < mOldX - 5 || mOldX + 5 < x ||
 					y < mOldY - 5 || mOldY + 5 < y) {
 				mIsLongPress = false;
@@ -143,14 +140,12 @@ public class CardPreviewActivity extends Activity {
 			}
 			break;
 		case MotionEvent.ACTION_CANCEL:
-			Log.v("taoka", "ACTION_CANCEL");
 			mIsLongPress = false;
 			mDragging = false;
 			mDragView.setBackgroundColor(0x00000000);
 			mHandler.removeCallbacks(mLongPressRunnable);
 			break;
 		case MotionEvent.ACTION_UP:
-			Log.v("taoka", "ACTION_UP");
 			mIsLongPress = false;
 			mDragging = false;
 			mDragView.setBackgroundColor(0x00000000);

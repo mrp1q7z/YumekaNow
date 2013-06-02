@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +79,6 @@ public class SleepFragment extends Fragment {
 		}
 		Intent wakeUpIntent = new Intent(mActivity, WakeUpActivity_.class);
 		pendingIntent = PendingIntent.getActivity(mActivity, 0, wakeUpIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		Log.d("taoka", "MainActivity.setTimerButtonOnClick : calendar=" + calendar.toString());
 		// 前回設定したタイマーは上書きされるのでキャンセルする必要はない
 		alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
 

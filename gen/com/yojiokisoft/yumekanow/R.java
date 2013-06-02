@@ -195,6 +195,8 @@ containing a value of this type.
         public static final int err_dialog_msg=0x7f070006;
         public static final int err_dialog_msg2=0x7f070007;
         public static final int err_dialog_title=0x7f070005;
+        public static final int error=0x7f07002d;
+        public static final int file_not_found=0x7f07002e;
         public static final int init_msg=0x7f070002;
         public static final int kome=0x7f07001f;
         public static final int margin_left=0x7f07001d;
