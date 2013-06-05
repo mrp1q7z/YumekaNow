@@ -36,8 +36,8 @@ public final class MainActivity_
     }
 
     private void afterSetContentView_() {
-        mTabHost = ((TabHost) findViewById(android.R.id.tabhost));
         mPager = ((ViewPager) findViewById(com.yojiokisoft.yumekanow.R.id.pager));
+        mTabHost = ((TabHost) findViewById(android.R.id.tabhost));
         initActivity();
     }
 
@@ -89,16 +89,16 @@ public final class MainActivity_
             onMenuSettings();
             return true;
         }
-        if (itemId_ == com.yojiokisoft.yumekanow.R.id.select_card) {
-            onMenuSelectCard();
-            return true;
-        }
         if (itemId_ == com.yojiokisoft.yumekanow.R.id.make_card) {
             onMenuMakeCard();
             return true;
         }
         if (itemId_ == com.yojiokisoft.yumekanow.R.id.usage) {
             onMenuUsage();
+            return true;
+        }
+        if (itemId_ == com.yojiokisoft.yumekanow.R.id.select_card) {
+            onMenuSelectCard();
             return true;
         }
         return false;

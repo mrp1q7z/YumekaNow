@@ -21,7 +21,6 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EActivity;
@@ -187,8 +186,6 @@ public class MainActivity extends FragmentActivity {
 
 	@OptionsItem(R.id.make_card)
 	void onMenuMakeCard() {
-		Toast toast = Toast.makeText(this, "カードを作るが選択されました", Toast.LENGTH_LONG);
-		toast.show();
 		Intent myIntent = new Intent(getApplicationContext(), MakeCardActivity_.class);
 		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(myIntent);
@@ -196,8 +193,6 @@ public class MainActivity extends FragmentActivity {
 
 	@OptionsItem(R.id.select_card)
 	void onMenuSelectCard() {
-		Toast toast = Toast.makeText(this, "カードを選ぶが選択されました", Toast.LENGTH_LONG);
-		toast.show();
 		Intent myIntent = new Intent(getApplicationContext(), CardListActivity_.class);
 		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(myIntent);
@@ -205,8 +200,6 @@ public class MainActivity extends FragmentActivity {
 
 	@OptionsItem(R.id.settings)
 	void onMenuSettings() {
-		Toast toast = Toast.makeText(this, "設定が選択されました", Toast.LENGTH_LONG);
-		toast.show();
 		Intent myIntent = new Intent(getApplicationContext(), MyPreference_.class);
 		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(myIntent);
@@ -214,8 +207,6 @@ public class MainActivity extends FragmentActivity {
 
 	@OptionsItem(R.id.usage)
 	void onMenuUsage() {
-		Toast toast = Toast.makeText(this, "使い方が選択されました", Toast.LENGTH_LONG);
-		toast.show();
 		Intent myIntent = new Intent(getApplicationContext(), UsageActivity_.class);
 		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(myIntent);
