@@ -29,8 +29,8 @@ public final class StateFragment_
     }
 
     private void afterSetContentView_() {
-        mListView = ((ListView) findViewById(com.yojiokisoft.yumekanow.R.id.dayToDayList));
         mProgress = ((MyProgress) findViewById(com.yojiokisoft.yumekanow.R.id.totalProgress));
+        mListView = ((ListView) findViewById(com.yojiokisoft.yumekanow.R.id.dayToDayList));
         setAdapter();
         setProgress();
     }

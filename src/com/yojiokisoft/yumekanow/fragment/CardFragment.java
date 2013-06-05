@@ -17,7 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
@@ -40,8 +40,8 @@ public class CardFragment extends Fragment {
 	@ViewById(R.id.affirmationText)
 	TextView mAffirmationText;
 
-	@ViewById(R.id.affirmationBack)
-	ImageView mBackImage;
+	@ViewById(R.id.cardContainer)
+	FrameLayout mBackImage;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,9 +87,9 @@ public class CardFragment extends Fragment {
 
 		if (card.backImageResourceId == 0) {
 			Drawable drawable = Drawable.createFromPath(card.backImagePath);
-			mBackImage.setImageDrawable(drawable);
+			mBackImage.setBackgroundDrawable(drawable);
 		} else {
-			mBackImage.setImageResource(card.backImageResourceId);
+			mBackImage.setBackgroundResource(card.backImageResourceId);
 		}
 	}
 
@@ -135,7 +135,7 @@ public class CardFragment extends Fragment {
 		if (currentCardId == -1) {
 			return;
 		}
-		
+
 		CounterEntity cnt = new CounterEntity();
 		cnt.cardId = currentCardId;
 		cnt.procTime = System.currentTimeMillis();

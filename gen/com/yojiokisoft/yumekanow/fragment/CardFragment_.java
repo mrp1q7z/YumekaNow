@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import com.yojiokisoft.yumekanow.R.layout;
 
@@ -31,7 +31,22 @@ public final class CardFragment_
 
     private void afterSetContentView_() {
         mAffirmationText = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.affirmationText));
-        mBackImage = ((ImageView) findViewById(com.yojiokisoft.yumekanow.R.id.affirmationBack));
+        mBackImage = ((FrameLayout) findViewById(com.yojiokisoft.yumekanow.R.id.cardContainer));
+        {
+            View view = findViewById(com.yojiokisoft.yumekanow.R.id.cardContainer);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        CardFragment_.this.cardContainerClicked();
+                    }
+
+                }
+                );
+            }
+        }
         {
             View view = findViewById(com.yojiokisoft.yumekanow.R.id.okButton);
             if (view!= null) {
@@ -56,21 +71,6 @@ public final class CardFragment_
                     @Override
                     public void onClick(View view) {
                         CardFragment_.this.cancelButtonClicked();
-                    }
-
-                }
-                );
-            }
-        }
-        {
-            View view = findViewById(com.yojiokisoft.yumekanow.R.id.cardContainer);
-            if (view!= null) {
-                view.setOnClickListener(new OnClickListener() {
-
-
-                    @Override
-                    public void onClick(View view) {
-                        CardFragment_.this.cardContainerClicked();
                     }
 
                 }
