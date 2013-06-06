@@ -184,6 +184,13 @@ public class CardPreviewActivity extends Activity {
 		}
 	};
 
+	private void setBackAndForeColor(TextView textView, int backColor) {
+		int foreColor = backColor ^ 0xffffff;
+		textView.setTextColor(foreColor);
+		textView.setBackgroundColor(backColor);
+		textView.setTag(backColor);
+	}
+
 	// 文字色の設定
 	private void setTextColor() {
 		View view = mInflater.inflate(R.layout.dialog_set_color, null);
@@ -193,15 +200,13 @@ public class CardPreviewActivity extends Activity {
 		final ColorPickerDialog.DialogCallback textColorOnDialgOk = new ColorPickerDialog.DialogCallback() {
 			@Override
 			public void onDialogOk(int color) {
-				textColor.setBackgroundColor(color);
-				textColor.setTag(color);
+				setBackAndForeColor(textColor, color);
 			}
 		};
 		final ColorPickerDialog.DialogCallback shadowColorOnDialgOk = new ColorPickerDialog.DialogCallback() {
 			@Override
 			public void onDialogOk(int color) {
-				shadowColor.setBackgroundColor(color);
-				shadowColor.setTag(color);
+				setBackAndForeColor(shadowColor, color);
 			}
 		};
 
@@ -245,10 +250,8 @@ public class CardPreviewActivity extends Activity {
 			}
 		});
 		builder.setNegativeButton(getString(R.string.cancel), null);
-		textColor.setBackgroundColor(mCard.textColor);
-		textColor.setTag(mCard.textColor);
-		shadowColor.setBackgroundColor(mCard.shadowColor);
-		shadowColor.setTag(mCard.shadowColor);
+		setBackAndForeColor(textColor, mCard.textColor);
+		setBackAndForeColor(shadowColor, mCard.shadowColor);
 		builder.show();
 	}
 

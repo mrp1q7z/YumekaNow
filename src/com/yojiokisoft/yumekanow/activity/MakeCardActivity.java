@@ -117,12 +117,10 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		mGallery.setAdapter(mAdapter);
 
 		int color = getResources().getColor(R.color.textColor);
-		mTextColor.setBackgroundColor(color);
-		mTextColor.setTag(color);
+		setBackAndForeColor(mTextColor, color);
 
 		color = getResources().getColor(R.color.shadowColor);
-		mShadowColor.setBackgroundColor(color);
-		mShadowColor.setTag(color);
+		setBackAndForeColor(mShadowColor, color);
 
 		mTextSize.setText(String.valueOf(mTextSizeBar.getProgress() + TEXT_SIZE_MIN));
 		mMarginTop.setText(String.valueOf(mMarginTopBar.getProgress()));
@@ -130,10 +128,8 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 
 		if (mCard != null) {
 			mAffirmationText.setText(mCard.affirmationText);
-			mTextColor.setBackgroundColor(mCard.textColor);
-			mTextColor.setTag(mCard.textColor);
-			mShadowColor.setBackgroundColor(mCard.shadowColor);
-			mShadowColor.setTag(mCard.shadowColor);
+			setBackAndForeColor(mTextColor, mCard.textColor);
+			setBackAndForeColor(mShadowColor, mCard.shadowColor);
 			mTextSize.setText(String.valueOf(mCard.textSize));
 			mTextSizeBar.setProgress(mCard.textSize - TEXT_SIZE_MIN);
 			mMarginTop.setText(String.valueOf(mCard.marginTop));
@@ -259,8 +255,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	final ColorPickerDialog.DialogCallback mTextColorOnDialgOk = new ColorPickerDialog.DialogCallback() {
 		@Override
 		public void onDialogOk(int color) {
-			mTextColor.setBackgroundColor(color);
-			mTextColor.setTag(color);
+			setBackAndForeColor(mTextColor, color);
 		}
 	};
 
@@ -280,10 +275,16 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	final ColorPickerDialog.DialogCallback mShadowColorOnDialgOk = new ColorPickerDialog.DialogCallback() {
 		@Override
 		public void onDialogOk(int color) {
-			mShadowColor.setBackgroundColor(color);
-			mShadowColor.setTag(color);
+			setBackAndForeColor(mShadowColor, color);
 		}
 	};
+
+	private void setBackAndForeColor(TextView textView, int backColor) {
+		int foreColor = backColor ^ 0xffffff;
+		textView.setTextColor(foreColor);
+		textView.setBackgroundColor(backColor);
+		textView.setTag(backColor);
+	}
 
 	/**
 	 * 影の色のクリック
