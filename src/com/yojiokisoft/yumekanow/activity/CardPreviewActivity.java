@@ -189,6 +189,9 @@ public class CardPreviewActivity extends Activity {
 		textView.setTextColor(foreColor);
 		textView.setBackgroundColor(backColor);
 		textView.setTag(backColor);
+
+		String hex = String.format("%06x", backColor & 0x00ffffff);
+		textView.setText("#" + hex);
 	}
 
 	// 文字色の設定

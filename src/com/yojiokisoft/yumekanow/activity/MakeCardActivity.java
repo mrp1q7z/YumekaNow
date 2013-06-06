@@ -284,6 +284,9 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		textView.setTextColor(foreColor);
 		textView.setBackgroundColor(backColor);
 		textView.setTag(backColor);
+
+		String hex = String.format("%06x", backColor & 0x00ffffff);
+		textView.setText("#" + hex);
 	}
 
 	/**
