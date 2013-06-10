@@ -27,12 +27,12 @@ public final class MyPreference_
 
     private void init_(Bundle savedInstanceState) {
         Resources resources_ = this.getResources();
-        mAnimationVal = resources_.getStringArray(array.animation_val);
-        mDispIntervalVal = resources_.getStringArray(array.disp_interval_val);
-        mInquiryVal = resources_.getStringArray(array.inquiry_val);
         mDispIntervalKey = resources_.getStringArray(array.disp_interval_key);
-        mInquiryKey = resources_.getStringArray(array.inquiry_key);
+        mAnimationVal = resources_.getStringArray(array.animation_val);
+        mInquiryVal = resources_.getStringArray(array.inquiry_val);
         mAnimationKey = resources_.getStringArray(array.animation_key);
+        mDispIntervalVal = resources_.getStringArray(array.disp_interval_val);
+        mInquiryKey = resources_.getStringArray(array.inquiry_key);
     }
 
     private void afterSetContentView_() {

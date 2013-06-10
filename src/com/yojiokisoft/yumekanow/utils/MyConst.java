@@ -24,6 +24,12 @@ public class MyConst {
 	// お問い合わせ
 	public static final String INQUIRY = "Inquiry";
 
+	// スリープ時間（時間指定）
+	public static final String SLEEP_JIKAN = "SleepJikan";
+	
+	// スリープ時間（タイマー指定）
+	public static final String SLEEP_TIMER = "SleepTimer";
+	
 	// カード情報
 	public static final String CARD = "Card";
 

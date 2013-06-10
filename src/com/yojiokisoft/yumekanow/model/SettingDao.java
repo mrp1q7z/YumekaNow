@@ -104,4 +104,20 @@ public class SettingDao {
 	public void setUseCard(int cardId) {
 		mSharedPref.edit().putInt("UseCard", cardId).commit();
 	}
+
+	public String getSleepJikan() {
+		return mSharedPref.getString(MyConst.SLEEP_JIKAN, "");
+	}
+
+	public void setSleepJikan(String jikan) {
+		mSharedPref.edit().putString(MyConst.SLEEP_JIKAN, jikan).commit();
+	}
+
+	public String getSleepTimer() {
+		return mSharedPref.getString(MyConst.SLEEP_TIMER, "");
+	}
+
+	public void setSleepTimer(String timer) {
+		mSharedPref.edit().putString(MyConst.SLEEP_TIMER, timer).commit();
+	}
 }

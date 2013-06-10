@@ -1,6 +1,7 @@
 package com.yojiokisoft.yumekanow.fragment;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.activity.MainActivity;
 import com.yojiokisoft.yumekanow.activity.WakeUpActivity_;
+import com.yojiokisoft.yumekanow.model.SettingDao;
 import com.yojiokisoft.yumekanow.service.MyWidgetService;
 
 @EFragment(R.layout.fragment_sleep)
@@ -41,8 +44,10 @@ public class SleepFragment extends Fragment {
 	}
 
 	@AfterViews
-	void printWakuUpTime() {
+	void initActivity() {
 		mWakeUpTime.setIs24HourView(true);
+		setCurrentTime();
+		mTimeKind.setOnCheckedChangeListener(mTimeKindChanged);
 	}
 
 	@Override
@@ -50,6 +55,29 @@ public class SleepFragment extends Fragment {
 		super.onAttach(activity);
 		mActivity = activity;
 	}
+
+	private void setCurrentTime() {
+		SettingDao settingDao = SettingDao.getInstance(mActivity);
+		String time;
+		if (mTimeKind.getCheckedRadioButtonId() == R.id.jikan) {
+			time = settingDao.getSleepJikan();
+		} else {
+			time = settingDao.getSleepTimer();
+		}
+		if (time != "") {
+			int hour = Integer.parseInt(time.substring(0, 2));
+			int min = Integer.parseInt(time.substring(2, 4));
+			mWakeUpTime.setCurrentHour(hour);
+			mWakeUpTime.setCurrentMinute(min);
+		}
+	}
+
+	private OnCheckedChangeListener mTimeKindChanged = new OnCheckedChangeListener() {
+		@Override
+		public void onCheckedChanged(RadioGroup group, int checkedId) {
+			setCurrentTime();
+		}
+	};
 
 	@Click(R.id.setTimerButton)
 	void setTimerButtonClicked() {
@@ -89,6 +117,15 @@ public class SleepFragment extends Fragment {
 			((MainActivity) mActivity).closeActivity();
 		} catch (ClassCastException e) {
 			throw new ClassCastException("activity が closeActivity を実装していません.");
+		}
+
+		// セットされた時間を記憶しておく
+		SettingDao settingDao = SettingDao.getInstance(mActivity);
+		String time = String.format(Locale.JAPANESE, "%02d%02d", hour, min);
+		if (mTimeKind.getCheckedRadioButtonId() == R.id.jikan) {
+			settingDao.setSleepJikan(time);
+		} else {
+			settingDao.setSleepTimer(time);
 		}
 	}
 }
