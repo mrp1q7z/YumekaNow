@@ -32,6 +32,9 @@ public class MyConst {
 	
 	// カード情報
 	public static final String CARD = "Card";
+	
+	// 起動イベント
+	public static final String FIRE_EVENT = "FireEvent";
 
 	// SDカードのパス
 	public static final String EX_STORAGE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();

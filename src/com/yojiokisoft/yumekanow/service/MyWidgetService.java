@@ -14,6 +14,7 @@ import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.activity.MainActivity_;
 import com.yojiokisoft.yumekanow.model.CounterDao;
 import com.yojiokisoft.yumekanow.model.SettingDao;
+import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.widget.MyWidget;
 
 public class MyWidgetService extends Service {
@@ -43,12 +44,12 @@ public class MyWidgetService extends Service {
 			return START_NOT_STICKY;
 		}
 		if (ACTION_MY_CLICK.equals(intent.getAction())) {
-			startMainActivity();
+			startMainActivity(null);
 		}
 
 		setClickListner();
 		setAnimation();
-		startMainActivity();
+		startMainActivity("Timer");
 
 		return super.onStartCommand(intent, flags, startId);
 	}
@@ -74,9 +75,12 @@ public class MyWidgetService extends Service {
 		manager.updateAppWidget(myWidget, remoteViews);
 	}
 
-	private void startMainActivity() {
+	private void startMainActivity(String fireEvent) {
 		Intent intent = new Intent(getApplicationContext(), MainActivity_.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		if (fireEvent != null) {
+			intent.putExtra(MyConst.FIRE_EVENT, fireEvent);
+		}
 		startActivity(intent);
 	}
 

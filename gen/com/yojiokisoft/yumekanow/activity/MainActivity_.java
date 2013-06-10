@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,11 +34,12 @@ public final class MainActivity_
     }
 
     private void init_(Bundle savedInstanceState) {
+        injectExtras_();
     }
 
     private void afterSetContentView_() {
-        mPager = ((ViewPager) findViewById(com.yojiokisoft.yumekanow.R.id.pager));
         mTabHost = ((TabHost) findViewById(android.R.id.tabhost));
+        mPager = ((ViewPager) findViewById(com.yojiokisoft.yumekanow.R.id.pager));
         initActivity();
     }
 
@@ -71,6 +73,31 @@ public final class MainActivity_
         return new MainActivity_.IntentBuilder_(context);
     }
 
+    @SuppressWarnings("unchecked")
+    private<T >T cast_(Object object) {
+        return ((T) object);
+    }
+
+    private void injectExtras_() {
+        Intent intent_ = getIntent();
+        Bundle extras_ = intent_.getExtras();
+        if (extras_!= null) {
+            if (extras_.containsKey("FireEvent")) {
+                try {
+                    mFireEvent = cast_(extras_.get("FireEvent"));
+                } catch (ClassCastException e) {
+                    Log.e("MainActivity_", "Could not cast extra to expected type, the field is left to its default value", e);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void setIntent(Intent newIntent) {
+        super.setIntent(newIntent);
+        injectExtras_();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -85,20 +112,20 @@ public final class MainActivity_
             return true;
         }
         int itemId_ = item.getItemId();
-        if (itemId_ == com.yojiokisoft.yumekanow.R.id.usage) {
-            onMenuUsage();
+        if (itemId_ == com.yojiokisoft.yumekanow.R.id.settings) {
+            onMenuSettings();
             return true;
         }
-        if (itemId_ == com.yojiokisoft.yumekanow.R.id.make_card) {
-            onMenuMakeCard();
+        if (itemId_ == com.yojiokisoft.yumekanow.R.id.usage) {
+            onMenuUsage();
             return true;
         }
         if (itemId_ == com.yojiokisoft.yumekanow.R.id.select_card) {
             onMenuSelectCard();
             return true;
         }
-        if (itemId_ == com.yojiokisoft.yumekanow.R.id.settings) {
-            onMenuSettings();
+        if (itemId_ == com.yojiokisoft.yumekanow.R.id.make_card) {
+            onMenuMakeCard();
             return true;
         }
         return false;
@@ -133,6 +160,11 @@ public final class MainActivity_
             } else {
                 context_.startActivity(intent_);
             }
+        }
+
+        public MainActivity_.IntentBuilder_ mFireEvent(String mFireEvent) {
+            intent_.putExtra("FireEvent", mFireEvent);
+            return this;
         }
 
     }

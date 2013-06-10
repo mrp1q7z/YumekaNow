@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EActivity;
+import com.googlecode.androidannotations.annotations.Extra;
 import com.googlecode.androidannotations.annotations.OptionsItem;
 import com.googlecode.androidannotations.annotations.OptionsMenu;
 import com.googlecode.androidannotations.annotations.ViewById;
@@ -33,6 +34,7 @@ import com.yojiokisoft.yumekanow.fragment.CardFragment_;
 import com.yojiokisoft.yumekanow.fragment.SleepFragment_;
 import com.yojiokisoft.yumekanow.fragment.StateFragment_;
 import com.yojiokisoft.yumekanow.model.SettingDao;
+import com.yojiokisoft.yumekanow.utils.MyConst;
 
 @EActivity(R.layout.activity_main)
 @OptionsMenu(R.menu.activity_main)
@@ -45,6 +47,9 @@ public class MainActivity extends FragmentActivity {
 
 	@ViewById(R.id.pager)
 	ViewPager mPager;
+
+	@Extra(MyConst.FIRE_EVENT)
+	String mFireEvent;
 
 	@AfterViews
 	public void initActivity() {
@@ -65,17 +70,19 @@ public class MainActivity extends FragmentActivity {
 			adapter.addTab(spec, "tab" + i);
 		}
 
-		SettingDao settingDao = SettingDao.getInstance(this);
-		if (settingDao.getVibrator()) {
-			mVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-			long[] pattern = { 0, 500, 250, 500, 250, 500 }; // OFF/ON/OFF/ON...
-			mVibrator.vibrate(pattern, -1);
-		}
+		if ("Timer".equals(mFireEvent)) {
+			SettingDao settingDao = SettingDao.getInstance(this);
+			if (settingDao.getVibrator()) {
+				mVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+				long[] pattern = { 0, 500, 250, 500, 250, 500 }; // OFF/ON/OFF/ON...
+				mVibrator.vibrate(pattern, -1);
+			}
 
-		String url = settingDao.getAlarmUrl();
-		if (url != null) {
-			mRingtone = RingtoneManager.getRingtone(this, Uri.parse(url));
-			mRingtone.play();
+			String url = settingDao.getAlarmUrl();
+			if (url != null) {
+				mRingtone = RingtoneManager.getRingtone(this, Uri.parse(url));
+				mRingtone.play();
+			}
 		}
 	}
 
