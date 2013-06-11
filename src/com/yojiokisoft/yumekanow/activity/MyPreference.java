@@ -266,7 +266,11 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 		} else {
 			summary += BR + "現在値：" + rm.getTitle(this);
 		}
-		prefAlarm.setSummary(summary);
+		SpannableString nowVal;
+		nowVal = new SpannableString(summary);
+		nowVal.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.theme_headerTextColor)), 0,
+				nowVal.length(), 0);
+		prefAlarm.setSummary(nowVal);
 		return true;
 	}
 }
