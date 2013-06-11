@@ -29,9 +29,9 @@ public final class MyPreference_
         Resources resources_ = this.getResources();
         mAnimationVal = resources_.getStringArray(array.animation_val);
         mInquiryKey = resources_.getStringArray(array.inquiry_key);
-        mDispIntervalVal = resources_.getStringArray(array.disp_interval_val);
-        mAnimationKey = resources_.getStringArray(array.animation_key);
         mInquiryVal = resources_.getStringArray(array.inquiry_val);
+        mAnimationKey = resources_.getStringArray(array.animation_key);
+        mDispIntervalVal = resources_.getStringArray(array.disp_interval_val);
         mDispIntervalKey = resources_.getStringArray(array.disp_interval_key);
     }
 

@@ -194,6 +194,7 @@ containing a value of this type.
         public static final int developer_email=0x7f070001;
         public static final int divider_description=0x7f070027;
         public static final int edit=0x7f07000c;
+        public static final int enter_affirmation_words=0x7f070033;
         public static final int err_dialog_msg=0x7f070006;
         public static final int err_dialog_msg2=0x7f070007;
         public static final int err_dialog_title=0x7f070005;

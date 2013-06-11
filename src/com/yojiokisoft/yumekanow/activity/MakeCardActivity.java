@@ -335,6 +335,13 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		try {
 			CardDao cardDao = new CardDao(this);
 			CardEntity cardEntity = getInputCard();
+			if (cardEntity.affirmationText.length() <= 0) {
+				MyDialog.Builder.newInstance(this)
+					.setTitle(getString(R.string.oops))
+					.setMessage(getString(R.string.enter_affirmation_words))
+					.show();
+				return;
+			}
 			cardDao.createOrUpdate(cardEntity);
 		} catch (SQLException e) {
 			MyUncaughtExceptionHandler.sendBugReport(this, e);
