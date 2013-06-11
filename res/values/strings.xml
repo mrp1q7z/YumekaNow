@@ -51,6 +51,8 @@
     <string name="yes">はい</string>
     <string name="no">いいえ</string>
 	<string name="del_confirm_msg">削除します。よろしいですか？</string>
+    <string name="confirm">確認	</string>
+	<string name="backimg_del_confirm_msg">背景画像を削除します。よろしいですか？</string>
     <string name="send">送信</string>
 	<string name="error">エラー</string>
 	<string name="file_not_found">画像ファイルが見つかりません</string>

@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -373,30 +373,29 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	 */
 	@Click(R.id.delBackImgButton)
 	void delBackImgButtonClicked() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-		builder.setMessage(getString(R.string.del_confirm_msg))
-				.setCancelable(false)
-				.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						BackImageEntity backImage = (BackImageEntity) mGallery.getSelectedItem();
-						File file = new File(backImage.bitmapPath);
-						file.delete();
-						// ギャラリーの再読み込み
-						BackImageDao backImageDao = new BackImageDao(mActivity.getResources());
-						List<BackImageEntity> list = backImageDao.queryForAll();
-						mGallery.setSelection(0);
-						MyListArrayAdapter adapter = (MyListArrayAdapter) mGallery.getAdapter();
-						adapter.setData(list);
-						adapter.notifyDataSetChanged();
-					}
-				})
-				.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
-					}
-				});
-		AlertDialog alert = builder.create();
-		alert.show();
+		OnClickListener delBackImg = new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				BackImageEntity backImage = (BackImageEntity) mGallery.getSelectedItem();
+				File file = new File(backImage.bitmapPath);
+				file.delete();
+				// ギャラリーの再読み込み
+				BackImageDao backImageDao = new BackImageDao(mActivity.getResources());
+				List<BackImageEntity> list = backImageDao.queryForAll();
+				mGallery.setSelection(0);
+				MyListArrayAdapter adapter = (MyListArrayAdapter) mGallery.getAdapter();
+				adapter.setData(list);
+				adapter.notifyDataSetChanged();
+			}
+		};
+
+		MyDialog.Builder.newInstance(this)
+				.setTitle(getString(R.string.confirm))
+				.setMessage(getString(R.string.backimg_del_confirm_msg))
+				.setPositiveLabel(getString(R.string.yes))
+				.setPositiveClickListener(delBackImg)
+				.setNegativeLabel(getString(R.string.no))
+				.show();
 	}
 
 	@SeekBarProgressChange(R.id.textSizeBar)

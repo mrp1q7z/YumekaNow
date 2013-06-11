@@ -27,10 +27,10 @@ public final class MyPreference_
 
     private void init_(Bundle savedInstanceState) {
         Resources resources_ = this.getResources();
-        mInquiryKey = resources_.getStringArray(array.inquiry_key);
+        mInquiryVal = resources_.getStringArray(array.inquiry_val);
         mAnimationKey = resources_.getStringArray(array.animation_key);
         mDispIntervalKey = resources_.getStringArray(array.disp_interval_key);
-        mInquiryVal = resources_.getStringArray(array.inquiry_val);
+        mInquiryKey = resources_.getStringArray(array.inquiry_key);
         mDispIntervalVal = resources_.getStringArray(array.disp_interval_val);
         mAnimationVal = resources_.getStringArray(array.animation_val);
     }
