@@ -42,6 +42,14 @@
         android:summary="アファーメーションカードの起動をアラーム音でお知らせします"
         android:title="アラーム音" />
 
+    <RingtonePreference
+        android:key="SleepAlarm"
+        android:ringtoneType="all"
+        android:showDefault="true"
+        android:showSilent="true"
+        android:summary="目覚ましタイマーの起動時に鳴らすアラーム音を設定します"
+        android:title="目覚まし音" />
+
     <PreferenceCategory android:title="このアプリについて" >
         <com.yojiokisoft.yumekanow.dialog.VersionDialogPreference
             android:dialogMessage="@string/version"

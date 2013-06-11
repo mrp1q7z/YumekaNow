@@ -97,6 +97,27 @@ public class SettingDao {
 		return ret;
 	}
 
+	public String getSleepAlarmUrl() {
+		String url = mSharedPref.getString(MyConst.SLEEP_ALARM, "");
+		String ret = null;
+		if (url.length() > 0) {
+			ret = url;
+		}
+		return ret;
+	}
+
+	public String getSleepAlarm() {
+		String url = mSharedPref.getString(MyConst.SLEEP_ALARM, "");
+		String ret = null;
+		if (url.length() <= 0) {
+			ret = "サイレント";
+		} else {
+			Ringtone rm = RingtoneManager.getRingtone(mContext, Uri.parse(url));
+			ret = rm.getTitle(mContext);
+		}
+		return ret;
+	}
+
 	public int getUseCard() {
 		return mSharedPref.getInt("UseCard", -1);
 	}

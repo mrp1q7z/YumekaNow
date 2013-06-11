@@ -5,6 +5,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.googlecode.androidannotations.annotations.Click;
@@ -16,11 +19,18 @@ import com.yojiokisoft.yumekanow.service.MyWidgetService;
 @EActivity(R.layout.activity_wake_up)
 public class WakeUpActivity extends Activity {
 	private Activity mActivity;
+	private Ringtone mRingtone = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mActivity = this;
+		SettingDao settingDao = SettingDao.getInstance(this);
+		String url = settingDao.getSleepAlarmUrl();
+		if (url != null) {
+			mRingtone = RingtoneManager.getRingtone(this, Uri.parse(url));
+			mRingtone.play();
+		}
 	}
 
 	@Click(R.id.okButton)
@@ -35,5 +45,14 @@ public class WakeUpActivity extends Activity {
 		alarmManager.setRepeating(AlarmManager.RTC, now, interval, pendingIntent);
 
 		finish();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (mRingtone != null) {
+			mRingtone.stop();
+			mRingtone = null;
+		}
 	}
 }

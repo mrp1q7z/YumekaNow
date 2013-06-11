@@ -112,8 +112,8 @@ public final class MainActivity_
             return true;
         }
         int itemId_ = item.getItemId();
-        if (itemId_ == com.yojiokisoft.yumekanow.R.id.select_card) {
-            onMenuSelectCard();
+        if (itemId_ == com.yojiokisoft.yumekanow.R.id.make_card) {
+            onMenuMakeCard();
             return true;
         }
         if (itemId_ == com.yojiokisoft.yumekanow.R.id.usage) {
@@ -124,8 +124,8 @@ public final class MainActivity_
             onMenuSettings();
             return true;
         }
-        if (itemId_ == com.yojiokisoft.yumekanow.R.id.make_card) {
-            onMenuMakeCard();
+        if (itemId_ == com.yojiokisoft.yumekanow.R.id.select_card) {
+            onMenuSelectCard();
             return true;
         }
         return false;

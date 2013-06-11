@@ -177,6 +177,18 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 					nowVal.length(), 0);
 			prefAlarm.setSummary(nowVal);
 		}
+		if (key == null || MyConst.SLEEP_ALARM.equals(key)) {
+			RingtonePreference prefSleepAlarm = (RingtonePreference) getPreferenceScreen().findPreference(MyConst.SLEEP_ALARM);
+			summary = indexOfBr(prefSleepAlarm.getSummary().toString());
+			SettingDao settingDao = SettingDao.getInstance(this);
+			summary += BR + "現在値：" + settingDao.getSleepAlarm();
+
+			SpannableString nowVal;
+			nowVal = new SpannableString(summary);
+			nowVal.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.theme_headerTextColor)), 0,
+					nowVal.length(), 0);
+			prefSleepAlarm.setSummary(nowVal);
+		}
 		if (key == null || MyConst.VERSION.equals(key)) {
 			VersionDialogPreference prefVersion = (VersionDialogPreference) getPreferenceScreen().findPreference(
 					MyConst.VERSION);
@@ -254,6 +266,8 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 		RingtonePreference pref = (RingtonePreference) findPreference(MyConst.ALARM);
 		pref.setOnPreferenceChangeListener(this);
+		RingtonePreference prefSleepAlarm = (RingtonePreference) findPreference(MyConst.SLEEP_ALARM);
+		prefSleepAlarm.setOnPreferenceChangeListener(this);
 	}
 
 	@Override

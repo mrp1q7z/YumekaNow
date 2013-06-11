@@ -18,6 +18,9 @@ public class MyConst {
 	// アラーム音
 	public static final String ALARM = "Alarm";
 
+	// 目覚まし音
+	public static final String SLEEP_ALARM = "SleepAlarm";
+
 	// バージョン
 	public static final String VERSION = "Version";
 
