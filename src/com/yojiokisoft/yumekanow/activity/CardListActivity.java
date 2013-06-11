@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
@@ -16,20 +18,26 @@ import android.widget.TextView;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.ItemClick;
+import com.googlecode.androidannotations.annotations.ItemLongClick;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 import com.yojiokisoft.yumekanow.model.CardDao;
+import com.yojiokisoft.yumekanow.model.SettingDao;
 import com.yojiokisoft.yumekanow.utils.MyConst;
+import com.yojiokisoft.yumekanow.utils.MyDialog;
 
 @EActivity(R.layout.activity_card_list)
 public class CardListActivity extends Activity {
 	@ViewById(R.id.cardList)
 	ListView mListView;
 
+	private Activity mActivity;
+
 	@AfterViews
 	public void initActivity() {
+		mActivity = this;
 		List<CardEntity> list = null;
 		try {
 			CardDao cardDao = new CardDao(this);
@@ -52,6 +60,42 @@ public class CardListActivity extends Activity {
 		startActivity(intent);
 	}
 
+	@ItemLongClick
+	public void cardListItemLongClicked(CardEntity card) {
+		SettingDao settingDao = SettingDao.getInstance(this);
+		int useCardId = settingDao.getUseCard();
+		if (card.id == useCardId) {
+			MyDialog.Builder.newInstance(this).setTitle(getString(R.string.oops))
+					.setMessage(getString(R.string.not_del_msg))
+					.show();
+			return;
+		}
+
+		final CardEntity delCard = card;
+		// カード削除リスナー
+		OnClickListener deleteCard = new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				try {
+					CardDao cardDao = new CardDao(mActivity);
+					cardDao.delete(delCard);
+					List<CardEntity> list = cardDao.queryForAll();
+					((MyListArrayAdapter) mListView.getAdapter()).setItems(list);
+					mListView.invalidateViews();
+				} catch (SQLException e) {
+					MyUncaughtExceptionHandler.sendBugReport(mActivity, e);
+				}
+			}
+		};
+
+		MyDialog.Builder.newInstance(this).setTitle(getString(R.string.del))
+				.setMessage(getString(R.string.del_confirm_msg))
+				.setPositiveLabel(getString(R.string.yes))
+				.setPositiveClickListener(deleteCard)
+				.setNegativeLabel(getString(R.string.no))
+				.show();
+	}
+
 	/**
 	 * アダプタークラス
 	 */
@@ -62,6 +106,10 @@ public class CardListActivity extends Activity {
 		MyListArrayAdapter(Activity activity, List<CardEntity> items) {
 			super();
 			mActivity = activity;
+			mItems = items;
+		}
+
+		public void setItems(List<CardEntity> items) {
 			mItems = items;
 		}
 

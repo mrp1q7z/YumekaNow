@@ -37,4 +37,8 @@ public class CardDao {
 	public Dao.CreateOrUpdateStatus createOrUpdate(CardEntity data) throws SQLException {
 		return mCardDao.createOrUpdate(data);
 	}
+	
+	public int delete(CardEntity card) throws SQLException {
+		return mCardDao.delete(card);
+	}
 }

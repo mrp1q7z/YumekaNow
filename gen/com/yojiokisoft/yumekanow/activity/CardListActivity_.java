@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import com.yojiokisoft.yumekanow.R.layout;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
@@ -43,6 +44,22 @@ public final class CardListActivity_
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         cardListItemClicked(((CardEntity) parent.getAdapter().getItem(position)));
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            AdapterView<?> view = ((AdapterView<?> ) findViewById(com.yojiokisoft.yumekanow.R.id.cardList));
+            if (view!= null) {
+                view.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                        cardListItemLongClicked(((CardEntity) parent.getAdapter().getItem(position)));
+                        return true;
                     }
 
                 }

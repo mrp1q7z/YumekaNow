@@ -202,7 +202,9 @@ containing a value of this type.
         public static final int margin_left=0x7f07001d;
         public static final int margin_top=0x7f07001c;
         public static final int no=0x7f07002a;
+        public static final int not_del_msg=0x7f070030;
         public static final int ok=0x7f07000d;
+        public static final int oops=0x7f07002f;
         public static final int preview=0x7f07001e;
         public static final int send=0x7f07002c;
         public static final int set=0x7f070026;
