@@ -32,6 +32,9 @@ import com.yojiokisoft.yumekanow.utils.MyConst;
 @EActivity(R.layout.activity_card_preview)
 public class CardPreviewActivity extends Activity {
 	private final int LONG_PRESS_TIMEOUT = ViewConfiguration.getLongPressTimeout();
+	private final int FONT_SIZE_MIN = 10; // 最小のフォントサイズ
+	private final int FONT_SIZE_MAX = 40; // 最大のフォントサイズ
+	private final int FONT_SIZE_DELAY = 4; // フォントサイズが指定しにくいので遅延させる倍数
 
 	private ScaleGestureDetector mScaleGestureDetector;
 
@@ -73,9 +76,9 @@ public class CardPreviewActivity extends Activity {
 
 	@AfterViews
 	public void initActivity() {
-		mTextSize = new float[50];
-		for (int i = 10; i <= mTextSize.length; i++) {
-			mTextSize[i - 1] = i;
+		mTextSize = new float[FONT_SIZE_MAX - FONT_SIZE_MIN + 1];
+		for (int i = FONT_SIZE_MIN; i <= FONT_SIZE_MAX; i++) {
+			mTextSize[i - FONT_SIZE_MIN] = i;
 		}
 		mInflater = this.getLayoutInflater();
 		mContext = this;
@@ -169,8 +172,8 @@ public class CardPreviewActivity extends Activity {
 		public boolean onScale(ScaleGestureDetector detector) {
 			if (detector.getScaleFactor() > 1.0f) {
 				mTextSizeIndex++;
-				if (mTextSizeIndex >= mTextSize.length) {
-					mTextSizeIndex = mTextSize.length - 1;
+				if (mTextSizeIndex >= (mTextSize.length * FONT_SIZE_DELAY)) {
+					mTextSizeIndex = mTextSize.length * FONT_SIZE_DELAY - 1;
 				}
 			} else {
 				mTextSizeIndex--;
@@ -178,8 +181,9 @@ public class CardPreviewActivity extends Activity {
 					mTextSizeIndex = 0;
 				}
 			}
-			mDragView.setTextSize(mTextSize[mTextSizeIndex]);
-			mCard.textSize = (int) mTextSize[mTextSizeIndex];
+			int index = (int)(mTextSizeIndex / FONT_SIZE_DELAY);
+			mDragView.setTextSize(mTextSize[index]);
+			mCard.textSize = (int) mTextSize[index];
 			return true;
 		}
 	};
