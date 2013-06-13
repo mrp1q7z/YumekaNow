@@ -158,6 +158,10 @@ public class CardPreviewActivity extends Activity {
 			} else {
 				mCard.marginLeft = mDragView.getLeft();
 				mCard.marginTop = mDragView.getTop();
+				MarginLayoutParams params = (MarginLayoutParams) mDragView.getLayoutParams();
+				params.leftMargin = mCard.marginLeft;
+				params.topMargin = mCard.marginTop;
+				mDragView.setLayoutParams(params);
 			}
 			break;
 		}
@@ -181,7 +185,7 @@ public class CardPreviewActivity extends Activity {
 					mTextSizeIndex = 0;
 				}
 			}
-			int index = (int)(mTextSizeIndex / FONT_SIZE_DELAY);
+			int index = (int) (mTextSizeIndex / FONT_SIZE_DELAY);
 			mDragView.setTextSize(mTextSize[index]);
 			mCard.textSize = (int) mTextSize[index];
 			return true;
