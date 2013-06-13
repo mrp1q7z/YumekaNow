@@ -1,5 +1,7 @@
 package com.yojiokisoft.yumekanow.activity;
 
+import java.util.Calendar;
+
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.media.Ringtone;
@@ -174,7 +176,8 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 			prefAlarm.setSummary(nowVal);
 		}
 		if (key == null || MyConst.SLEEP_ALARM.equals(key)) {
-			RingtonePreference prefSleepAlarm = (RingtonePreference) getPreferenceScreen().findPreference(MyConst.SLEEP_ALARM);
+			RingtonePreference prefSleepAlarm = (RingtonePreference) getPreferenceScreen().findPreference(
+					MyConst.SLEEP_ALARM);
 			summary = indexOfBr(prefSleepAlarm.getSummary().toString());
 			SettingDao settingDao = SettingDao.getInstance(this);
 			summary += BR + "現在値：" + settingDao.getSleepAlarm();
@@ -228,7 +231,10 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 
 			SettingDao settingDao = SettingDao.getInstance(this);
 			long interval = settingDao.getDispInterval() * 60 * 1000;
-			TimerManager.setTimer(this, interval, interval);
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTimeInMillis(System.currentTimeMillis());
+			calendar.add(Calendar.MINUTE, settingDao.getDispInterval()); // 現時刻 + 指定時間
+			TimerManager.setTimer(this, calendar.getTimeInMillis(), interval);
 		}
 		if (MyConst.INQUIRY.equals(key)) {
 			String inquiry = sharedPreferences.getString(key, "");
