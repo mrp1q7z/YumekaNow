@@ -1,20 +1,19 @@
 package com.yojiokisoft.yumekanow.fragment;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -24,9 +23,8 @@ import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.activity.MainActivity;
-import com.yojiokisoft.yumekanow.activity.WakeUpActivity_;
 import com.yojiokisoft.yumekanow.model.SettingDao;
-import com.yojiokisoft.yumekanow.service.MyWidgetService;
+import com.yojiokisoft.yumekanow.service.TimerManager;
 
 @EFragment(R.layout.fragment_sleep)
 public class SleepFragment extends Fragment {
@@ -38,6 +36,12 @@ public class SleepFragment extends Fragment {
 	@ViewById(R.id.timeKind)
 	RadioGroup mTimeKind;
 
+	@ViewById(R.id.currentTimer)
+	TextView mCurrentTimer;
+
+	@ViewById(R.id.cancelTimerButton)
+	Button mCancelTimerButton;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return null;
@@ -47,7 +51,21 @@ public class SleepFragment extends Fragment {
 	void initActivity() {
 		mWakeUpTime.setIs24HourView(true);
 		setCurrentTime();
+		printCurrentTimer();
 		mTimeKind.setOnCheckedChangeListener(mTimeKindChanged);
+	}
+
+	private void printCurrentTimer() {
+		Calendar calendar = TimerManager.getCurrentTimer();
+		if (calendar.getTimeInMillis() == 0) {
+			mCurrentTimer.setText("タイマーは設定されていません");
+			mCancelTimerButton.setVisibility(View.GONE);
+		} else {
+			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm", Locale.JAPANESE);
+			String time = sdf.format(calendar.getTime()) + "に設定中";
+			mCurrentTimer.setText(time);
+			mCancelTimerButton.setVisibility(View.VISIBLE);
+		}
 	}
 
 	@Override
@@ -82,11 +100,7 @@ public class SleepFragment extends Fragment {
 	@Click(R.id.setTimerButton)
 	void setTimerButtonClicked() {
 		// アファーメーションアラームの解除
-		Intent serviceIntent = new Intent(mActivity, MyWidgetService.class);
-		PendingIntent pendingIntent = PendingIntent.getService(mActivity, 0, serviceIntent,
-				PendingIntent.FLAG_UPDATE_CURRENT);
-		AlarmManager alarmManager = (AlarmManager) mActivity.getSystemService(Context.ALARM_SERVICE);
-		alarmManager.cancel(pendingIntent);
+		TimerManager.cancelTimer(mActivity);
 
 		// タイマーのアラームをセット
 		int hour = mWakeUpTime.getCurrentHour();
@@ -105,10 +119,7 @@ public class SleepFragment extends Fragment {
 			// タイマー指定
 			calendar.add(Calendar.MINUTE, 60 * hour + min); // 現時刻 + 指定時間
 		}
-		Intent wakeUpIntent = new Intent(mActivity, WakeUpActivity_.class);
-		pendingIntent = PendingIntent.getActivity(mActivity, 0, wakeUpIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		// 前回設定したタイマーは上書きされるのでキャンセルする必要はない
-		alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+		TimerManager.setWakuUpTimer(mActivity, calendar.getTimeInMillis());
 
 		Toast toast = Toast.makeText(mActivity, "おやすみなさい", Toast.LENGTH_LONG);
 		toast.show();
@@ -127,5 +138,16 @@ public class SleepFragment extends Fragment {
 		} else {
 			settingDao.setSleepTimer(time);
 		}
+	}
+
+	@Click(R.id.cancelTimerButton)
+	void cancelTimerButtonClicked() {
+		TimerManager.cancelWakeUpTimer(mActivity);
+		printCurrentTimer();
+		
+		long now = System.currentTimeMillis();
+		SettingDao settingDao = SettingDao.getInstance(mActivity);
+		long interval = settingDao.getDispInterval() * 60 * 1000;
+		TimerManager.setTimer(mActivity, now, interval);
 	}
 }

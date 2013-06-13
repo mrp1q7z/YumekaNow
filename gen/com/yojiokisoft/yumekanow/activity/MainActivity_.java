@@ -38,8 +38,8 @@ public final class MainActivity_
     }
 
     private void afterSetContentView_() {
-        mTabHost = ((TabHost) findViewById(android.R.id.tabhost));
         mPager = ((ViewPager) findViewById(com.yojiokisoft.yumekanow.R.id.pager));
+        mTabHost = ((TabHost) findViewById(android.R.id.tabhost));
         initActivity();
     }
 

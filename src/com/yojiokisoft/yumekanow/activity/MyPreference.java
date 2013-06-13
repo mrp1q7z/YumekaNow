@@ -1,9 +1,5 @@
 package com.yojiokisoft.yumekanow.activity;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.media.Ringtone;
@@ -26,7 +22,7 @@ import com.googlecode.androidannotations.annotations.res.StringArrayRes;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.dialog.VersionDialogPreference;
 import com.yojiokisoft.yumekanow.model.SettingDao;
-import com.yojiokisoft.yumekanow.service.MyWidgetService;
+import com.yojiokisoft.yumekanow.service.TimerManager;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.utils.MyLog;
 import com.yojiokisoft.yumekanow.utils.MyMail;
@@ -228,15 +224,11 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		setSummary(key);
 		if (MyConst.DISP_INTERVAL.equals(key)) {
-			Intent intent = new Intent(this, MyWidgetService.class);
-			PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent,
-					PendingIntent.FLAG_UPDATE_CURRENT);
-			AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-			alarmManager.cancel(pendingIntent);
+			TimerManager.cancelTimer(this);
 
 			SettingDao settingDao = SettingDao.getInstance(this);
 			long interval = settingDao.getDispInterval() * 60 * 1000;
-			alarmManager.setRepeating(AlarmManager.RTC, interval, interval, pendingIntent);
+			TimerManager.setTimer(this, interval, interval);
 		}
 		if (MyConst.INQUIRY.equals(key)) {
 			String inquiry = sharedPreferences.getString(key, "");
