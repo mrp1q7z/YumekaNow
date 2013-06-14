@@ -107,9 +107,9 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 		String key;
 
 		if (isChecked) {
-			key = "オン";
+			key = getString(R.string.vibrator_on);
 		} else {
-			key = "OFF";
+			key = getString(R.string.vibrator_off);
 		}
 		return key;
 	}
@@ -120,7 +120,7 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 			ListPreference prefDispInterval = (ListPreference) getPreferenceScreen().findPreference(
 					MyConst.DISP_INTERVAL);
 			summary = indexOfBr(prefDispInterval.getSummary().toString());
-			summary += BR + "現在値：" + dispIntervalVal2Key(prefDispInterval.getValue());
+			summary += BR + getString(R.string.now_setting) + dispIntervalVal2Key(prefDispInterval.getValue());
 
 			SpannableString nowVal;
 			nowVal = new SpannableString(summary);
@@ -132,7 +132,7 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 			EditTextPreference prefGoalCnt = (EditTextPreference) getPreferenceScreen()
 					.findPreference(MyConst.GOAL_CNT);
 			summary = indexOfBr(prefGoalCnt.getSummary().toString());
-			summary += BR + "現在値：" + prefGoalCnt.getText();
+			summary += BR + getString(R.string.now_setting) + prefGoalCnt.getText();
 
 			SpannableString nowVal;
 			nowVal = new SpannableString(summary);
@@ -143,7 +143,7 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 		if (key == null || MyConst.ANIMATION.equals(key)) {
 			ListPreference prefAnimation = (ListPreference) getPreferenceScreen().findPreference(MyConst.ANIMATION);
 			summary = indexOfBr(prefAnimation.getSummary().toString());
-			summary += BR + "現在値：" + animationVal2Key(prefAnimation.getValue());
+			summary += BR + getString(R.string.now_setting) + animationVal2Key(prefAnimation.getValue());
 
 			SpannableString nowVal;
 			nowVal = new SpannableString(summary);
@@ -155,7 +155,7 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 			CheckBoxPreference prefVibrator = (CheckBoxPreference) getPreferenceScreen().findPreference(
 					MyConst.VIBRATOR);
 			summary = indexOfBr(prefVibrator.getSummary().toString());
-			summary += BR + "現在値：" + vibratorVal2Key(prefVibrator.isChecked());
+			summary += BR + getString(R.string.now_setting) + vibratorVal2Key(prefVibrator.isChecked());
 
 			SpannableString nowVal;
 			nowVal = new SpannableString(summary);
@@ -167,7 +167,7 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 			RingtonePreference prefAlarm = (RingtonePreference) getPreferenceScreen().findPreference(MyConst.ALARM);
 			summary = indexOfBr(prefAlarm.getSummary().toString());
 			SettingDao settingDao = SettingDao.getInstance(this);
-			summary += BR + "現在値：" + settingDao.getAlarm();
+			summary += BR + getString(R.string.now_setting) + settingDao.getAlarm();
 
 			SpannableString nowVal;
 			nowVal = new SpannableString(summary);
@@ -180,7 +180,7 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 					MyConst.SLEEP_ALARM);
 			summary = indexOfBr(prefSleepAlarm.getSummary().toString());
 			SettingDao settingDao = SettingDao.getInstance(this);
-			summary += BR + "現在値：" + settingDao.getSleepAlarm();
+			summary += BR + getString(R.string.now_setting) + settingDao.getSleepAlarm();
 
 			SpannableString nowVal;
 			nowVal = new SpannableString(summary);
@@ -274,9 +274,9 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 		Ringtone rm = RingtoneManager.getRingtone(this, Uri.parse((String) newValue));
 		String summary = indexOfBr(prefAlarm.getSummary().toString());
 		if (((String) newValue).length() <= 0) {
-			summary += BR + "現在値：Silent";
+			summary += BR + getString(R.string.now_setting) + getString(R.string.silent);
 		} else {
-			summary += BR + "現在値：" + rm.getTitle(this);
+			summary += BR + getString(R.string.now_setting) + rm.getTitle(this);
 		}
 		SpannableString nowVal;
 		nowVal = new SpannableString(summary);

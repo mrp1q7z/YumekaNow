@@ -95,7 +95,7 @@ public class CardFragment extends Fragment {
 
 	private CardEntity getEmptyCard() {
 		CardEntity card = new CardEntity();
-		card.affirmationText = "カードを作成してください";
+		card.affirmationText = getString(R.string.make_card_msg);
 		card.textColor = Color.BLACK;
 		card.shadowColor = Color.WHITE;
 		card.textSize = 20;
@@ -107,7 +107,7 @@ public class CardFragment extends Fragment {
 
 	private CardEntity getDefalutCard() {
 		CardEntity card = new CardEntity();
-		card.affirmationText = "カードを選択してください";
+		card.affirmationText = getString(R.string.select_card_msg);
 		card.textColor = Color.RED;
 		card.shadowColor = Color.WHITE;
 		card.textSize = 20;
@@ -160,8 +160,8 @@ public class CardFragment extends Fragment {
 		setCounter(1);
 		try {
 			((MainActivity) mActivity).closeActivity();
-		} catch (ClassCastException e) {
-			throw new ClassCastException("activity が closeActivity を実装していません.");
+		} catch (RuntimeException e) {
+			throw new RuntimeException("activity が closeActivity を実装していません.");
 		}
 	}
 
@@ -170,8 +170,8 @@ public class CardFragment extends Fragment {
 		setCounter(0);
 		try {
 			((MainActivity) mActivity).closeActivity();
-		} catch (ClassCastException e) {
-			throw new ClassCastException("activity が closeActivity を実装していません.");
+		} catch (RuntimeException e) {
+			throw new RuntimeException("activity が closeActivity を実装していません.");
 		}
 	}
 
@@ -179,8 +179,8 @@ public class CardFragment extends Fragment {
 	void cardContainerClicked() {
 		try {
 			((MainActivity) mActivity).stopVibrator();
-		} catch (ClassCastException e) {
-			throw new ClassCastException("activity が stopVibrator を実装していません.");
+		} catch (RuntimeException e) {
+			throw new RuntimeException("activity が stopVibrator を実装していません.");
 		}
 	}
 }

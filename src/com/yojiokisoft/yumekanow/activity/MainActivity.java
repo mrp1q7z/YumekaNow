@@ -63,8 +63,11 @@ public class MainActivity extends FragmentActivity {
 		int tabWidth = metrics.widthPixels / 3;
 		int tabHeight = metrics.widthPixels / 7;
 
-		String tabTitle[] = { "カード", "情報", "スリープ" };
-		for (int i = 0; i < 3; i++) {
+		String tabTitle[] = new String[3];
+		tabTitle[0] = getString(R.string.tab_title1);
+		tabTitle[1] = getString(R.string.tab_title2);
+		tabTitle[2] = getString(R.string.tab_title3);
+		for (int i = 0; i < tabTitle.length; i++) {
 			TabSpec spec = mTabHost.newTabSpec("tab" + i);
 			spec.setIndicator(getTabView(tabWidth, tabHeight, tabTitle[i]));
 			adapter.addTab(spec, "tab" + i);

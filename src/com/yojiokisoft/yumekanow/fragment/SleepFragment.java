@@ -58,11 +58,11 @@ public class SleepFragment extends Fragment {
 	private void printCurrentTimer() {
 		Calendar calendar = TimerManager.getCurrentTimer();
 		if (calendar.getTimeInMillis() == 0) {
-			mCurrentTimer.setText("タイマーは設定されていません");
+			mCurrentTimer.setText(getString(R.string.timer_not_set));
 			mCancelTimerButton.setVisibility(View.GONE);
 		} else {
 			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm", Locale.JAPANESE);
-			String time = sdf.format(calendar.getTime()) + "に設定中";
+			String time = sdf.format(calendar.getTime()) + getString(R.string.timer_setting_at);
 			mCurrentTimer.setText(time);
 			mCancelTimerButton.setVisibility(View.VISIBLE);
 		}
@@ -121,13 +121,13 @@ public class SleepFragment extends Fragment {
 		}
 		TimerManager.setWakuUpTimer(mActivity, calendar.getTimeInMillis());
 
-		Toast toast = Toast.makeText(mActivity, "おやすみなさい", Toast.LENGTH_LONG);
+		Toast toast = Toast.makeText(mActivity, getString(R.string.good_night), Toast.LENGTH_LONG);
 		toast.show();
 
 		try {
 			((MainActivity) mActivity).closeActivity();
-		} catch (ClassCastException e) {
-			throw new ClassCastException("activity が closeActivity を実装していません.");
+		} catch (RuntimeException e) {
+			throw new RuntimeException("activity が closeActivity を実装していません.");
 		}
 
 		// セットされた時間を記憶しておく
