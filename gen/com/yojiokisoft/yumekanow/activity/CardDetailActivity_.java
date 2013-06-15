@@ -38,21 +38,6 @@ public final class CardDetailActivity_
     private void afterSetContentView_() {
         mViewPager = ((ViewPager) findViewById(id.pager));
         {
-            View view = findViewById(id.useButton);
-            if (view!= null) {
-                view.setOnClickListener(new OnClickListener() {
-
-
-                    @Override
-                    public void onClick(View view) {
-                        CardDetailActivity_.this.useButtonOnClick();
-                    }
-
-                }
-                );
-            }
-        }
-        {
             View view = findViewById(id.editButton);
             if (view!= null) {
                 view.setOnClickListener(new OnClickListener() {
@@ -61,6 +46,21 @@ public final class CardDetailActivity_
                     @Override
                     public void onClick(View view) {
                         CardDetailActivity_.this.editButtonOnClick();
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            View view = findViewById(id.useButton);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        CardDetailActivity_.this.useButtonOnClick();
                     }
 
                 }

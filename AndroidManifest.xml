@@ -32,7 +32,7 @@
             android:name="com.yojiokisoft.yumekanow.service.MyWidgetService"
             android:exported="false" >
             <intent-filter>
-                <action android:name="com.example.android.appwidget.ClickSample.ACTION_MY_CLICK" />
+                <action android:name="com.yojiokisoft.yumekanow.ACTION_MY_CLICK" />
             </intent-filter>
         </service>
 

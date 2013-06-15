@@ -11,6 +11,8 @@ import com.yojiokisoft.yumekanow.service.TimerManager;
 public class MyWidget extends AppWidgetProvider {
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+		super.onUpdate(context, appWidgetManager, appWidgetIds);
+		
 		//キャッチされない例外により、スレッドが突然終了したときや、  
 		//このスレッドに対してほかにハンドラが定義されていないときに  
 		//呼び出されるデフォルトのハンドラを設定します。  
@@ -21,7 +23,5 @@ public class MyWidget extends AppWidgetProvider {
 		SettingDao settingDao = SettingDao.getInstance(context);
 		long interval = settingDao.getDispInterval() * 60 * 1000;
 		TimerManager.setTimer(context, now, interval);
-
-		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
 }

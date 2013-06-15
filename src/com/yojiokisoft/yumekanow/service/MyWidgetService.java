@@ -18,7 +18,7 @@ import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.widget.MyWidget;
 
 public class MyWidgetService extends Service {
-	private static final String ACTION_MY_CLICK = "com.example.android.appwidget.ClickSample.ACTION_MY_CLICK";
+	private static final String ACTION_MY_CLICK = "com.yojiokisoft.yumekanow.ACTION_MY_CLICK";
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -40,21 +40,17 @@ public class MyWidgetService extends Service {
 	 */
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		int ret = super.onStartCommand(intent, flags, startId);
+
 		if (intent == null) {
-			return START_NOT_STICKY;
+			return ret;
 		}
 		if (ACTION_MY_CLICK.equals(intent.getAction())) {
 			startMainActivity(null);
+			return ret;
 		}
 
-		setClickListner();
-		setAnimation();
-		startMainActivity("Timer");
-
-		return super.onStartCommand(intent, flags, startId);
-	}
-
-	private void setClickListner() {
+		// クリックリスナーの登録
 		RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.my_widget);
 		Intent clickIntent = new Intent();
 		clickIntent.setAction(ACTION_MY_CLICK);
@@ -62,17 +58,17 @@ public class MyWidgetService extends Service {
 		remoteViews.setOnClickPendingIntent(R.id.widgetImage, pendingIntent);
 		remoteViews.setOnClickPendingIntent(R.id.widgetName, pendingIntent);
 
-		AppWidgetManager manager = AppWidgetManager.getInstance(this);
-		ComponentName myWidget = new ComponentName(this, MyWidget.class);
-		manager.updateAppWidget(myWidget, remoteViews);
-	}
-
-	private void setAnimation() {
-		RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.my_widget);
+		// アニメーションイメージの更新
 		remoteViews.setImageViewResource(R.id.widgetImage, getWidgetImageResource());
+
+		// ウィジェットに反映
 		ComponentName myWidget = new ComponentName(this, MyWidget.class);
 		AppWidgetManager manager = AppWidgetManager.getInstance(this);
 		manager.updateAppWidget(myWidget, remoteViews);
+
+		startMainActivity("Timer");
+
+		return ret;
 	}
 
 	private void startMainActivity(String fireEvent) {
