@@ -12,4 +12,5 @@ public class DayCntEntity implements Serializable {
 	public int ngCnt;
 	public int totalOkCnt;
 	public int totalNgCnt;
+	public String encouragmentMsg;
 }

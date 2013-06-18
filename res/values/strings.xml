@@ -71,4 +71,17 @@
 	<string name="timer_not_set">タイマーは設定されていません</string>
 	<string name="timer_setting_at">に設定中</string>
 	<string name="good_night">おやすみなさい</string>
+	<string name="ec_start">スタート</string>
+	<string name="ec_konochousi">この調子</string>
+	<string name="ec_ganbatte">がんばって</string>
+	<string name="ec_atosukosi">あと少し</string>
+	<string name="ec_akirameruna">あきらめるな</string>
+	<string name="ec_syosikantetu">初志貫徹</string>
+	<string name="ec_yatta">やったー！</string>
+	<string name="ec_daijoubu">大丈夫</string>
+	<string name="ec_dekiruyo">できるよ</string>
+	<string name="ec_kanauyo">叶うよ</string>
+	<string name="ec_tudukeyou">続けよう</string>
+	<string name="ec_yaruzo">やるぞ</string>
+	<string name="ec_iizo">いいぞ</string>
 </resources>

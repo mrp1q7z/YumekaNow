@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 import android.content.Context;
 
@@ -12,12 +13,16 @@ import com.j256.ormlite.dao.GenericRawResults;
 import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.entity.CounterEntity;
 import com.yojiokisoft.yumekanow.entity.DayCntEntity;
+import com.yojiokisoft.yumekanow.entity.EncouragementMsgEntity;
+import com.yojiokisoft.yumekanow.utils.MyConst;
 
 public class CounterDao {
 	private Dao<CounterEntity, Integer> mCounterDao = null;
 	private int mCurrentCardId;
+	private Context mContext;
 
 	public CounterDao(Context context) throws SQLException {
+		mContext = context;
 		DatabaseHelper helper = DatabaseHelper.getInstance(context);
 		mCounterDao = helper.getDao(CounterEntity.class);
 
@@ -72,6 +77,7 @@ public class CounterDao {
 	 * @throws SQLException 
 	 */
 	public List<DayCntEntity> getDayCnt() throws SQLException {
+		/*
 		GenericRawResults<String[]> rawResults = null;
 		List<DayCntEntity> ret = new ArrayList<DayCntEntity>();
 		rawResults = mCounterDao
@@ -100,8 +106,75 @@ public class CounterDao {
 			dayCnt.totalNgCnt = totalNgCnt;
 			ret.add(dayCnt);
 		}
+		setEncouragementMsg(ret);
+		*/
+
+		// debug >>>
+		List<DayCntEntity> ret = new ArrayList<DayCntEntity>();
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, 2013);
+		cal.set(Calendar.MONTH, 4 - 1);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		int totalOkCnt = 0;
+		int totalNgCnt = 0;
+		Random rand = new Random();
+		for (int i = 0; i < 116; i++) {
+			DayCntEntity dayCnt = new DayCntEntity();
+			dayCnt.day = i + 1;
+			dayCnt.date = cal;
+			dayCnt.okCnt = rand.nextInt(8) + 9;
+			dayCnt.ngCnt = rand.nextInt(3) + 0;
+			totalOkCnt += dayCnt.okCnt;
+			totalNgCnt += dayCnt.ngCnt;
+			dayCnt.totalOkCnt = totalOkCnt;
+			dayCnt.totalNgCnt = totalNgCnt;
+			ret.add(dayCnt);
+			cal.add(Calendar.DAY_OF_MONTH, 1);
+		}
+		setEncouragementMsg(ret);
+		// debug <<<
 
 		return ret;
+	}
+
+	private void setEncouragementMsg(List<DayCntEntity> list) {
+		int size = list.size();
+		int[] percent = new int[size];
+		SettingDao settingDao = SettingDao.getInstance(mContext);
+
+		int goalCnt = settingDao.getGoalCnt();
+		for (int i = 0; i < size; i++) {
+			percent[i] = list.get(i).totalOkCnt * 100 / goalCnt;
+		}
+
+		EncouragementMsgEntity[] msg = MyConst.getEncouragementMsg(mContext);
+		DayCntEntity item;
+		int len = msg.length;
+		size = list.size();
+		int max;
+		int startIndex = 0;
+		for (int i = 0; i < len; i++) {
+			if (i >= len - 1) {
+				max = Integer.MAX_VALUE;
+			} else {
+				max = msg[i + 1].percent - 1;
+			}
+			if (msg[i].day != 0) {
+				item = list.get(msg[i].day - 1);
+				item.encouragmentMsg = msg[i].message;
+				list.set(msg[i].day - 1, item);
+			} else {
+				for (int j = startIndex; j < size; j++) {
+					if (msg[i].percent <= percent[j] && percent[j] <= max) {
+						item = list.get(j);
+						item.encouragmentMsg = msg[i].message;
+						list.set(j, item);
+						startIndex = j + 1;
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	public void setCounter(CounterEntity counter) throws SQLException {

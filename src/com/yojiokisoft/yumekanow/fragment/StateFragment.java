@@ -147,10 +147,7 @@ public class StateFragment extends Fragment {
 			holder.date.setText(s);
 			s = String.format("%2d", item.okCnt) + "回";
 			holder.cnt.setText(s);
-			s = getComment(item);
-			if (s != null) {
-				holder.comment.setText(s);
-			}
+			holder.comment.setText(item.encouragmentMsg);
 
 			return convertView;
 		}
@@ -161,19 +158,5 @@ public class StateFragment extends Fragment {
 			TextView cnt;
 			TextView comment;
 		}
-	}
-
-	private String getComment(DayCntEntity item) {
-		if (item.day == 1) {
-			return "スタート";
-		}
-		if (item.totalOkCnt > 10) {
-			return "この調子";
-		}
-		if (item.totalOkCnt > 900) {
-			return "あと少し";
-		}
-		//		return null;
-		return String.valueOf(item.totalOkCnt);
 	}
 }

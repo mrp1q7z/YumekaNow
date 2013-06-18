@@ -44,42 +44,27 @@ public final class MakeCardActivity_
     }
 
     private void afterSetContentView_() {
-        mShadowColor = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.shadowColor));
-        mMarginTop = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.marginTop));
         mTextColor = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.textColor));
         mMarginLeft = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.marginLeft));
+        mShadowColor = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.shadowColor));
         mDelBackImgButton = ((Button) findViewById(com.yojiokisoft.yumekanow.R.id.delBackImgButton));
-        mGallery = ((Gallery) findViewById(com.yojiokisoft.yumekanow.R.id.backImgGallery));
-        mAffirmationText = ((EditText) findViewById(com.yojiokisoft.yumekanow.R.id.affirmationText));
-        mTextSizeBar = ((SeekBar) findViewById(com.yojiokisoft.yumekanow.R.id.textSizeBar));
-        mMarginLeftBar = ((SeekBar) findViewById(com.yojiokisoft.yumekanow.R.id.marginLeftBar));
-        mImageSwitcher = ((ImageSwitcher) findViewById(com.yojiokisoft.yumekanow.R.id.backImgSwitcher));
-        mMarginTopBar = ((SeekBar) findViewById(com.yojiokisoft.yumekanow.R.id.marginTopBar));
         mTextSize = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.textSize));
+        mMarginTop = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.marginTop));
+        mAffirmationText = ((EditText) findViewById(com.yojiokisoft.yumekanow.R.id.affirmationText));
+        mMarginTopBar = ((SeekBar) findViewById(com.yojiokisoft.yumekanow.R.id.marginTopBar));
+        mMarginLeftBar = ((SeekBar) findViewById(com.yojiokisoft.yumekanow.R.id.marginLeftBar));
+        mGallery = ((Gallery) findViewById(com.yojiokisoft.yumekanow.R.id.backImgGallery));
+        mTextSizeBar = ((SeekBar) findViewById(com.yojiokisoft.yumekanow.R.id.textSizeBar));
+        mImageSwitcher = ((ImageSwitcher) findViewById(com.yojiokisoft.yumekanow.R.id.backImgSwitcher));
         {
-            View view = findViewById(com.yojiokisoft.yumekanow.R.id.cancelButton);
+            View view = findViewById(com.yojiokisoft.yumekanow.R.id.addBackImgButton);
             if (view!= null) {
                 view.setOnClickListener(new OnClickListener() {
 
 
                     @Override
                     public void onClick(View view) {
-                        MakeCardActivity_.this.cancelButtonClicked();
-                    }
-
-                }
-                );
-            }
-        }
-        {
-            View view = findViewById(com.yojiokisoft.yumekanow.R.id.textColor);
-            if (view!= null) {
-                view.setOnClickListener(new OnClickListener() {
-
-
-                    @Override
-                    public void onClick(View view) {
-                        MakeCardActivity_.this.textColorClicked();
+                        MakeCardActivity_.this.addBackImgButtonClicked();
                     }
 
                 }
@@ -102,14 +87,14 @@ public final class MakeCardActivity_
             }
         }
         {
-            View view = findViewById(com.yojiokisoft.yumekanow.R.id.delBackImgButton);
+            View view = findViewById(com.yojiokisoft.yumekanow.R.id.cancelButton);
             if (view!= null) {
                 view.setOnClickListener(new OnClickListener() {
 
 
                     @Override
                     public void onClick(View view) {
-                        MakeCardActivity_.this.delBackImgButtonClicked();
+                        MakeCardActivity_.this.cancelButtonClicked();
                     }
 
                 }
@@ -132,6 +117,36 @@ public final class MakeCardActivity_
             }
         }
         {
+            View view = findViewById(com.yojiokisoft.yumekanow.R.id.delBackImgButton);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        MakeCardActivity_.this.delBackImgButtonClicked();
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            View view = findViewById(com.yojiokisoft.yumekanow.R.id.textColor);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        MakeCardActivity_.this.textColorClicked();
+                    }
+
+                }
+                );
+            }
+        }
+        {
             View view = findViewById(com.yojiokisoft.yumekanow.R.id.okButton);
             if (view!= null) {
                 view.setOnClickListener(new OnClickListener() {
@@ -140,21 +155,6 @@ public final class MakeCardActivity_
                     @Override
                     public void onClick(View view) {
                         MakeCardActivity_.this.okButtonClicked();
-                    }
-
-                }
-                );
-            }
-        }
-        {
-            View view = findViewById(com.yojiokisoft.yumekanow.R.id.addBackImgButton);
-            if (view!= null) {
-                view.setOnClickListener(new OnClickListener() {
-
-
-                    @Override
-                    public void onClick(View view) {
-                        MakeCardActivity_.this.addBackImgButtonClicked();
                     }
 
                 }
@@ -176,29 +176,6 @@ public final class MakeCardActivity_
 
         }
         );
-        {
-            final SeekBar view = ((SeekBar) findViewById(com.yojiokisoft.yumekanow.R.id.marginTopBar));
-            if (view!= null) {
-                view.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-                    }
-
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        MakeCardActivity_.this.marginTopChanged(seekBar, progress);
-                    }
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                    }
-
-                }
-                );
-            }
-        }
         {
             final SeekBar view = ((SeekBar) findViewById(com.yojiokisoft.yumekanow.R.id.marginLeftBar));
             if (view!= null) {
@@ -235,6 +212,29 @@ public final class MakeCardActivity_
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         MakeCardActivity_.this.textSizeChanged(seekBar, progress);
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            final SeekBar view = ((SeekBar) findViewById(com.yojiokisoft.yumekanow.R.id.marginTopBar));
+            if (view!= null) {
+                view.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
+
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        MakeCardActivity_.this.marginTopChanged(seekBar, progress);
                     }
 
                     @Override
