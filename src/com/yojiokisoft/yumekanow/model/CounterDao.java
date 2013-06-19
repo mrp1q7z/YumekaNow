@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
 
 import android.content.Context;
 
@@ -77,7 +76,6 @@ public class CounterDao {
 	 * @throws SQLException 
 	 */
 	public List<DayCntEntity> getDayCnt() throws SQLException {
-		/*
 		GenericRawResults<String[]> rawResults = null;
 		List<DayCntEntity> ret = new ArrayList<DayCntEntity>();
 		rawResults = mCounterDao
@@ -106,10 +104,10 @@ public class CounterDao {
 			dayCnt.totalNgCnt = totalNgCnt;
 			ret.add(dayCnt);
 		}
-		setEncouragementMsg(ret);
-		*/
+		setEncouragementMsg(ret, false);
 
 		// debug >>>
+		/*
 		List<DayCntEntity> ret = new ArrayList<DayCntEntity>();
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, 2013);
@@ -131,24 +129,38 @@ public class CounterDao {
 			ret.add(dayCnt);
 			cal.add(Calendar.DAY_OF_MONTH, 1);
 		}
-		setEncouragementMsg(ret);
+		setEncouragementMsg(ret, false);
+		*/
 		// debug <<<
 
 		return ret;
 	}
+	
+	public void setEncouragementMsg(List<DayCntEntity> list) {
+		setEncouragementMsg(list, true);
+	}
 
-	private void setEncouragementMsg(List<DayCntEntity> list) {
+	private void setEncouragementMsg(List<DayCntEntity> list, boolean clearFlag) {
+		DayCntEntity item;
 		int size = list.size();
+		if (clearFlag) {
+			for (int i=0; i<size; i++) {
+				item = list.get(i);
+				if (item.encouragmentMsg != null) {
+					item.encouragmentMsg = null;
+					list.set(i, item);
+				}
+			}
+		}
+		
 		int[] percent = new int[size];
 		SettingDao settingDao = SettingDao.getInstance(mContext);
-
 		int goalCnt = settingDao.getGoalCnt();
 		for (int i = 0; i < size; i++) {
 			percent[i] = list.get(i).totalOkCnt * 100 / goalCnt;
 		}
 
 		EncouragementMsgEntity[] msg = MyConst.getEncouragementMsg(mContext);
-		DayCntEntity item;
 		int len = msg.length;
 		size = list.size();
 		int max;
@@ -165,8 +177,11 @@ public class CounterDao {
 				list.set(msg[i].day - 1, item);
 			} else {
 				for (int j = startIndex; j < size; j++) {
+					item = list.get(j);
+					if (item.encouragmentMsg != null) {
+						continue;
+					}
 					if (msg[i].percent <= percent[j] && percent[j] <= max) {
-						item = list.get(j);
 						item.encouragmentMsg = msg[i].message;
 						list.set(j, item);
 						startIndex = j + 1;

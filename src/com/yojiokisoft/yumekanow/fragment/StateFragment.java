@@ -25,10 +25,13 @@ import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 import com.yojiokisoft.yumekanow.model.CounterDao;
 import com.yojiokisoft.yumekanow.model.SettingDao;
 import com.yojiokisoft.yumekanow.mycomponent.MyProgress;
+import com.yojiokisoft.yumekanow.utils.MyLog;
 
 @EFragment(R.layout.fragment_state)
 public class StateFragment extends Fragment {
 	private Activity mActivity;
+	private CounterDao mCounter;
+	private int mGoalCnt;
 
 	@ViewById(R.id.totalProgress)
 	MyProgress mProgress;
@@ -44,11 +47,9 @@ public class StateFragment extends Fragment {
 	@AfterViews
 	void setProgress() {
 		SettingDao settingDao = SettingDao.getInstance(mActivity);
-		CounterDao counter;
 		int okCnt = 0;
 		try {
-			counter = new CounterDao(mActivity);
-			okCnt = counter.getOkCnt();
+			okCnt = mCounter.getOkCnt();
 		} catch (SQLException e) {
 			MyUncaughtExceptionHandler.sendBugReport(mActivity, e);
 		}
@@ -63,11 +64,9 @@ public class StateFragment extends Fragment {
 
 	@AfterViews
 	void setAdapter() {
-		CounterDao counter;
 		List<DayCntEntity> list = null;
 		try {
-			counter = new CounterDao(mActivity);
-			list = counter.getDayCnt();
+			list = mCounter.getDayCnt();
 		} catch (SQLException e) {
 			MyUncaughtExceptionHandler.sendBugReport(mActivity, e);
 		}
@@ -76,18 +75,36 @@ public class StateFragment extends Fragment {
 		}
 		BaseAdapter adapter = new MyListArrayAdapter(mActivity, list);
 		mListView.setAdapter(adapter);
+
+		SettingDao settingDao = SettingDao.getInstance(mActivity);
+		mGoalCnt = settingDao.getGoalCnt();
 	}
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		mActivity = activity;
+		try {
+			mCounter = new CounterDao(mActivity);
+		} catch (SQLException e) {
+			MyUncaughtExceptionHandler.sendBugReport(mActivity, e);
+		}
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		setProgress();
+
+		SettingDao settingDao = SettingDao.getInstance(mActivity);
+		if (mGoalCnt != settingDao.getGoalCnt()) {
+MyLog.d("GlolCntが変えられた");
+			mGoalCnt = settingDao.getGoalCnt();
+			setProgress();
+			List<DayCntEntity> list = ((MyListArrayAdapter) mListView.getAdapter()).getItems();
+			mCounter.setEncouragementMsg(list);
+			((MyListArrayAdapter) mListView.getAdapter()).setItems(list);
+			mListView.invalidateViews();
+		}
 	}
 
 	/**
@@ -100,6 +117,17 @@ public class StateFragment extends Fragment {
 		MyListArrayAdapter(Activity activity, List<DayCntEntity> items) {
 			super();
 			mActivity = activity;
+			mItems = items;
+		}
+
+		public List<DayCntEntity> getItems() {
+			return mItems;
+		}
+
+		public void setItems(List<DayCntEntity> items) {
+			if (mItems != null) {
+				mItems = null;
+			}
 			mItems = items;
 		}
 
