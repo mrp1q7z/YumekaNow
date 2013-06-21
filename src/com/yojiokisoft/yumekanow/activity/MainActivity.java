@@ -29,11 +29,13 @@ import com.googlecode.androidannotations.annotations.OptionsItem;
 import com.googlecode.androidannotations.annotations.OptionsMenu;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 import com.yojiokisoft.yumekanow.fragment.CardFragment_;
 import com.yojiokisoft.yumekanow.fragment.SleepFragment_;
 import com.yojiokisoft.yumekanow.fragment.StateFragment_;
 import com.yojiokisoft.yumekanow.model.SettingDao;
+import com.yojiokisoft.yumekanow.service.TimerManager;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 
 @EActivity(R.layout.activity_main)
@@ -53,6 +55,15 @@ public class MainActivity extends FragmentActivity {
 
 	@AfterViews
 	public void initActivity() {
+		//キャッチされない例外により、スレッドが突然終了したときや、  
+		//このスレッドに対してほかにハンドラが定義されていないときに  
+		//呼び出されるデフォルトのハンドラを設定します。  
+		Context appCtx = getApplicationContext();
+		Thread.setDefaultUncaughtExceptionHandler(new MyUncaughtExceptionHandler(appCtx));
+
+		DatabaseHelper.getInstance(appCtx);
+		TimerManager.setTimer(this);
+
 		FragmentManager manager = getSupportFragmentManager();
 		mTabHost.setup();
 		final MyPagerAdapter adapter = new MyPagerAdapter(manager, this, mTabHost, mPager);

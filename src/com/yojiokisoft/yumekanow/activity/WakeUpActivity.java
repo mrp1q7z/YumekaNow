@@ -1,6 +1,7 @@
 package com.yojiokisoft.yumekanow.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -32,11 +33,11 @@ public class WakeUpActivity extends Activity {
 	@Click(R.id.okButton)
 	void okButtonClicked() {
 		TimerManager.cancelWakeUpTimer(mActivity);
-		
-		long now = System.currentTimeMillis();
-		SettingDao settingDao = SettingDao.getInstance(mActivity);
-		long interval = settingDao.getDispInterval() * 60 * 1000;
-		TimerManager.setTimer(mActivity, now, interval);
+		TimerManager.setTimer(mActivity);
+
+		Intent intent = new Intent(getApplicationContext(), MainActivity_.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
 
 		finish();
 	}

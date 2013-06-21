@@ -1,7 +1,5 @@
 package com.yojiokisoft.yumekanow.activity;
 
-import java.util.Calendar;
-
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.media.Ringtone;
@@ -228,13 +226,7 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 		setSummary(key);
 		if (MyConst.DISP_INTERVAL.equals(key)) {
 			TimerManager.cancelTimer(this);
-
-			SettingDao settingDao = SettingDao.getInstance(this);
-			long interval = settingDao.getDispInterval() * 60 * 1000;
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTimeInMillis(System.currentTimeMillis());
-			calendar.add(Calendar.MINUTE, settingDao.getDispInterval()); // 現時刻 + 指定時間
-			TimerManager.setTimer(this, calendar.getTimeInMillis(), interval);
+			TimerManager.setTimer(this);
 		}
 		if (MyConst.INQUIRY.equals(key)) {
 			String inquiry = sharedPreferences.getString(key, "");

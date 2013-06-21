@@ -145,11 +145,6 @@ public class SleepFragment extends Fragment {
 		TimerManager.cancelWakeUpTimer(mActivity);
 		printCurrentTimer();
 
-		SettingDao settingDao = SettingDao.getInstance(mActivity);
-		long interval = settingDao.getDispInterval() * 60 * 1000;
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(System.currentTimeMillis());
-		calendar.add(Calendar.MINUTE, settingDao.getDispInterval()); // 現時刻 + 指定時間
-		TimerManager.setTimer(mActivity, calendar.getTimeInMillis(), interval);
+		TimerManager.setTimer(mActivity);
 	}
 }

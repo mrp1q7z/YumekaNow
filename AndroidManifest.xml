@@ -17,36 +17,11 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <receiver
-            android:name="com.yojiokisoft.yumekanow.widget.MyWidget"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget" />
-        </receiver>
-
         <service
-            android:name="com.yojiokisoft.yumekanow.service.MyWidgetService"
+            android:name="com.yojiokisoft.yumekanow.service.YumekaNowService"
             android:exported="false" >
-            <intent-filter>
-                <action android:name="com.yojiokisoft.yumekanow.ACTION_MY_CLICK" />
-            </intent-filter>
         </service>
 
-        <activity
-            android:name="com.yojiokisoft.yumekanow.activity.InitActivity_"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name="com.yojiokisoft.yumekanow.activity.CardListActivity_"
             android:screenOrientation="portrait" >
@@ -74,7 +49,13 @@
         <activity
             android:name="com.yojiokisoft.yumekanow.activity.MainActivity_"
             android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
             android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.yojiokisoft.yumekanow.activity.WakeUpActivity_"
