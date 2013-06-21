@@ -19,15 +19,6 @@
         android:summary="アファーメーションを唱えた回数がこの値になったら目標達成とみなします"
         android:title="目標回数" />
 
-    <ListPreference
-        android:defaultValue="flower"
-        android:dialogTitle="アニメーション"
-        android:entries="@array/animation_key"
-        android:entryValues="@array/animation_val"
-        android:key="Animation"
-        android:summary="ウジェットのアイコンに表示されるアニメーションを設定します"
-        android:title="アニメーション" />
-
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="Vibrator"

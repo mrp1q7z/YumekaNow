@@ -13,9 +13,6 @@ public class MyConst {
 	// 目標回数
 	public static final String GOAL_CNT = "GoalCnt";
 
-	// アニメーション
-	public static final String ANIMATION = "Animation";
-
 	// バイブレータ
 	public static final String VIBRATOR = "Vibrator";
 

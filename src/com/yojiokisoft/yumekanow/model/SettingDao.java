@@ -16,8 +16,6 @@ public class SettingDao {
 	private static Context mContext;
 	private static String[] mDispIntervalKey;
 	private static String[] mDispIntervalVal;
-	private static String[] mAnimationKey;
-	private static String[] mAnimationVal;
 
 	private SettingDao() {
 	}
@@ -29,8 +27,6 @@ public class SettingDao {
 			mContext = context;
 			mDispIntervalKey = mContext.getResources().getStringArray(R.array.disp_interval_key);
 			mDispIntervalVal = mContext.getResources().getStringArray(R.array.disp_interval_val);
-			mAnimationKey = mContext.getResources().getStringArray(R.array.animation_key);
-			mAnimationVal = mContext.getResources().getStringArray(R.array.animation_val);
 		}
 		return mInstance;
 	}
@@ -54,22 +50,6 @@ public class SettingDao {
 
 	public int getGoalCnt() {
 		return Integer.parseInt(mSharedPref.getString(MyConst.GOAL_CNT, mContext.getString(R.string.defaultGoalCnt)));
-	}
-
-	public String getAnimation() {
-		String val = mSharedPref.getString(MyConst.ANIMATION, "");
-		String ret = null;
-		for (int i = 0; i < mAnimationVal.length; i++) {
-			if (mAnimationVal[i].equals(val)) {
-				ret = mAnimationKey[i];
-				break;
-			}
-		}
-		return ret;
-	}
-
-	public String getAnimationId() {
-		return mSharedPref.getString(MyConst.ANIMATION, "");
 	}
 
 	public boolean getVibrator() {

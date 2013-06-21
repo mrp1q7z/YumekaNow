@@ -38,12 +38,6 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 	@StringArrayRes(R.array.disp_interval_val)
 	String[] mDispIntervalVal;
 
-	@StringArrayRes(R.array.animation_key)
-	String[] mAnimationKey;
-
-	@StringArrayRes(R.array.animation_val)
-	String[] mAnimationVal;
-
 	@StringArrayRes(R.array.inquiry_key)
 	String[] mInquiryKey;
 
@@ -88,19 +82,6 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 		return ret;
 	}
 
-	private String animationVal2Key(String val) {
-		String key = null;
-
-		for (int i = 0; i < mAnimationVal.length; i++) {
-			if (mAnimationVal[i].equals(val)) {
-				key = mAnimationKey[i];
-				break;
-			}
-		}
-
-		return key;
-	}
-
 	private String vibratorVal2Key(boolean isChecked) {
 		String key;
 
@@ -137,17 +118,6 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 			nowVal.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.theme_headerTextColor)), 0,
 					nowVal.length(), 0);
 			prefGoalCnt.setSummary(nowVal);
-		}
-		if (key == null || MyConst.ANIMATION.equals(key)) {
-			ListPreference prefAnimation = (ListPreference) getPreferenceScreen().findPreference(MyConst.ANIMATION);
-			summary = indexOfBr(prefAnimation.getSummary().toString());
-			summary += BR + getString(R.string.now_setting) + animationVal2Key(prefAnimation.getValue());
-
-			SpannableString nowVal;
-			nowVal = new SpannableString(summary);
-			nowVal.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.theme_headerTextColor)), 0,
-					nowVal.length(), 0);
-			prefAnimation.setSummary(nowVal);
 		}
 		if (key == null || MyConst.VIBRATOR.equals(key)) {
 			CheckBoxPreference prefVibrator = (CheckBoxPreference) getPreferenceScreen().findPreference(
@@ -197,7 +167,7 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 					nowVal.length(), 0);
 			prefVersion.setSummary(nowVal);
 		}
-		if (key == null || MyConst.ANIMATION.equals(key)) {
+		if (key == null || MyConst.INQUIRY.equals(key)) {
 			ListPreference prefInquiry = (ListPreference) getPreferenceScreen().findPreference(MyConst.INQUIRY);
 			summary = indexOfBr(prefInquiry.getSummary().toString());
 

@@ -27,14 +27,6 @@
         <item>7時間</item>
         <item>8時間</item>
     </string-array>
-    <string-array name="animation_val">
-        <item>flower</item>
-        <item>drop</item>
-    </string-array>
-    <string-array name="animation_key">
-        <item>花</item>
-        <item>水滴</item>
-    </string-array>
     <string-array name="inquiry_val">
         <item>comments</item>
         <item>questions</item>
