@@ -40,6 +40,12 @@ public class MyConst {
 	// 起動イベント
 	public static final String FIRE_EVENT = "FireEvent";
 
+	// 次回起動時間
+	public static final String NEXT_START_TIME = "NextStartTime";
+
+	// 目覚まし起動時間
+	public static final String WAKE_UP_TIME = "WakeUpTime";
+
 	// SDカードのパス
 	public static final String EX_STORAGE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
 

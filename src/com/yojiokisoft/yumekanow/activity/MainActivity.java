@@ -58,11 +58,15 @@ public class MainActivity extends FragmentActivity {
 		//キャッチされない例外により、スレッドが突然終了したときや、  
 		//このスレッドに対してほかにハンドラが定義されていないときに  
 		//呼び出されるデフォルトのハンドラを設定します。  
-		Context appCtx = getApplicationContext();
-		Thread.setDefaultUncaughtExceptionHandler(new MyUncaughtExceptionHandler(appCtx));
+		Context appContext = getApplicationContext();
+		Thread.setDefaultUncaughtExceptionHandler(new MyUncaughtExceptionHandler(appContext));
 
-		DatabaseHelper.getInstance(appCtx);
-		TimerManager.setTimer(this);
+		DatabaseHelper.getInstance(appContext);
+		SettingDao settingDao = SettingDao.getInstance(appContext);
+
+		if (TimerManager.getStartTime() == 0) {
+			TimerManager.setStartTimer(this);
+		}
 
 		FragmentManager manager = getSupportFragmentManager();
 		mTabHost.setup();
@@ -85,7 +89,6 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		if ("Timer".equals(mFireEvent)) {
-			SettingDao settingDao = SettingDao.getInstance(this);
 			if (settingDao.getVibrator()) {
 				mVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 				long[] pattern = { 0, 500, 250, 500, 250, 500 }; // OFF/ON/OFF/ON...

@@ -18,27 +18,35 @@ public class TimerManager {
 		mCalendar.setTimeInMillis(0);
 	}
 
-	public static void setTimer(Context context) {
+	public static void setStartTimer(Context context) {
 		long now = System.currentTimeMillis();
 		SettingDao settingDao = SettingDao.getInstance(context);
 		long interval = settingDao.getDispInterval() * 60 * 1000;
-		setTimer(context, now + interval, interval);
+		setStartTimer(context, now + interval, interval);
 	}
 
-	public static void setTimer(Context context, long triggerAtTime, long interval) {
+	public static void setStartTimer(Context context, long triggerAtTime, long interval) {
 		Intent intent = new Intent(context, YumekaNowService.class);
 		PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.setRepeating(AlarmManager.RTC, triggerAtTime, interval, pendingIntent);
+		
+		SettingDao settingDao = SettingDao.getInstance(context);
+		settingDao.setNextStartTime(triggerAtTime);
 	}
 
-	public static void cancelTimer(Context context) {
+	public static void cancelStartTimer(Context context) {
 		Intent intent = new Intent(context, YumekaNowService.class);
 		PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.cancel(pendingIntent);
+	}
+	
+	public static long getStartTime() {
+		SettingDao settingDao = SettingDao.getInstance();
+		return settingDao.getNextStartTime();
 	}
 
 	public static void setWakuUpTimer(Context context, long triggerAtTime) {

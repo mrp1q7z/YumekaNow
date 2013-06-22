@@ -100,7 +100,7 @@ public class SleepFragment extends Fragment {
 	@Click(R.id.setTimerButton)
 	void setTimerButtonClicked() {
 		// アファーメーションアラームの解除
-		TimerManager.cancelTimer(mActivity);
+		TimerManager.cancelStartTimer(mActivity);
 
 		// タイマーのアラームをセット
 		int hour = mWakeUpTime.getCurrentHour();
@@ -145,6 +145,6 @@ public class SleepFragment extends Fragment {
 		TimerManager.cancelWakeUpTimer(mActivity);
 		printCurrentTimer();
 
-		TimerManager.setTimer(mActivity);
+		TimerManager.setStartTimer(mActivity);
 	}
 }

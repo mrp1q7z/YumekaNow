@@ -31,6 +31,13 @@ public class SettingDao {
 		return mInstance;
 	}
 
+	public static SettingDao getInstance() {
+		if (mContext == null) {
+			return null;
+		}
+		return getInstance(mContext);
+	}
+
 	public int getDispInterval() {
 		String val = mSharedPref.getString(MyConst.DISP_INTERVAL, mContext.getString(R.string.defaultDispInterval));
 		return Integer.parseInt(val);
@@ -120,5 +127,13 @@ public class SettingDao {
 
 	public void setSleepTimer(String timer) {
 		mSharedPref.edit().putString(MyConst.SLEEP_TIMER, timer).commit();
+	}
+	
+	public long getNextStartTime() {
+		return mSharedPref.getLong(MyConst.NEXT_START_TIME, 0);
+	}
+	
+	public void setNextStartTime(long time) {
+		mSharedPref.edit().putLong(MyConst.NEXT_START_TIME, time).commit();
 	}
 }

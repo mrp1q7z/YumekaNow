@@ -33,7 +33,7 @@ public class WakeUpActivity extends Activity {
 	@Click(R.id.okButton)
 	void okButtonClicked() {
 		TimerManager.cancelWakeUpTimer(mActivity);
-		TimerManager.setTimer(mActivity);
+		TimerManager.setStartTimer(mActivity);
 
 		Intent intent = new Intent(getApplicationContext(), MainActivity_.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

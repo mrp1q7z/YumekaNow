@@ -195,8 +195,8 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		setSummary(key);
 		if (MyConst.DISP_INTERVAL.equals(key)) {
-			TimerManager.cancelTimer(this);
-			TimerManager.setTimer(this);
+			TimerManager.cancelStartTimer(this);
+			TimerManager.setStartTimer(this);
 		}
 		if (MyConst.INQUIRY.equals(key)) {
 			String inquiry = sharedPreferences.getString(key, "");
