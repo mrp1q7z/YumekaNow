@@ -56,7 +56,8 @@ public class SleepFragment extends Fragment {
 	}
 
 	private void printCurrentTimer() {
-		Calendar calendar = TimerManager.getCurrentTimer();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(TimerManager.getWakeUpTime());
 		if (calendar.getTimeInMillis() == 0) {
 			mCurrentTimer.setText(getString(R.string.timer_not_set));
 			mCancelTimerButton.setVisibility(View.GONE);

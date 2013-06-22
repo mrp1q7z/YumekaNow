@@ -1,7 +1,5 @@
 package com.yojiokisoft.yumekanow.service;
 
-import java.util.Calendar;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -11,13 +9,6 @@ import com.yojiokisoft.yumekanow.activity.WakeUpActivity_;
 import com.yojiokisoft.yumekanow.model.SettingDao;
 
 public class TimerManager {
-	private static Calendar mCalendar;
-
-	static {
-		mCalendar = Calendar.getInstance();
-		mCalendar.setTimeInMillis(0);
-	}
-
 	public static void setStartTimer(Context context) {
 		long now = System.currentTimeMillis();
 		SettingDao settingDao = SettingDao.getInstance(context);
@@ -31,8 +22,8 @@ public class TimerManager {
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.setRepeating(AlarmManager.RTC, triggerAtTime, interval, pendingIntent);
-		
-		SettingDao settingDao = SettingDao.getInstance(context);
+
+		SettingDao settingDao = SettingDao.getInstance();
 		settingDao.setNextStartTime(triggerAtTime);
 	}
 
@@ -42,8 +33,11 @@ public class TimerManager {
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.cancel(pendingIntent);
+
+		SettingDao settingDao = SettingDao.getInstance();
+		settingDao.setNextStartTime(0);
 	}
-	
+
 	public static long getStartTime() {
 		SettingDao settingDao = SettingDao.getInstance();
 		return settingDao.getNextStartTime();
@@ -55,7 +49,9 @@ public class TimerManager {
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC, triggerAtTime, pendingIntent);
-		mCalendar.setTimeInMillis(triggerAtTime);
+
+		SettingDao settingDao = SettingDao.getInstance();
+		settingDao.setWakeUpTime(triggerAtTime);
 	}
 
 	public static void cancelWakeUpTimer(Context context) {
@@ -64,10 +60,13 @@ public class TimerManager {
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.cancel(pendingIntent);
-		mCalendar.setTimeInMillis(0);
+
+		SettingDao settingDao = SettingDao.getInstance();
+		settingDao.setWakeUpTime(0);
 	}
 
-	public static Calendar getCurrentTimer() {
-		return mCalendar;
+	public static long getWakeUpTime() {
+		SettingDao settingDao = SettingDao.getInstance();
+		return settingDao.getWakeUpTime();
 	}
 }

@@ -136,4 +136,12 @@ public class SettingDao {
 	public void setNextStartTime(long time) {
 		mSharedPref.edit().putLong(MyConst.NEXT_START_TIME, time).commit();
 	}
+	
+	public long getWakeUpTime() {
+		return mSharedPref.getLong(MyConst.WAKE_UP_TIME, 0);
+	}
+	
+	public void setWakeUpTime(long time) {
+		mSharedPref.edit().putLong(MyConst.WAKE_UP_TIME, time).commit();
+	}
 }
