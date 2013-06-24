@@ -33,7 +33,8 @@ public class SettingDao {
 
 	public static SettingDao getInstance() {
 		if (mContext == null) {
-			return null;
+			throw new RuntimeException("SettingDao mContext is null");
+//			return null;
 		}
 		return getInstance(mContext);
 	}

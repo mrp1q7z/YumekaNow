@@ -233,8 +233,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		Date today = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.JAPANESE);
 		String filename = "img_" + dateFormat.format(today) + ".jpg";
-		String path = MyConst.EX_STORAGE_PATH + File.separator
-				+ MyConst.APP_DATA_PATH + File.separator + filename;
+		String path = MyConst.APP_DATA_PATH + filename;
 		File file = new File(path);
 		try {
 			MyImage.saveImage(file, bitmap);

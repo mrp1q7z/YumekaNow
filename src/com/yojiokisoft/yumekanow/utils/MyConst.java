@@ -47,10 +47,11 @@ public class MyConst {
 	public static final String WAKE_UP_TIME = "WakeUpTime";
 
 	// SDカードのパス
-	public static final String EX_STORAGE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+//	public static final String EX_STORAGE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
 
 	// アプリケーションデータの保存パス
-	public static final String APP_DATA_PATH = "YumekaNow";
+	public static final String APP_DATA_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/YumekaNow/";
+//	public static final String APP_DATA_PATH = "";
 
 	// バグファイル名(キャッチした)
 	public static final String BUG_CAUGHT_FILE = "bug_caught.txt";
@@ -60,12 +61,14 @@ public class MyConst {
 
 	// キャッチしたバグファイルのフルパス
 	public static String getCaughtBugFilePath() {
-		return EX_STORAGE_PATH + "/" + APP_DATA_PATH + "/" + BUG_CAUGHT_FILE;
+//		return EX_STORAGE_PATH + "/" + APP_DATA_PATH + "/" + BUG_CAUGHT_FILE;
+		return APP_DATA_PATH + BUG_CAUGHT_FILE;
 	}
 
 	// キャッチされなかったバグファイルのフルパス
 	public static String getUncaughtBugFilePath() {
-		return EX_STORAGE_PATH + "/" + APP_DATA_PATH + "/" + BUG_UNCAUGHT_FILE;
+//		return EX_STORAGE_PATH + "/" + APP_DATA_PATH + "/" + BUG_UNCAUGHT_FILE;
+		return APP_DATA_PATH + BUG_UNCAUGHT_FILE;
 	}
 
 	// SQLiteのDB名
@@ -73,7 +76,8 @@ public class MyConst {
 
 	// SQLiteのDB名のフルパス
 	public static String getDatabaseName() {
-		return EX_STORAGE_PATH + "/" + APP_DATA_PATH + "/" + DATABASE_NAME;
+//		return EX_STORAGE_PATH + "/" + APP_DATA_PATH + "/" + DATABASE_NAME;
+		return APP_DATA_PATH + DATABASE_NAME;
 	}
 
 	// 励ましメッセージ [パーセント, n日目, メッセージID]

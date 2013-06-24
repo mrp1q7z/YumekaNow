@@ -172,7 +172,9 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 			while ((line = br.readLine()) != null) {
 				sb.append(line).append("\r\n");
 			}
-		} catch (Exception e) {
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			if (br != null) {

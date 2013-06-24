@@ -39,8 +39,8 @@ public final class CardPreviewActivity_
     }
 
     private void afterSetContentView_() {
-        mImageView = ((ImageView) findViewById(id.backImage));
         mTextView = ((TextView) findViewById(id.affirmationText));
+        mImageView = ((ImageView) findViewById(id.backImage));
         {
             View view = findViewById(id.okButton);
             if (view!= null) {

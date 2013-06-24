@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yojiokisoft.yumekanow"
+    android:installLocation="internalOnly"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -8,6 +9,7 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -61,6 +63,18 @@
             android:name="com.yojiokisoft.yumekanow.activity.WakeUpActivity_"
             android:screenOrientation="portrait" >
         </activity>
+
+        <receiver android:name="com.yojiokisoft.yumekanow.service.YumekaNowReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+
+                <!-- data android:scheme="package" / -->
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

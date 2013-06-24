@@ -1,13 +1,12 @@
 package com.yojiokisoft.yumekanow.model;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.res.Resources;
-import android.os.Environment;
 
 import com.yojiokisoft.yumekanow.entity.BackImageEntity;
+import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.utils.MyFile;
 
 public class BackImageDao {
@@ -30,13 +29,11 @@ public class BackImageDao {
 			list.add(item);
 		}
 
-		String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
-				+ "YumekaNow";
-		List<String> files = MyFile.getFileList(path, ".jpg");
+		List<String> files = MyFile.getFileList(MyConst.APP_DATA_PATH, ".jpg");
 		for (String file : files) {
 			BackImageEntity item = new BackImageEntity();
 			item.resouceId = 0;
-			item.bitmapPath = path + File.separator + file;
+			item.bitmapPath = MyConst.APP_DATA_PATH + file;
 			list.add(item);
 		}
 

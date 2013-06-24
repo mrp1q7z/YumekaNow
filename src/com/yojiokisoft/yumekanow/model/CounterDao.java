@@ -37,6 +37,7 @@ public class CounterDao {
 	 * @return
 	 * @throws SQLException 
 	 */
+	/*
 	public int getGrowLevel() throws SQLException {
 		GenericRawResults<String[]> rawResults = null;
 		int ret = 0;
@@ -50,6 +51,7 @@ public class CounterDao {
 
 		return ret;
 	}
+	*/
 
 	/**
 	 * OKカウントの取得
@@ -143,6 +145,9 @@ public class CounterDao {
 	private void setEncouragementMsg(List<DayCntEntity> list, boolean clearFlag) {
 		DayCntEntity item;
 		int size = list.size();
+		if (size <= 0) {
+			return;
+		}
 		if (clearFlag) {
 			for (int i=0; i<size; i++) {
 				item = list.get(i);

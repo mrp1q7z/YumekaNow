@@ -10,6 +10,9 @@ public class MyFile {
 		List<String> list = new ArrayList<String>();
 		File filePath = new File(path);
 		final File[] files = filePath.listFiles(getFileExtensionFilter(extension));
+		if (files == null) {
+			return list;
+		}
 		for (File file : files) {
 			list.add(file.getName());
 		}
