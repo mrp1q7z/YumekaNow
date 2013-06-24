@@ -72,6 +72,8 @@
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
 
+                <!-- これがあると BOOT_COMPLETD が受信できない -->
+                <!-- しかしこれがないと PACKAGE_REPLACED が受信できない？ -->
                 <!-- data android:scheme="package" / -->
             </intent-filter>
         </receiver>

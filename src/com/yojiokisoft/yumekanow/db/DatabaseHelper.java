@@ -19,7 +19,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	private static DatabaseHelper mInstance = null;
 
 	private DatabaseHelper(Context context) {
-		super(context, MyConst.getDatabaseName(), null, DATABASE_VERSION);
+		super(context, MyConst.getDatabasePath(), null, DATABASE_VERSION);
 	}
 
 	public static DatabaseHelper getInstance(Context context) {
