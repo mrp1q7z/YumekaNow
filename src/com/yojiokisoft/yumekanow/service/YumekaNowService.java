@@ -38,6 +38,8 @@ public class YumekaNowService extends Service {
 		mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		mainIntent.putExtra(MyConst.FIRE_EVENT, "Timer");
 		startActivity(mainIntent);
+		
+		stopSelf();
 
 		return ret;
 	}
