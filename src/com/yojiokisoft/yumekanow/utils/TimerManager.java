@@ -1,12 +1,13 @@
-package com.yojiokisoft.yumekanow.service;
+package com.yojiokisoft.yumekanow.utils;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import com.yojiokisoft.yumekanow.YumekaNowService;
 import com.yojiokisoft.yumekanow.activity.WakeUpActivity_;
-import com.yojiokisoft.yumekanow.model.SettingDao;
+import com.yojiokisoft.yumekanow.db.SettingDao;
 
 public class TimerManager {
 	public static void setStartTimer(Context context) {

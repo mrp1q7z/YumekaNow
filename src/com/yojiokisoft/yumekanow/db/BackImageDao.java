@@ -1,4 +1,4 @@
-package com.yojiokisoft.yumekanow.model;
+package com.yojiokisoft.yumekanow.db;
 
 import java.util.ArrayList;
 import java.util.List;

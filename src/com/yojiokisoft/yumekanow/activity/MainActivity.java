@@ -30,13 +30,13 @@ import com.googlecode.androidannotations.annotations.OptionsMenu;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.db.DatabaseHelper;
+import com.yojiokisoft.yumekanow.db.SettingDao;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 import com.yojiokisoft.yumekanow.fragment.CardFragment_;
 import com.yojiokisoft.yumekanow.fragment.SleepFragment_;
 import com.yojiokisoft.yumekanow.fragment.StateFragment_;
-import com.yojiokisoft.yumekanow.model.SettingDao;
-import com.yojiokisoft.yumekanow.service.TimerManager;
 import com.yojiokisoft.yumekanow.utils.MyConst;
+import com.yojiokisoft.yumekanow.utils.TimerManager;
 
 @EActivity(R.layout.activity_main)
 @OptionsMenu(R.menu.activity_main)

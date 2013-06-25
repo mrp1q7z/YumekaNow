@@ -1,4 +1,4 @@
-package com.yojiokisoft.yumekanow.model;
+package com.yojiokisoft.yumekanow.db;
 
 import android.content.Context;
 import android.content.SharedPreferences;

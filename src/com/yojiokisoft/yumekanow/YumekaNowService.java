@@ -1,4 +1,4 @@
-package com.yojiokisoft.yumekanow.service;
+package com.yojiokisoft.yumekanow;
 
 import android.app.Service;
 import android.content.Intent;

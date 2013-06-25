@@ -23,8 +23,8 @@ import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.activity.MainActivity;
-import com.yojiokisoft.yumekanow.model.SettingDao;
-import com.yojiokisoft.yumekanow.service.TimerManager;
+import com.yojiokisoft.yumekanow.db.SettingDao;
+import com.yojiokisoft.yumekanow.utils.TimerManager;
 
 @EFragment(R.layout.fragment_sleep)
 public class SleepFragment extends Fragment {

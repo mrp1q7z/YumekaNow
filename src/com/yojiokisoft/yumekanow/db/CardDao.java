@@ -1,4 +1,4 @@
-package com.yojiokisoft.yumekanow.model;
+package com.yojiokisoft.yumekanow.db;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.List;
 import android.content.Context;
 
 import com.j256.ormlite.dao.Dao;
-import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 
 public class CardDao {

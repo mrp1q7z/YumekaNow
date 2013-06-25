@@ -20,10 +20,10 @@ import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.db.CounterDao;
+import com.yojiokisoft.yumekanow.db.SettingDao;
 import com.yojiokisoft.yumekanow.entity.DayCntEntity;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
-import com.yojiokisoft.yumekanow.model.CounterDao;
-import com.yojiokisoft.yumekanow.model.SettingDao;
 import com.yojiokisoft.yumekanow.mycomponent.MyProgress;
 import com.yojiokisoft.yumekanow.utils.MyLog;
 

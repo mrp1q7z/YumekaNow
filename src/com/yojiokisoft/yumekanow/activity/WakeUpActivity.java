@@ -10,8 +10,8 @@ import android.os.Bundle;
 import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.yojiokisoft.yumekanow.R;
-import com.yojiokisoft.yumekanow.model.SettingDao;
-import com.yojiokisoft.yumekanow.service.TimerManager;
+import com.yojiokisoft.yumekanow.db.SettingDao;
+import com.yojiokisoft.yumekanow.utils.TimerManager;
 
 @EActivity(R.layout.activity_wake_up)
 public class WakeUpActivity extends Activity {

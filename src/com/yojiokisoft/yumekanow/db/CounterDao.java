@@ -1,4 +1,4 @@
-package com.yojiokisoft.yumekanow.model;
+package com.yojiokisoft.yumekanow.db;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -9,7 +9,6 @@ import android.content.Context;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
-import com.yojiokisoft.yumekanow.db.DatabaseHelper;
 import com.yojiokisoft.yumekanow.entity.CounterEntity;
 import com.yojiokisoft.yumekanow.entity.DayCntEntity;
 import com.yojiokisoft.yumekanow.entity.EncouragementMsgEntity;

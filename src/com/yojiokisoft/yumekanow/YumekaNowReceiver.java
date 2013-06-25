@@ -1,4 +1,4 @@
-package com.yojiokisoft.yumekanow.service;
+package com.yojiokisoft.yumekanow;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -9,8 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.yojiokisoft.yumekanow.model.SettingDao;
+import com.yojiokisoft.yumekanow.db.SettingDao;
 import com.yojiokisoft.yumekanow.utils.MyLog;
+import com.yojiokisoft.yumekanow.utils.TimerManager;
 
 public class YumekaNowReceiver extends BroadcastReceiver {
 

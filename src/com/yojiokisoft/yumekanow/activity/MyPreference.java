@@ -20,12 +20,12 @@ import android.text.style.ForegroundColorSpan;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.res.StringArrayRes;
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.db.SettingDao;
 import com.yojiokisoft.yumekanow.dialog.VersionDialogPreference;
-import com.yojiokisoft.yumekanow.model.SettingDao;
-import com.yojiokisoft.yumekanow.service.TimerManager;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.utils.MyLog;
 import com.yojiokisoft.yumekanow.utils.MyMail;
+import com.yojiokisoft.yumekanow.utils.TimerManager;
 
 @EActivity
 public class MyPreference extends PreferenceActivity implements OnSharedPreferenceChangeListener,

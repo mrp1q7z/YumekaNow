@@ -25,10 +25,10 @@ import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.Extra;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.db.CardDao;
+import com.yojiokisoft.yumekanow.db.SettingDao;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
-import com.yojiokisoft.yumekanow.model.CardDao;
-import com.yojiokisoft.yumekanow.model.SettingDao;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 
 @EActivity(R.layout.activity_card_detail)
