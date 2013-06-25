@@ -1,12 +1,15 @@
 package com.yojiokisoft.yumekanow.utils;
 
 import android.content.Context;
-import android.os.Environment;
 
+import com.yojiokisoft.yumekanow.App;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.entity.EncouragementMsgEntity;
 
 public class MyConst {
+	// アプリケーション名
+	public static final String APP_NAME = "YumekaNow";
+
 	// 表示間隔
 	public static final String DISP_INTERVAL = "DispInterval";
 
@@ -46,9 +49,6 @@ public class MyConst {
 	// 目覚まし起動時間
 	public static final String WAKE_UP_TIME = "WakeUpTime";
 
-	// アプリケーションデータの保存パス
-	public static final String APP_DATA_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/YumekaNow/";
-
 	// バグファイル名(キャッチした)
 	public static final String BUG_CAUGHT_FILE = "bug_caught.txt";
 
@@ -57,12 +57,12 @@ public class MyConst {
 
 	// キャッチしたバグファイルのフルパス
 	public static String getCaughtBugFilePath() {
-		return APP_DATA_PATH + BUG_CAUGHT_FILE;
+		return MyFile.pathCombine(App.getInstance().getAppDataPath(), BUG_CAUGHT_FILE);
 	}
 
 	// キャッチされなかったバグファイルのフルパス
 	public static String getUncaughtBugFilePath() {
-		return APP_DATA_PATH + BUG_UNCAUGHT_FILE;
+		return MyFile.pathCombine(App.getInstance().getAppDataPath(), BUG_UNCAUGHT_FILE);
 	}
 
 	// SQLiteのDB名
@@ -70,7 +70,12 @@ public class MyConst {
 
 	// SQLiteのDB名のフルパス
 	public static String getDatabasePath() {
-		return APP_DATA_PATH + DATABASE_FILE;
+		return App.getInstance().getDatabasePath(DATABASE_FILE).toString();
+	}
+
+	// 背景画像のパス
+	public static String getBackImagePath() {
+		return App.getInstance().getAppDataPath();
 	}
 
 	// 励ましメッセージ [パーセント, n日目, メッセージID]

@@ -28,4 +28,8 @@ public class MyFile {
 			}
 		};
 	}
+
+	public static String pathCombine(String dirPath, String fileName) {
+		return new File(dirPath, fileName).getPath();
+	}
 }

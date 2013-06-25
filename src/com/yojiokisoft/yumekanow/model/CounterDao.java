@@ -137,7 +137,7 @@ public class CounterDao {
 
 		return ret;
 	}
-	
+
 	public void setEncouragementMsg(List<DayCntEntity> list) {
 		setEncouragementMsg(list, true);
 	}
@@ -149,7 +149,7 @@ public class CounterDao {
 			return;
 		}
 		if (clearFlag) {
-			for (int i=0; i<size; i++) {
+			for (int i = 0; i < size; i++) {
 				item = list.get(i);
 				if (item.encouragmentMsg != null) {
 					item.encouragmentMsg = null;
@@ -157,7 +157,7 @@ public class CounterDao {
 				}
 			}
 		}
-		
+
 		int[] percent = new int[size];
 		SettingDao settingDao = SettingDao.getInstance(mContext);
 		int goalCnt = settingDao.getGoalCnt();
@@ -177,9 +177,11 @@ public class CounterDao {
 				max = msg[i + 1].percent - 1;
 			}
 			if (msg[i].day != 0) {
-				item = list.get(msg[i].day - 1);
-				item.encouragmentMsg = msg[i].message;
-				list.set(msg[i].day - 1, item);
+				if (size >= msg[i].day) {
+					item = list.get(msg[i].day - 1);
+					item.encouragmentMsg = msg[i].message;
+					list.set(msg[i].day - 1, item);
+				}
 			} else {
 				for (int j = startIndex; j < size; j++) {
 					item = list.get(j);

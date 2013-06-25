@@ -51,6 +51,7 @@ import com.yojiokisoft.yumekanow.model.BackImageDao;
 import com.yojiokisoft.yumekanow.model.CardDao;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.utils.MyDialog;
+import com.yojiokisoft.yumekanow.utils.MyFile;
 import com.yojiokisoft.yumekanow.utils.MyImage;
 
 @EActivity(R.layout.activity_make_card)
@@ -59,6 +60,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	private final int INTENT_REQUEST_PICTURE = 3;
 	private Activity mActivity;
 	private BaseAdapter mAdapter;
+	private BackImageDao mBackImageDao;
 
 	@ViewById(R.id.backImgSwitcher)
 	ImageSwitcher mImageSwitcher;
@@ -111,8 +113,8 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		mImageSwitcher.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
 		mImageSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
 
-		BackImageDao backImageDao = new BackImageDao(this.getResources());
-		List<BackImageEntity> list = backImageDao.queryForAll();
+		mBackImageDao = new BackImageDao(this);
+		List<BackImageEntity> list = mBackImageDao.queryForAll();
 		mAdapter = new MyListArrayAdapter(this, list);
 		mGallery.setAdapter(mAdapter);
 
@@ -233,7 +235,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		Date today = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.JAPANESE);
 		String filename = "img_" + dateFormat.format(today) + ".jpg";
-		String path = MyConst.APP_DATA_PATH + filename;
+		String path = MyFile.pathCombine(MyConst.getBackImagePath(), filename);
 		File file = new File(path);
 		try {
 			MyImage.saveImage(file, bitmap);
@@ -241,8 +243,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			e.printStackTrace();
 		}
 		// ギャラリーの再読み込み
-		BackImageDao backImageDao = new BackImageDao(this.getResources());
-		List<BackImageEntity> list = backImageDao.queryForAll();
+		List<BackImageEntity> list = mBackImageDao.queryForAll();
 		MyListArrayAdapter adapter = (MyListArrayAdapter) mGallery.getAdapter();
 		adapter.setData(list);
 		adapter.notifyDataSetChanged();
@@ -386,8 +387,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 				File file = new File(backImage.bitmapPath);
 				file.delete();
 				// ギャラリーの再読み込み
-				BackImageDao backImageDao = new BackImageDao(mActivity.getResources());
-				List<BackImageEntity> list = backImageDao.queryForAll();
+				List<BackImageEntity> list = mBackImageDao.queryForAll();
 				mGallery.setSelection(0);
 				MyListArrayAdapter adapter = (MyListArrayAdapter) mGallery.getAdapter();
 				adapter.setData(list);
