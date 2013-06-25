@@ -57,21 +57,6 @@ public final class CardPreviewActivity_
             }
         }
         {
-            View view = findViewById(id.cancelButton);
-            if (view!= null) {
-                view.setOnClickListener(new OnClickListener() {
-
-
-                    @Override
-                    public void onClick(View view) {
-                        CardPreviewActivity_.this.cancelButtonClicked();
-                    }
-
-                }
-                );
-            }
-        }
-        {
             View view = findViewById(id.affirmationText);
             if (view!= null) {
                 view.setOnTouchListener(new OnTouchListener() {

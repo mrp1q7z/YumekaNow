@@ -274,9 +274,4 @@ public class CardPreviewActivity extends Activity {
 		startActivity(intent);
 		finish();
 	}
-
-	@Click
-	public void cancelButtonClicked() {
-		finish();
-	}
 }

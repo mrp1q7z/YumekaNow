@@ -337,27 +337,15 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			CardEntity cardEntity = getInputCard();
 			if (cardEntity.affirmationText.length() <= 0) {
 				MyDialog.Builder.newInstance(this)
-					.setTitle(getString(R.string.oops))
-					.setMessage(getString(R.string.enter_affirmation_words))
-					.show();
+						.setTitle(getString(R.string.oops))
+						.setMessage(getString(R.string.enter_affirmation_words))
+						.show();
 				return;
 			}
 			cardDao.createOrUpdate(cardEntity);
 		} catch (SQLException e) {
 			MyUncaughtExceptionHandler.sendBugReport(this, e);
 		}
-		finish();
-
-		Intent intent = new Intent(getApplication(), MainActivity_.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);
-	}
-
-	/**
-	 * Cancelボタンのクリックリスナー
-	 */
-	@Click(R.id.cancelButton)
-	void cancelButtonClicked() {
 		finish();
 
 		Intent intent = new Intent(getApplication(), MainActivity_.class);

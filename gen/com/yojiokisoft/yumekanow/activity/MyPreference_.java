@@ -27,10 +27,10 @@ public final class MyPreference_
 
     private void init_(Bundle savedInstanceState) {
         Resources resources_ = this.getResources();
-        mInquiryKey = resources_.getStringArray(array.inquiry_key);
         mDispIntervalVal = resources_.getStringArray(array.disp_interval_val);
-        mDispIntervalKey = resources_.getStringArray(array.disp_interval_key);
+        mInquiryKey = resources_.getStringArray(array.inquiry_key);
         mInquiryVal = resources_.getStringArray(array.inquiry_val);
+        mDispIntervalKey = resources_.getStringArray(array.disp_interval_key);
     }
 
     private void afterSetContentView_() {
