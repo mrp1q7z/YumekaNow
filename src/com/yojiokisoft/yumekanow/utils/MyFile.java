@@ -2,6 +2,9 @@ package com.yojiokisoft.yumekanow.utils;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,5 +34,25 @@ public class MyFile {
 
 	public static String pathCombine(String dirPath, String fileName) {
 		return new File(dirPath, fileName).getPath();
+	}
+
+	public static void closeQuietly(InputStream input) {
+		try {
+			if (input != null) {
+				input.close();
+			}
+		} catch (IOException ioe) {
+			// ignore
+		}
+	}
+
+	public static void closeQuietly(OutputStream output) {
+		try {
+			if (output != null) {
+				output.close();
+			}
+		} catch (IOException ioe) {
+			// ignore
+		}
 	}
 }
