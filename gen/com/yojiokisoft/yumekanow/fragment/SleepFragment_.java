@@ -32,25 +32,10 @@ public final class SleepFragment_
     }
 
     private void afterSetContentView_() {
-        mCurrentTimer = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.currentTimer));
         mTimeKind = ((RadioGroup) findViewById(com.yojiokisoft.yumekanow.R.id.timeKind));
-        mCancelTimerButton = ((Button) findViewById(com.yojiokisoft.yumekanow.R.id.cancelTimerButton));
         mWakeUpTime = ((TimePicker) findViewById(com.yojiokisoft.yumekanow.R.id.wakeUpTime));
-        {
-            View view = findViewById(com.yojiokisoft.yumekanow.R.id.setTimerButton);
-            if (view!= null) {
-                view.setOnClickListener(new OnClickListener() {
-
-
-                    @Override
-                    public void onClick(View view) {
-                        SleepFragment_.this.setTimerButtonClicked();
-                    }
-
-                }
-                );
-            }
-        }
+        mCurrentTimer = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.currentTimer));
+        mCancelTimerButton = ((Button) findViewById(com.yojiokisoft.yumekanow.R.id.cancelTimerButton));
         {
             View view = findViewById(com.yojiokisoft.yumekanow.R.id.cancelTimerButton);
             if (view!= null) {
@@ -60,6 +45,21 @@ public final class SleepFragment_
                     @Override
                     public void onClick(View view) {
                         SleepFragment_.this.cancelTimerButtonClicked();
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            View view = findViewById(com.yojiokisoft.yumekanow.R.id.setTimerButton);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        SleepFragment_.this.setTimerButtonClicked();
                     }
 
                 }

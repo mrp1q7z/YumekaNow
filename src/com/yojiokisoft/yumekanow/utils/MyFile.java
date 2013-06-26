@@ -1,5 +1,6 @@
 package com.yojiokisoft.yumekanow.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -50,6 +51,16 @@ public class MyFile {
 		try {
 			if (output != null) {
 				output.close();
+			}
+		} catch (IOException ioe) {
+			// ignore
+		}
+	}
+
+	public static void closeQuietly(BufferedReader br) {
+		try {
+			if (br != null) {
+				br.close();
 			}
 		} catch (IOException ioe) {
 			// ignore

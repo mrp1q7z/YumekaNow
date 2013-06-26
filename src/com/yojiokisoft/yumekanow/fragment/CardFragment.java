@@ -52,13 +52,13 @@ public class CardFragment extends Fragment {
 	public void printCard() {
 		// カード情報を取得
 		List<CardEntity> cardList = null;
-		int cardId = SettingDao.getInstance(mActivity).getUseCard();
+		int cardId = SettingDao.getInstance().getUseCard();
 		if (cardId == -1) {
 			cardList = new ArrayList<CardEntity>();
 			cardList.add(getDefalutCard());
 		} else {
 			try {
-				CardDao cardDao = new CardDao(mActivity);
+				CardDao cardDao = new CardDao();
 				cardList = cardDao.queryForEq("id", cardId);
 				if (cardList.size() < 1) {
 					cardList.add(getEmptyCard());
@@ -127,7 +127,7 @@ public class CardFragment extends Fragment {
 		CounterDao counterDao = null;
 		int currentCardId = -1;
 		try {
-			counterDao = new CounterDao(mActivity);
+			counterDao = new CounterDao();
 			currentCardId = counterDao.getCurrentCardId();
 		} catch (SQLException e) {
 			MyUncaughtExceptionHandler.sendBugReport(mActivity, e);

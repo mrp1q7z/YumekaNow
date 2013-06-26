@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -33,26 +32,17 @@ import com.yojiokisoft.yumekanow.utils.MyConst;
 
 @EActivity(R.layout.activity_card_detail)
 public class CardDetailActivity extends Activity {
-	private Context mContext;
-
 	@ViewById(R.id.pager)
 	ViewPager mViewPager;
 
 	@Extra(MyConst.CARD)
 	CardEntity mCard;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		mContext = this;
-	}
-
 	@AfterViews
 	public void initActivity() {
 		List<CardEntity> list = null;
 		try {
-			CardDao cardDao = new CardDao(this);
+			CardDao cardDao = new CardDao();
 			list = cardDao.queryForAll();
 		} catch (SQLException e) {
 			MyUncaughtExceptionHandler.sendBugReport(this, e);
@@ -81,7 +71,7 @@ public class CardDetailActivity extends Activity {
 	void useButtonOnClick() {
 		CustomPagerAdapter adapter = (CustomPagerAdapter) mViewPager.getAdapter();
 		CardEntity card = adapter.getCard(mViewPager.getCurrentItem());
-		SettingDao settingDao = SettingDao.getInstance(mContext);
+		SettingDao settingDao = SettingDao.getInstance();
 		settingDao.setUseCard(card.id);
 		finish();
 
@@ -123,7 +113,7 @@ public class CardDetailActivity extends Activity {
 			mList = new ArrayList<Integer>();
 
 			try {
-				mCardDao = new CardDao(mContext);
+				mCardDao = new CardDao();
 			} catch (SQLException e) {
 				MyUncaughtExceptionHandler.sendBugReport((Activity) mContext, e);
 			}

@@ -17,7 +17,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Bundle;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.View;
@@ -58,7 +57,6 @@ import com.yojiokisoft.yumekanow.utils.MyImage;
 public class MakeCardActivity extends Activity implements ViewFactory {
 	private final int TEXT_SIZE_MIN = 10;
 	private final int INTENT_REQUEST_PICTURE = 3;
-	private Activity mActivity;
 	private BaseAdapter mAdapter;
 	private BackImageDao mBackImageDao;
 
@@ -101,19 +99,13 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	@Extra(MyConst.CARD)
 	CardEntity mCard;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		mActivity = this;
-	}
-
 	@AfterViews
 	void initActivity() {
 		mImageSwitcher.setFactory(this);
 		mImageSwitcher.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
 		mImageSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
 
-		mBackImageDao = new BackImageDao(this);
+		mBackImageDao = new BackImageDao();
 		List<BackImageEntity> list = mBackImageDao.queryForAll();
 		mAdapter = new MyListArrayAdapter(this, list);
 		mGallery.setAdapter(mAdapter);
@@ -333,7 +325,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	@Click(R.id.okButton)
 	void okButtonClicked() {
 		try {
-			CardDao cardDao = new CardDao(this);
+			CardDao cardDao = new CardDao();
 			CardEntity cardEntity = getInputCard();
 			if (cardEntity.affirmationText.length() <= 0) {
 				MyDialog.Builder.newInstance(this)
@@ -412,7 +404,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		if (backImage.resouceId == 0) {
 			mImageSwitcher.setImageURI(Uri.parse("file:///" + backImage.bitmapPath));
 			try {
-				CardDao cardDao = new CardDao(mActivity);
+				CardDao cardDao = new CardDao();
 				if (cardDao.isUsed(backImage.bitmapPath)) {
 					mDelBackImgButton.setVisibility(View.GONE);
 				} else {

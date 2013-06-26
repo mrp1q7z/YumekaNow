@@ -12,7 +12,7 @@ import com.yojiokisoft.yumekanow.db.SettingDao;
 public class TimerManager {
 	public static void setStartTimer(Context context) {
 		long now = System.currentTimeMillis();
-		SettingDao settingDao = SettingDao.getInstance(context);
+		SettingDao settingDao = SettingDao.getInstance();
 		long interval = settingDao.getDispInterval() * 60 * 1000;
 		setStartTimer(context, now + interval, interval);
 	}

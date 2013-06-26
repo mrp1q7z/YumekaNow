@@ -40,7 +40,7 @@ public class CardListActivity extends Activity {
 		mActivity = this;
 		List<CardEntity> list = null;
 		try {
-			CardDao cardDao = new CardDao(this);
+			CardDao cardDao = new CardDao();
 			list = cardDao.queryForAll();
 		} catch (SQLException e) {
 			MyUncaughtExceptionHandler.sendBugReport(this, e);
@@ -62,7 +62,7 @@ public class CardListActivity extends Activity {
 
 	@ItemLongClick
 	public void cardListItemLongClicked(CardEntity card) {
-		SettingDao settingDao = SettingDao.getInstance(this);
+		SettingDao settingDao = SettingDao.getInstance();
 		int useCardId = settingDao.getUseCard();
 		if (card.id == useCardId) {
 			MyDialog.Builder.newInstance(this).setTitle(getString(R.string.oops))
@@ -77,7 +77,7 @@ public class CardListActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				try {
-					CardDao cardDao = new CardDao(mActivity);
+					CardDao cardDao = new CardDao();
 					cardDao.delete(delCard);
 					List<CardEntity> list = cardDao.queryForAll();
 					((MyListArrayAdapter) mListView.getAdapter()).setItems(list);

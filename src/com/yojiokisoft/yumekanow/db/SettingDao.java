@@ -7,6 +7,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 
+import com.yojiokisoft.yumekanow.App;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 
@@ -20,23 +21,15 @@ public class SettingDao {
 	private SettingDao() {
 	}
 
-	public static SettingDao getInstance(Context context) {
+	public static SettingDao getInstance() {
 		if (mInstance == null) {
 			mInstance = new SettingDao();
-			mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-			mContext = context;
+			mContext = App.getInstance().getAppContext();
+			mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
 			mDispIntervalKey = mContext.getResources().getStringArray(R.array.disp_interval_key);
 			mDispIntervalVal = mContext.getResources().getStringArray(R.array.disp_interval_val);
 		}
 		return mInstance;
-	}
-
-	public static SettingDao getInstance() {
-		if (mContext == null) {
-			throw new RuntimeException("SettingDao mContext is null");
-//			return null;
-		}
-		return getInstance(mContext);
 	}
 
 	public int getDispInterval() {

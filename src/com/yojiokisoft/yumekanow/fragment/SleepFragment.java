@@ -76,7 +76,7 @@ public class SleepFragment extends Fragment {
 	}
 
 	private void setCurrentTime() {
-		SettingDao settingDao = SettingDao.getInstance(mActivity);
+		SettingDao settingDao = SettingDao.getInstance();
 		String time;
 		if (mTimeKind.getCheckedRadioButtonId() == R.id.jikan) {
 			time = settingDao.getSleepJikan();
@@ -132,7 +132,7 @@ public class SleepFragment extends Fragment {
 		}
 
 		// セットされた時間を記憶しておく
-		SettingDao settingDao = SettingDao.getInstance(mActivity);
+		SettingDao settingDao = SettingDao.getInstance();
 		String time = String.format(Locale.JAPANESE, "%02d%02d", hour, min);
 		if (mTimeKind.getCheckedRadioButtonId() == R.id.jikan) {
 			settingDao.setSleepJikan(time);

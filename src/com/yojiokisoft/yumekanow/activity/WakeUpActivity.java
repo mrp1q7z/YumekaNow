@@ -22,7 +22,7 @@ public class WakeUpActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mActivity = this;
-		SettingDao settingDao = SettingDao.getInstance(this);
+		SettingDao settingDao = SettingDao.getInstance();
 		String url = settingDao.getSleepAlarmUrl();
 		if (url != null) {
 			mRingtone = RingtoneManager.getRingtone(this, Uri.parse(url));

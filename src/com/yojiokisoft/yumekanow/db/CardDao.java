@@ -3,16 +3,14 @@ package com.yojiokisoft.yumekanow.db;
 import java.sql.SQLException;
 import java.util.List;
 
-import android.content.Context;
-
 import com.j256.ormlite.dao.Dao;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 
 public class CardDao {
 	private Dao<CardEntity, Integer> mCardDao = null;
 
-	public CardDao(Context context) throws SQLException {
-		DatabaseHelper helper = DatabaseHelper.getInstance(context);
+	public CardDao() throws SQLException {
+		DatabaseHelper helper = DatabaseHelper.getInstance();
 		mCardDao = helper.getDao(CardEntity.class);
 	}
 

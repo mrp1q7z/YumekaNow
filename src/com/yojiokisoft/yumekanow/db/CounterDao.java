@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import android.content.Context;
-
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.yojiokisoft.yumekanow.entity.CounterEntity;
@@ -17,14 +15,12 @@ import com.yojiokisoft.yumekanow.utils.MyConst;
 public class CounterDao {
 	private Dao<CounterEntity, Integer> mCounterDao = null;
 	private int mCurrentCardId;
-	private Context mContext;
 
-	public CounterDao(Context context) throws SQLException {
-		mContext = context;
-		DatabaseHelper helper = DatabaseHelper.getInstance(context);
+	public CounterDao() throws SQLException {
+		DatabaseHelper helper = DatabaseHelper.getInstance();
 		mCounterDao = helper.getDao(CounterEntity.class);
 
-		mCurrentCardId = SettingDao.getInstance(context).getUseCard();
+		mCurrentCardId = SettingDao.getInstance().getUseCard();
 	}
 
 	public int getCurrentCardId() {
@@ -158,13 +154,13 @@ public class CounterDao {
 		}
 
 		int[] percent = new int[size];
-		SettingDao settingDao = SettingDao.getInstance(mContext);
+		SettingDao settingDao = SettingDao.getInstance();
 		int goalCnt = settingDao.getGoalCnt();
 		for (int i = 0; i < size; i++) {
 			percent[i] = list.get(i).totalOkCnt * 100 / goalCnt;
 		}
 
-		EncouragementMsgEntity[] msg = MyConst.getEncouragementMsg(mContext);
+		EncouragementMsgEntity[] msg = MyConst.getEncouragementMsg();
 		int len = msg.length;
 		size = list.size();
 		int max;

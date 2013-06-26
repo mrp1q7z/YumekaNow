@@ -1,7 +1,5 @@
 package com.yojiokisoft.yumekanow.utils;
 
-import android.content.Context;
-
 import com.yojiokisoft.yumekanow.App;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.entity.EncouragementMsgEntity;
@@ -94,14 +92,14 @@ public class MyConst {
 			{ 90, 0, R.string.ec_atosukosi },
 			{ 100, 0, R.string.ec_yatta } };
 
-	public static EncouragementMsgEntity[] getEncouragementMsg(Context context) {
+	public static EncouragementMsgEntity[] getEncouragementMsg() {
 		int len = encouragementMsg.length;
 		EncouragementMsgEntity[] msg = new EncouragementMsgEntity[len];
 		for (int i = 0; i < len; i++) {
 			msg[i] = new EncouragementMsgEntity();
 			msg[i].percent = encouragementMsg[i][0];
 			msg[i].day = encouragementMsg[i][1];
-			msg[i].message = context.getString(encouragementMsg[i][2]);
+			msg[i].message = App.getInstance().getString(encouragementMsg[i][2]);
 		}
 		return msg;
 	}

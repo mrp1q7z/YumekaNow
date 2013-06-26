@@ -17,30 +17,22 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 
+import com.yojiokisoft.yumekanow.App;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.utils.MyDialog;
+import com.yojiokisoft.yumekanow.utils.MyFile;
 import com.yojiokisoft.yumekanow.utils.MyLog;
 
 public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
-	private static Context sContext;
 	private static File sBugReportFile = null;
 	private static String sVersionName;
 	private static final UncaughtExceptionHandler sDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
-
-	/** 
-	 * コンストラクタ 
-	 * @param context 
-	 */
-	public MyUncaughtExceptionHandler(Context context) {
-		sContext = context;
-	}
 
 	@Override
 	public void uncaughtException(Thread thread, Throwable ex) {
@@ -77,7 +69,7 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 			return;
 		}
 
-		setVersionName(activity);
+		setVersionName();
 
 		//AlertDialogを表示します。
 		MyDialog.Builder.newInstance(activity)
@@ -106,7 +98,7 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 			return;
 		}
 
-		setVersionName(activity);
+		setVersionName();
 
 		//AlertDialogを表示します。  
 		MyDialog.Builder.newInstance(activity)
@@ -119,17 +111,13 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 				.show();
 	}
 
-	private static void setVersionName(Activity activity) {
+	private static void setVersionName() {
 		if (sVersionName != null) {
 			return;
 		}
 		try {
 			PackageInfo sPackInfo;
-			if (sContext == null) {
-				sPackInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
-			} else {
-				sPackInfo = sContext.getPackageManager().getPackageInfo(sContext.getPackageName(), 0);
-			}
+			sPackInfo = App.getInstance().getPackageManager().getPackageInfo(App.getInstance().getPackageName(), 0);
 			sVersionName = sPackInfo.versionName;
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
@@ -172,18 +160,13 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 			while ((line = br.readLine()) != null) {
 				sb.append(line).append("\r\n");
 			}
+			br.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			MyFile.closeQuietly(br);
 		}
 		return sb.toString();
 	}

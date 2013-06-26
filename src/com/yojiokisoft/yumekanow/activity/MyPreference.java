@@ -134,7 +134,7 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 		if (key == null || MyConst.ALARM.equals(key)) {
 			RingtonePreference prefAlarm = (RingtonePreference) getPreferenceScreen().findPreference(MyConst.ALARM);
 			summary = indexOfBr(prefAlarm.getSummary().toString());
-			SettingDao settingDao = SettingDao.getInstance(this);
+			SettingDao settingDao = SettingDao.getInstance();
 			summary += BR + getString(R.string.now_setting) + settingDao.getAlarm();
 
 			SpannableString nowVal;
@@ -147,7 +147,7 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 			RingtonePreference prefSleepAlarm = (RingtonePreference) getPreferenceScreen().findPreference(
 					MyConst.SLEEP_ALARM);
 			summary = indexOfBr(prefSleepAlarm.getSummary().toString());
-			SettingDao settingDao = SettingDao.getInstance(this);
+			SettingDao settingDao = SettingDao.getInstance();
 			summary += BR + getString(R.string.now_setting) + settingDao.getSleepAlarm();
 
 			SpannableString nowVal;

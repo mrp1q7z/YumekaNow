@@ -30,8 +30,8 @@ public final class CardFragment_
     }
 
     private void afterSetContentView_() {
-        mAffirmationText = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.affirmationText));
         mBackImage = ((FrameLayout) findViewById(com.yojiokisoft.yumekanow.R.id.cardContainer));
+        mAffirmationText = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.affirmationText));
         {
             View view = findViewById(com.yojiokisoft.yumekanow.R.id.cardContainer);
             if (view!= null) {

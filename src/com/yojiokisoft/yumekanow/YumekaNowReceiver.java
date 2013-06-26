@@ -22,11 +22,10 @@ public class YumekaNowReceiver extends BroadcastReceiver {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd(E) HH:mm:ss", Locale.JAPANESE);
 		// debug <<<
-		SettingDao.getInstance(context.getApplicationContext());
 		long now = System.currentTimeMillis();
 		long startTime = TimerManager.getStartTime();
 		if (startTime != 0) {
-			SettingDao settingDao = SettingDao.getInstance(context);
+			SettingDao settingDao = SettingDao.getInstance();
 			long interval = settingDao.getDispInterval() * 60 * 1000;
 			if (startTime < now) {
 				int x = (int) ((now - startTime) / interval) + 1;

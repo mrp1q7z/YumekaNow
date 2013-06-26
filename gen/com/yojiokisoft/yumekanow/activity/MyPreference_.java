@@ -29,8 +29,8 @@ public final class MyPreference_
         Resources resources_ = this.getResources();
         mDispIntervalVal = resources_.getStringArray(array.disp_interval_val);
         mDispIntervalKey = resources_.getStringArray(array.disp_interval_key);
-        mInquiryVal = resources_.getStringArray(array.inquiry_val);
         mInquiryKey = resources_.getStringArray(array.inquiry_key);
+        mInquiryVal = resources_.getStringArray(array.inquiry_val);
     }
 
     private void afterSetContentView_() {

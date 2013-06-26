@@ -29,10 +29,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		super(context, MyConst.getDatabasePath(), null, DATABASE_VERSION);
 	}
 
-	public static DatabaseHelper getInstance(Context context) {
+	public static DatabaseHelper getInstance() {
 		if (mInstance == null) {
 			createPreInstallDatabaseIfNotExists();
-			mInstance = new DatabaseHelper(context);
+			mInstance = new DatabaseHelper(App.getInstance().getAppContext());
 		}
 		return mInstance;
 	}

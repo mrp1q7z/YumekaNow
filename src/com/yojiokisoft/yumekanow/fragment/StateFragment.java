@@ -46,7 +46,7 @@ public class StateFragment extends Fragment {
 
 	@AfterViews
 	void setProgress() {
-		SettingDao settingDao = SettingDao.getInstance(mActivity);
+		SettingDao settingDao = SettingDao.getInstance();
 		int okCnt = 0;
 		try {
 			okCnt = mCounter.getOkCnt();
@@ -76,7 +76,7 @@ public class StateFragment extends Fragment {
 		BaseAdapter adapter = new MyListArrayAdapter(mActivity, list);
 		mListView.setAdapter(adapter);
 
-		SettingDao settingDao = SettingDao.getInstance(mActivity);
+		SettingDao settingDao = SettingDao.getInstance();
 		mGoalCnt = settingDao.getGoalCnt();
 	}
 
@@ -85,7 +85,7 @@ public class StateFragment extends Fragment {
 		super.onAttach(activity);
 		mActivity = activity;
 		try {
-			mCounter = new CounterDao(mActivity);
+			mCounter = new CounterDao();
 		} catch (SQLException e) {
 			MyUncaughtExceptionHandler.sendBugReport(mActivity, e);
 		}
@@ -95,7 +95,7 @@ public class StateFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 
-		SettingDao settingDao = SettingDao.getInstance(mActivity);
+		SettingDao settingDao = SettingDao.getInstance();
 		if (mGoalCnt != settingDao.getGoalCnt()) {
 MyLog.d("GlolCntが変えられた");
 			mGoalCnt = settingDao.getGoalCnt();
