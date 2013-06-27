@@ -74,18 +74,22 @@ containing a value of this type.
         public static final int back_img04=0x7f020003;
         public static final int back_img05=0x7f020004;
         public static final int back_img06=0x7f020005;
-        public static final int goal_flag=0x7f020006;
-        public static final int ic_launcher=0x7f020007;
-        public static final int ic_menu_mark=0x7f020008;
-        public static final int start_flag=0x7f020009;
-        public static final int tab_indicator_holo=0x7f02000a;
-        public static final int tab_selected_focused_holo=0x7f02000b;
-        public static final int tab_selected_holo=0x7f02000c;
-        public static final int tab_selected_pressed_holo=0x7f02000d;
-        public static final int tab_unselected_focused_holo=0x7f02000e;
-        public static final int tab_unselected_holo=0x7f02000f;
-        public static final int tab_unselected_pressed_holo=0x7f020010;
-        public static final int waku=0x7f020011;
+        public static final int back_img07=0x7f020006;
+        public static final int back_img08=0x7f020007;
+        public static final int back_img09=0x7f020008;
+        public static final int back_img10=0x7f020009;
+        public static final int goal_flag=0x7f02000a;
+        public static final int ic_launcher=0x7f02000b;
+        public static final int ic_menu_mark=0x7f02000c;
+        public static final int start_flag=0x7f02000d;
+        public static final int tab_indicator_holo=0x7f02000e;
+        public static final int tab_selected_focused_holo=0x7f02000f;
+        public static final int tab_selected_holo=0x7f020010;
+        public static final int tab_selected_pressed_holo=0x7f020011;
+        public static final int tab_unselected_focused_holo=0x7f020012;
+        public static final int tab_unselected_holo=0x7f020013;
+        public static final int tab_unselected_pressed_holo=0x7f020014;
+        public static final int waku=0x7f020015;
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f0b0024;

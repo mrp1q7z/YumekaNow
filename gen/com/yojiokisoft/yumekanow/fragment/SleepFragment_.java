@@ -32,9 +32,9 @@ public final class SleepFragment_
     }
 
     private void afterSetContentView_() {
+        mCurrentTimer = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.currentTimer));
         mTimeKind = ((RadioGroup) findViewById(com.yojiokisoft.yumekanow.R.id.timeKind));
         mWakeUpTime = ((TimePicker) findViewById(com.yojiokisoft.yumekanow.R.id.wakeUpTime));
-        mCurrentTimer = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.currentTimer));
         mCancelTimerButton = ((Button) findViewById(com.yojiokisoft.yumekanow.R.id.cancelTimerButton));
         {
             View view = findViewById(com.yojiokisoft.yumekanow.R.id.cancelTimerButton);
