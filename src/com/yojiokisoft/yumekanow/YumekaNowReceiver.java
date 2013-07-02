@@ -1,27 +1,37 @@
-package com.yojiokisoft.yumekanow;
+/*
+ * Copyright (C) 2013 YojiokiSoft
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
+package com.yojiokisoft.yumekanow;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.yojiokisoft.yumekanow.db.SettingDao;
-import com.yojiokisoft.yumekanow.utils.MyLog;
 import com.yojiokisoft.yumekanow.utils.MyAlarmManager;
 
+/**
+ * sendBroadcastによって送信されたインテントを受信する
+ */
 public class YumekaNowReceiver extends BroadcastReceiver {
-
+	/**
+	 * ブロードキャストの受信
+	 * @see BroadcastReceiver#onReceive(Context, Intent)1
+	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		// debug >>>
-		String debug = intent.getAction();
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd(E) HH:mm:ss", Locale.JAPANESE);
-		// debug <<<
 		long now = System.currentTimeMillis();
 		long startTime = MyAlarmManager.getStartTime();
 		if (startTime != 0) {
@@ -32,23 +42,11 @@ public class YumekaNowReceiver extends BroadcastReceiver {
 				startTime += x * interval;
 			}
 			MyAlarmManager.setStartTimer(context, startTime, interval);
-			// debug >>>
-			cal.setTimeInMillis(startTime);
-			debug += "\nstartTime=" + sdf.format(cal.getTime());
-			// debug <<<
 		}
 
 		long wakeUpTime = MyAlarmManager.getWakeUpTime();
 		if (wakeUpTime != 0) {
 			MyAlarmManager.setWakuUpTimer(context, wakeUpTime);
-			// debug >>>
-			cal.setTimeInMillis(wakeUpTime);
-			debug += "\nwakeUpTime=" + sdf.format(cal.getTime());
-			// debug <<<
 		}
-		// debug >>>
-		Toast.makeText(context, debug, Toast.LENGTH_LONG).show();
-		MyLog.d("debug=" + debug);
-		// debug <<<
 	}
 }

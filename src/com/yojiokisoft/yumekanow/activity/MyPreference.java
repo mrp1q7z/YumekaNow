@@ -1,7 +1,22 @@
+/*
+ * Copyright (C) 2013 YojiokiSoft
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.yojiokisoft.yumekanow.activity;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -18,42 +33,63 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 
 import com.googlecode.androidannotations.annotations.EActivity;
-import com.googlecode.androidannotations.annotations.res.StringArrayRes;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.db.SettingDao;
-import com.yojiokisoft.yumekanow.dialog.VersionDialogPreference;
-import com.yojiokisoft.yumekanow.utils.MyConst;
-import com.yojiokisoft.yumekanow.utils.MyLog;
-import com.yojiokisoft.yumekanow.utils.MyMail;
 import com.yojiokisoft.yumekanow.utils.MyAlarmManager;
+import com.yojiokisoft.yumekanow.utils.MyConst;
+import com.yojiokisoft.yumekanow.utils.MyMail;
 
+/**
+ * 設定アクティビティ
+ */
 @EActivity
-public class MyPreference extends PreferenceActivity implements OnSharedPreferenceChangeListener,
-		OnPreferenceChangeListener {
+public class MyPreference extends PreferenceActivity {
 	private final static String BR = System.getProperty("line.separator");
+	private Activity mActivity;
+	private SettingDao mSettingDao;
 
-	@StringArrayRes(R.array.disp_interval_key)
-	String[] mDispIntervalKey;
-
-	@StringArrayRes(R.array.disp_interval_val)
-	String[] mDispIntervalVal;
-
-	@StringArrayRes(R.array.inquiry_key)
-	String[] mInquiryKey;
-
-	@StringArrayRes(R.array.inquiry_val)
-	String[] mInquiryVal;
-
+	/**
+	 * アクティビティの初期化
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mActivity = this;
+		mSettingDao = SettingDao.getInstance();
 		addPreferencesFromResource(R.xml.settings);
 
-		setSummary(null);
+		setSummary();
 
+		// お問い合わせの設定値をクリア
+		// 既に選択中のものを選択してもイベントが発生しないから
 		clearPreference(MyConst.PK_INQUIRY);
+
+		// 設定値が変更された時のイベントリスナーを登録
+		ListPreference prefDispInterval = (ListPreference) findPreference(MyConst.PK_DISP_INTERVAL);
+		prefDispInterval.setOnPreferenceChangeListener(mDispIntervalChanged);
+
+		EditTextPreference prefGoalCnt = (EditTextPreference) getPreferenceScreen().findPreference(MyConst.PK_GOAL_CNT);
+		prefGoalCnt.setOnPreferenceChangeListener(mGoalCntChanged);
+
+		CheckBoxPreference prefVibrator = (CheckBoxPreference) getPreferenceScreen()
+				.findPreference(MyConst.PK_VIBRATOR);
+		prefVibrator.setOnPreferenceChangeListener(mVibratorChanged);
+
+		RingtonePreference prefAlarm = (RingtonePreference) findPreference(MyConst.PK_ALARM);
+		prefAlarm.setOnPreferenceChangeListener(mAlarmChanged);
+
+		RingtonePreference prefSleepAlarm = (RingtonePreference) findPreference(MyConst.PK_SLEEP_ALARM);
+		prefSleepAlarm.setOnPreferenceChangeListener(mAlarmChanged);
+
+		ListPreference prefInquiry = (ListPreference) getPreferenceScreen().findPreference(MyConst.PK_INQUIRY);
+		prefInquiry.setOnPreferenceChangeListener(mInquiryChanged);
 	}
 
+	/**
+	 * 設定値のクリア.
+	 * 
+	 * @param key
+	 */
 	private void clearPreference(String key) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -61,6 +97,12 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 		editor.commit();
 	}
 
+	/**
+	 * 文字列をBRまででカットする.
+	 * 
+	 * @param str 対象の文字列
+	 * @return BRまでの文字列
+	 */
 	private String indexOfBr(String str) {
 		int find = str.indexOf(BR);
 		if (find == -1) {
@@ -69,182 +111,152 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 		return str.substring(0, find);
 	}
 
-	private String dispIntervalVal2Key(String val) {
-		String ret = null;
-
-		for (int i = 0; i < mDispIntervalVal.length; i++) {
-			if (mDispIntervalVal[i].equals(val)) {
-				ret = mDispIntervalKey[i];
-				break;
-			}
-		}
-
-		return ret;
-	}
-
-	private String vibratorVal2Key(boolean isChecked) {
-		String key;
-
-		if (isChecked) {
-			key = getString(R.string.vibrator_on);
-		} else {
-			key = getString(R.string.vibrator_off);
-		}
-		return key;
-	}
-
-	private void setSummary(String key) {
+	/**
+	 * サマリーに現在の設定値をセットする.
+	 */
+	private void setSummary() {
+		String[] prefKeys = { MyConst.PK_DISP_INTERVAL, MyConst.PK_GOAL_CNT, MyConst.PK_VIBRATOR, MyConst.PK_ALARM,
+				MyConst.PK_SLEEP_ALARM, MyConst.PK_VERSION, MyConst.PK_INQUIRY
+		};
+		Preference pref;
 		String summary;
-		if (key == null || MyConst.PK_DISP_INTERVAL.equals(key)) {
-			ListPreference prefDispInterval = (ListPreference) getPreferenceScreen().findPreference(
-					MyConst.PK_DISP_INTERVAL);
-			summary = indexOfBr(prefDispInterval.getSummary().toString());
-			summary += BR + getString(R.string.now_setting) + dispIntervalVal2Key(prefDispInterval.getValue());
+		String nowVal;
+		for (int i = 0; i < prefKeys.length; i++) {
+			pref = getPreferenceScreen().findPreference(prefKeys[i]);
+			summary = indexOfBr(pref.getSummary().toString());
+			nowVal = getNowValue(prefKeys[i]);
+			if (nowVal != null) {
+				summary += BR + getString(R.string.now_setting) + nowVal;
+			}
+			pref.setSummary(getSummarySpannableString(summary));
+		}
+	}
 
-			SpannableString nowVal;
-			nowVal = new SpannableString(summary);
-			nowVal.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.theme_headerTextColor)), 0,
-					nowVal.length(), 0);
-			prefDispInterval.setSummary(nowVal);
+	/**
+	 * 現在値の取得.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	private String getNowValue(String key) {
+		if (MyConst.PK_DISP_INTERVAL.equals(key)) {
+			return mSettingDao.getDispIntervalString();
 		}
 		if (key == null || MyConst.PK_GOAL_CNT.equals(key)) {
-			EditTextPreference prefGoalCnt = (EditTextPreference) getPreferenceScreen()
-					.findPreference(MyConst.PK_GOAL_CNT);
-			summary = indexOfBr(prefGoalCnt.getSummary().toString());
-			summary += BR + getString(R.string.now_setting) + prefGoalCnt.getText();
-
-			SpannableString nowVal;
-			nowVal = new SpannableString(summary);
-			nowVal.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.theme_headerTextColor)), 0,
-					nowVal.length(), 0);
-			prefGoalCnt.setSummary(nowVal);
+			return String.valueOf(mSettingDao.getGoalCnt());
 		}
 		if (key == null || MyConst.PK_VIBRATOR.equals(key)) {
-			CheckBoxPreference prefVibrator = (CheckBoxPreference) getPreferenceScreen().findPreference(
-					MyConst.PK_VIBRATOR);
-			summary = indexOfBr(prefVibrator.getSummary().toString());
-			summary += BR + getString(R.string.now_setting) + vibratorVal2Key(prefVibrator.isChecked());
-
-			SpannableString nowVal;
-			nowVal = new SpannableString(summary);
-			nowVal.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.theme_headerTextColor)), 0,
-					nowVal.length(), 0);
-			prefVibrator.setSummary(nowVal);
+			return mSettingDao.getVibratorString();
 		}
 		if (key == null || MyConst.PK_ALARM.equals(key)) {
-			RingtonePreference prefAlarm = (RingtonePreference) getPreferenceScreen().findPreference(MyConst.PK_ALARM);
-			summary = indexOfBr(prefAlarm.getSummary().toString());
-			SettingDao settingDao = SettingDao.getInstance();
-			summary += BR + getString(R.string.now_setting) + settingDao.getAlarm();
-
-			SpannableString nowVal;
-			nowVal = new SpannableString(summary);
-			nowVal.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.theme_headerTextColor)), 0,
-					nowVal.length(), 0);
-			prefAlarm.setSummary(nowVal);
+			return mSettingDao.getAlarm();
 		}
 		if (key == null || MyConst.PK_SLEEP_ALARM.equals(key)) {
-			RingtonePreference prefSleepAlarm = (RingtonePreference) getPreferenceScreen().findPreference(
-					MyConst.PK_SLEEP_ALARM);
-			summary = indexOfBr(prefSleepAlarm.getSummary().toString());
-			SettingDao settingDao = SettingDao.getInstance();
-			summary += BR + getString(R.string.now_setting) + settingDao.getSleepAlarm();
-
-			SpannableString nowVal;
-			nowVal = new SpannableString(summary);
-			nowVal.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.theme_headerTextColor)), 0,
-					nowVal.length(), 0);
-			prefSleepAlarm.setSummary(nowVal);
-		}
-		if (key == null || MyConst.PK_VERSION.equals(key)) {
-			VersionDialogPreference prefVersion = (VersionDialogPreference) getPreferenceScreen().findPreference(
-					MyConst.PK_VERSION);
-			summary = indexOfBr(prefVersion.getSummary().toString());
-
-			SpannableString nowVal;
-			nowVal = new SpannableString(summary);
-			nowVal.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.theme_headerTextColor)), 0,
-					nowVal.length(), 0);
-			prefVersion.setSummary(nowVal);
-		}
-		if (key == null || MyConst.PK_INQUIRY.equals(key)) {
-			ListPreference prefInquiry = (ListPreference) getPreferenceScreen().findPreference(MyConst.PK_INQUIRY);
-			summary = indexOfBr(prefInquiry.getSummary().toString());
-
-			SpannableString nowVal;
-			nowVal = new SpannableString(summary);
-			nowVal.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.theme_headerTextColor)), 0,
-					nowVal.length(), 0);
-			prefInquiry.setSummary(nowVal);
+			return mSettingDao.getSleepAlarm();
+		} else {
+			return null;
 		}
 	}
 
-	private String inquiryVal2Key(String val) {
-		String key = null;
+	/**
+	 * サマリー用のマークアップ可能な文字列の取得
+	 * 
+	 * @param summary
+	 * @return
+	 */
+	private SpannableString getSummarySpannableString(String summary) {
+		SpannableString span;
+		span = new SpannableString(summary);
+		span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.theme_headerTextColor)), 0,
+				span.length(), 0);
+		return span;
+	}
 
-		for (int i = 0; i < mInquiryVal.length; i++) {
-			if (mInquiryVal[i].equals(val)) {
-				key = mInquiryKey[i];
-				break;
+	/**
+	 * 表示間隔が変更された.
+	 */
+	private final OnPreferenceChangeListener mDispIntervalChanged = new OnPreferenceChangeListener() {
+		@Override
+		public boolean onPreferenceChange(Preference preference, Object newValue) {
+			MyAlarmManager.cancelStartTimer(mActivity);
+			MyAlarmManager.setStartTimer(mActivity);
+
+			ListPreference pref = (ListPreference) preference;
+			String summary = indexOfBr(pref.getSummary().toString());
+			summary += BR + getString(R.string.now_setting) + mSettingDao.dispIntervalVal2Key((String) newValue);
+			pref.setSummary(getSummarySpannableString(summary));
+
+			return true;
+		}
+	};
+
+	/**
+	 * 目標回数が変更された.
+	 */
+	private final OnPreferenceChangeListener mGoalCntChanged = new OnPreferenceChangeListener() {
+		@Override
+		public boolean onPreferenceChange(Preference preference, Object newValue) {
+			EditTextPreference pref = (EditTextPreference) preference;
+			String summary = indexOfBr(pref.getSummary().toString());
+			summary += BR + getString(R.string.now_setting) + (String) newValue;
+			pref.setSummary(getSummarySpannableString(summary));
+
+			return true;
+		}
+	};
+
+	/**
+	 * バイブレータが変更された.
+	 */
+	private final OnPreferenceChangeListener mVibratorChanged = new OnPreferenceChangeListener() {
+		@Override
+		public boolean onPreferenceChange(Preference preference, Object newValue) {
+			CheckBoxPreference pref = (CheckBoxPreference) preference;
+			String summary = indexOfBr(pref.getSummary().toString());
+			summary += BR + getString(R.string.now_setting) + mSettingDao.vibratorVal2Key((Boolean) newValue);
+			pref.setSummary(getSummarySpannableString(summary));
+			return true;
+		}
+	};
+
+	/**
+	 * アラーム音が変更された.
+	 */
+	private final OnPreferenceChangeListener mAlarmChanged = new OnPreferenceChangeListener() {
+		@Override
+		public boolean onPreferenceChange(Preference preference, Object newValue) {
+			RingtonePreference pref = (RingtonePreference) preference;
+			Ringtone rm = RingtoneManager.getRingtone(mActivity, Uri.parse((String) newValue));
+			String summary = indexOfBr(pref.getSummary().toString());
+			if (((String) newValue).length() <= 0) {
+				summary += BR + getString(R.string.now_setting) + getString(R.string.silent);
+			} else {
+				summary += BR + getString(R.string.now_setting) + rm.getTitle(mActivity);
 			}
-		}
+			pref.setSummary(getSummarySpannableString(summary));
 
-		return key;
-	}
-
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		setSummary(key);
-		if (MyConst.PK_DISP_INTERVAL.equals(key)) {
-			MyAlarmManager.cancelStartTimer(this);
-			MyAlarmManager.setStartTimer(this);
+			return true;
 		}
-		if (MyConst.PK_INQUIRY.equals(key)) {
-			String inquiry = sharedPreferences.getString(key, "");
+	};
+
+	/**
+	 * 目覚まし音が変更された.
+	 */
+	private final OnPreferenceChangeListener mInquiryChanged = new OnPreferenceChangeListener() {
+		@Override
+		public boolean onPreferenceChange(Preference preference, Object newValue) {
+			String inquiry = (String) newValue;
 			if (!"".equals(inquiry)) {
-				String inquiryKey = inquiryVal2Key(inquiry);
+				String inquiryKey = mSettingDao.inquiryVal2Key(inquiry);
 				String subject = "[" + inquiryKey + "]" + getString(R.string.app_name);
-				MyLog.d("Inquiry=" + inquiry);
 				// メール送信
 				MyMail.Builder.newInstance(getApplicationContext())
 						.setTo(getString(R.string.developer_email))
 						.setSubject(subject)
 						.send();
-				clearPreference(MyConst.PK_INQUIRY);
 			}
+
+			return false; // データの変更はしない
 		}
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-		RingtonePreference pref = (RingtonePreference) findPreference(MyConst.PK_ALARM);
-		pref.setOnPreferenceChangeListener(this);
-		RingtonePreference prefSleepAlarm = (RingtonePreference) findPreference(MyConst.PK_SLEEP_ALARM);
-		prefSleepAlarm.setOnPreferenceChangeListener(this);
-	}
-
-	@Override
-	public boolean onPreferenceChange(Preference preference, Object newValue) {
-		RingtonePreference prefAlarm = (RingtonePreference) preference;
-		Ringtone rm = RingtoneManager.getRingtone(this, Uri.parse((String) newValue));
-		String summary = indexOfBr(prefAlarm.getSummary().toString());
-		if (((String) newValue).length() <= 0) {
-			summary += BR + getString(R.string.now_setting) + getString(R.string.silent);
-		} else {
-			summary += BR + getString(R.string.now_setting) + rm.getTitle(this);
-		}
-		SpannableString nowVal;
-		nowVal = new SpannableString(summary);
-		nowVal.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.theme_headerTextColor)), 0,
-				nowVal.length(), 0);
-		prefAlarm.setSummary(nowVal);
-		return true;
-	}
+	};
 }

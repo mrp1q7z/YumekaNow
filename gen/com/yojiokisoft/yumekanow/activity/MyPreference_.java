@@ -8,11 +8,9 @@ package com.yojiokisoft.yumekanow.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import com.yojiokisoft.yumekanow.R.array;
 
 public final class MyPreference_
     extends MyPreference
@@ -26,11 +24,6 @@ public final class MyPreference_
     }
 
     private void init_(Bundle savedInstanceState) {
-        Resources resources_ = this.getResources();
-        mDispIntervalKey = resources_.getStringArray(array.disp_interval_key);
-        mInquiryVal = resources_.getStringArray(array.inquiry_val);
-        mInquiryKey = resources_.getStringArray(array.inquiry_key);
-        mDispIntervalVal = resources_.getStringArray(array.disp_interval_val);
     }
 
     private void afterSetContentView_() {

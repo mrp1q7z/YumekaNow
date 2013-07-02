@@ -1,13 +1,26 @@
+/*
+ * Copyright (C) 2013 YojiokiSoft
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.yojiokisoft.yumekanow.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener;
@@ -25,36 +38,35 @@ import com.googlecode.androidannotations.annotations.Extra;
 import com.googlecode.androidannotations.annotations.Touch;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
-import com.yojiokisoft.yumekanow.dialog.ColorPickerDialog;
+import com.yojiokisoft.yumekanow.dialog.AmbilWarnaDialog;
+import com.yojiokisoft.yumekanow.dialog.AmbilWarnaDialog.OnAmbilWarnaListener;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 
+/**
+ * カードプレビューアクティビティ
+ */
 @EActivity(R.layout.activity_card_preview)
 public class CardPreviewActivity extends Activity {
 	private final int LONG_PRESS_TIMEOUT = ViewConfiguration.getLongPressTimeout();
 	private final int FONT_SIZE_MIN = 10; // 最小のフォントサイズ
 	private final int FONT_SIZE_MAX = 40; // 最大のフォントサイズ
-	private final int FONT_SIZE_DELAY = 4; // フォントサイズが指定しにくいので遅延させる倍数
+	private final int FONT_SIZE_DELAY = 4; // フォントサイズが指定しにくいので遅延させる倍数（大きいほどゆっくりになる）
 
 	private ScaleGestureDetector mScaleGestureDetector;
 
 	@ViewById(R.id.affirmationText)
-	TextView mTextView;
+	/*package*/TextView mTextView;
 
 	@ViewById(R.id.backImage)
-	ImageView mImageView;
+	/*package*/ImageView mImageView;
 
 	@Extra(MyConst.EN_CARD)
-	CardEntity mCard;
+	/*package*/CardEntity mCard;
 
-	private LayoutInflater mInflater;
-	private Context mContext;
-
-	// ドラッグ対象のView
-	private TextView mDragView = null;
-	// ドラッグ中に移動量を取得するための変数
-	private int mOldX;
-	private int mOldY;
+	private TextView mDragView = null; // ドラッグ対象のビュー
+	private int mOldX; // ドラッグ中の移動量(x)
+	private int mOldY; // ドラッグ中の移動量(y)
 
 	private boolean mDragging = false;
 	private Handler mHandler = new Handler();
@@ -63,6 +75,10 @@ public class CardPreviewActivity extends Activity {
 	private int mTextSizeIndex = 0;
 	private long mDownTime;
 
+	/**
+	 * 長押し状態を判定し、ドラッグモードを開始する.
+	 * LONG_PRESS_TIMEOUTの時間を過ぎても押下されていた場合のみドラッグモードに入る
+	 */
 	private final Runnable mLongPressRunnable = new Runnable() {
 		@Override
 		public void run() {
@@ -74,14 +90,15 @@ public class CardPreviewActivity extends Activity {
 		}
 	};
 
+	/**
+	 * アクティビティの初期化 (onCreateと同等のタイミングで呼ばれる）
+	 */
 	@AfterViews
-	public void initActivity() {
+	/*package*/void initActivity() {
 		mTextSize = new float[FONT_SIZE_MAX - FONT_SIZE_MIN + 1];
 		for (int i = FONT_SIZE_MIN; i <= FONT_SIZE_MAX; i++) {
 			mTextSize[i - FONT_SIZE_MIN] = i;
 		}
-		mInflater = this.getLayoutInflater();
-		mContext = this;
 
 		mTextView.setText(mCard.affirmationText);
 		mTextView.setTextColor(mCard.textColor);
@@ -103,6 +120,10 @@ public class CardPreviewActivity extends Activity {
 		mDragView = mTextView;
 	}
 
+	/**
+	 * タッチイベント
+	 * @see Activity#onTouchEvent(MotionEvent)
+	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		final boolean isInProgres = mScaleGestureDetector.isInProgress();
@@ -113,8 +134,13 @@ public class CardPreviewActivity extends Activity {
 		return super.onTouchEvent(event);
 	}
 
+	/**
+	 * アファーメーションの言葉をタッチ.
+	 * 
+	 * @param event
+	 */
 	@Touch(R.id.affirmationText)
-	public void affirmationTextOnTouch(MotionEvent event) {
+	/*package*/void affirmationTextOnTouch(MotionEvent event) {
 		if (mDragView == null) {
 			return;
 		}
@@ -170,7 +196,9 @@ public class CardPreviewActivity extends Activity {
 		mOldY = y;
 	}
 
-	// スケールジェスチャー
+	/**
+	 * 文字の拡大／縮小を行う.
+	 */
 	private final SimpleOnScaleGestureListener mOnScaleGestureListener = new SimpleOnScaleGestureListener() {
 		@Override
 		public boolean onScale(ScaleGestureDetector detector) {
@@ -192,7 +220,13 @@ public class CardPreviewActivity extends Activity {
 		}
 	};
 
-	private void setBackAndForeColor(TextView textView, int backColor) {
+	/**
+	 * 文字／文字の影のラベルをセットする.
+	 * 
+	 * @param textView
+	 * @param backColor
+	 */
+	private void setBackAndForeColorLabel(TextView textView, int backColor) {
 		int foreColor = backColor ^ 0xffffff;
 		textView.setTextColor(foreColor);
 		textView.setBackgroundColor(backColor);
@@ -202,31 +236,31 @@ public class CardPreviewActivity extends Activity {
 		textView.setText("#" + hex);
 	}
 
-	// 文字色の設定
+	/**
+	 * 文字の色を設定.
+	 */
 	private void setTextColor() {
-		View view = mInflater.inflate(R.layout.dialog_set_color, null);
+		View view = getLayoutInflater().inflate(R.layout.dialog_set_color, null);
 
 		final TextView textColor = (TextView) view.findViewById(R.id.textColor);
 		final TextView shadowColor = (TextView) view.findViewById(R.id.shadowColor);
-		final ColorPickerDialog.DialogCallback textColorOnDialgOk = new ColorPickerDialog.DialogCallback() {
-			@Override
-			public void onDialogOk(int color) {
-				setBackAndForeColor(textColor, color);
-			}
-		};
-		final ColorPickerDialog.DialogCallback shadowColorOnDialgOk = new ColorPickerDialog.DialogCallback() {
-			@Override
-			public void onDialogOk(int color) {
-				setBackAndForeColor(shadowColor, color);
-			}
-		};
 
 		// 色の設定ダイアログで文字色の設定
 		textColor.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ColorPickerDialog dialog = new ColorPickerDialog(v.getContext());
-				dialog.setDialogOkClickListener(textColorOnDialgOk);
+				int initColor = (Integer) textColor.getTag();
+				AmbilWarnaDialog dialog = new AmbilWarnaDialog(v.getContext(), initColor, new OnAmbilWarnaListener() {
+					@Override
+					public void onOk(AmbilWarnaDialog dialog, int color) {
+						setBackAndForeColorLabel(textColor, color);
+					}
+
+					@Override
+					public void onCancel(AmbilWarnaDialog dialog) {
+						;
+					}
+				});
 				dialog.show();
 			}
 		});
@@ -235,13 +269,23 @@ public class CardPreviewActivity extends Activity {
 		shadowColor.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ColorPickerDialog dialog = new ColorPickerDialog(v.getContext());
-				dialog.setDialogOkClickListener(shadowColorOnDialgOk);
+				int initColor = (Integer) shadowColor.getTag();
+				AmbilWarnaDialog dialog = new AmbilWarnaDialog(v.getContext(), initColor, new OnAmbilWarnaListener() {
+					@Override
+					public void onOk(AmbilWarnaDialog dialog, int color) {
+						setBackAndForeColorLabel(shadowColor, color);
+					}
+
+					@Override
+					public void onCancel(AmbilWarnaDialog dialog) {
+						;
+					}
+				});
 				dialog.show();
 			}
 		});
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(getString(R.string.color_dialog_title));
 		builder.setView(view);
 		builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
@@ -261,13 +305,16 @@ public class CardPreviewActivity extends Activity {
 			}
 		});
 		builder.setNegativeButton(getString(R.string.cancel), null);
-		setBackAndForeColor(textColor, mCard.textColor);
-		setBackAndForeColor(shadowColor, mCard.shadowColor);
+		setBackAndForeColorLabel(textColor, mCard.textColor);
+		setBackAndForeColorLabel(shadowColor, mCard.shadowColor);
 		builder.show();
 	}
 
+	/**
+	 * OKボタンのクリック
+	 */
 	@Click
-	public void okButtonClicked() {
+	/*package*/void okButtonClicked() {
 		Intent intent = new Intent(getApplicationContext(), MakeCardActivity_.class);
 		intent.putExtra(MyConst.EN_CARD, mCard);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

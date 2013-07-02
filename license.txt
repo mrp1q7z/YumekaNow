@@ -1,0 +1,35 @@
+ライセンス（配布条件）
+=====================
+
+YumekaNow は次の２つのライセンスに配布できます。
+
+GNU General Public License as published by the Free Software
+Foundation; either version 3x
+
+ただし、以下のモノは yukuku@gmail.com さんによる作成物で、
+Apache License 2.0 でのライセンスです。
+
+ * src/com/yojiokisoft/yumekanow/dialog/AmbilWarnaDialog.java
+ * src/com/yojiokisoft/yumekanow/dialog/AmbilWarnaKotak.java
+ * res/layout/ambilwarna_dialog.xml
+ * res/values/dimen.xml
+ * res/drawable/ambilwana_hue.png
+ * res/drawable-hdpi/ambilwana_arrow_down.png
+ * res/drawable-hdpi/ambilwana_arrow_right.png
+ * res/drawable-hdpi/ambilwana_cursor.png
+ * res/drawable-hdpi/ambliwana_target.png
+ * res/drawable-ldpi/ambilwana_arrow_down.png
+ * res/drawable-ldpi/ambilwana_arrow_right.png
+ * res/drawable-ldpi/ambilwana_cursor.png
+ * res/drawable-ldpi/ambliwana_target.png
+ * res/drawable-mdpi/ambilwana_arrow_down.png
+ * res/drawable-mdpi/ambilwana_arrow_right.png
+ * res/drawable-mdpi/ambilwana_cursor.png
+ * res/drawable-mdpi/ambliwana_target.png
+ * res/drawable-xhdpi/ambilwana_arrow_down.png
+ * res/drawable-xhdpi/ambilwana_arrow_right.png
+ * res/drawable-xhdpi/ambilwana_cursor.png
+ * res/drawable-xhdpi/ambliwana_target.png
+ 
+詳しくは、以下を参照してください。
+http://code.google.com/p/android-color-picker/

@@ -1,25 +1,32 @@
+/*
+ * Copyright (C) 2013 YojiokiSoft
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.yojiokisoft.yumekanow.activity;
 
-import java.util.ArrayList;
-
-import android.content.Context;
 import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Vibrator;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
-import android.widget.TabWidget;
 import android.widget.TextView;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
@@ -29,39 +36,38 @@ import com.googlecode.androidannotations.annotations.OptionsItem;
 import com.googlecode.androidannotations.annotations.OptionsMenu;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
-import com.yojiokisoft.yumekanow.db.DatabaseHelper;
+import com.yojiokisoft.yumekanow.adapter.MainPagerAdapter;
 import com.yojiokisoft.yumekanow.db.SettingDao;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
-import com.yojiokisoft.yumekanow.fragment.CardFragment_;
-import com.yojiokisoft.yumekanow.fragment.SleepFragment_;
-import com.yojiokisoft.yumekanow.fragment.StateFragment_;
-import com.yojiokisoft.yumekanow.utils.MyConst;
-import com.yojiokisoft.yumekanow.utils.MyLog;
 import com.yojiokisoft.yumekanow.utils.MyAlarmManager;
+import com.yojiokisoft.yumekanow.utils.MyConst;
 
+/**
+ * メインアクティビティ
+ */
 @EActivity(R.layout.activity_main)
 @OptionsMenu(R.menu.activity_main)
 public class MainActivity extends FragmentActivity {
+	@ViewById(android.R.id.tabhost)
+	/*package*/TabHost mTabHost;
+
+	@ViewById(R.id.pager)
+	/*package*/ViewPager mPager;
+
+	@Extra(MyConst.EN_FIRE_EVENT)
+	/*package*/String mFireEvent;
+
 	private Vibrator mVibrator = null;
 	private Ringtone mRingtone = null;
 
-	@ViewById(android.R.id.tabhost)
-	TabHost mTabHost;
-
-	@ViewById(R.id.pager)
-	ViewPager mPager;
-
-	@Extra(MyConst.EN_FIRE_EVENT)
-	String mFireEvent;
-
+	/**
+	 * アクティビティの初期化 (onCreateと同等のタイミングで呼ばれる）
+	 */
 	@AfterViews
-	public void initActivity() {
-		//キャッチされない例外により、スレッドが突然終了したときや、  
-		//このスレッドに対してほかにハンドラが定義されていないときに  
-		//呼び出されるデフォルトのハンドラを設定します。  
+	/*package*/void initActivity() {
+		// キャッチされない例外をキャッチするデフォルトのハンドラを設定する
 		Thread.setDefaultUncaughtExceptionHandler(new MyUncaughtExceptionHandler());
 
-		DatabaseHelper.getInstance();
 		SettingDao settingDao = SettingDao.getInstance();
 
 		if (MyAlarmManager.getStartTime() == 0) {
@@ -70,7 +76,7 @@ public class MainActivity extends FragmentActivity {
 
 		FragmentManager manager = getSupportFragmentManager();
 		mTabHost.setup();
-		final MyPagerAdapter adapter = new MyPagerAdapter(manager, this, mTabHost, mPager);
+		final MainPagerAdapter adapter = new MainPagerAdapter(manager, this, mTabHost, mPager);
 
 		// tab size from screen size
 		DisplayMetrics metrics = new DisplayMetrics();
@@ -103,19 +109,32 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+	/**
+	 * 開始処理
+	 */
 	@Override
 	protected void onStart() {
 		super.onStart();
 		MyUncaughtExceptionHandler.sendBugReport(this);
-MyLog.d("test");
 	}
 
+	/**
+	 * 終了処理
+	 */
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		stopVibrator();
 	}
 
+	/**
+	 * 指定の幅・高さ・タイトルをもったテキストビューを生成し返却する.
+	 * 
+	 * @param width
+	 * @param height
+	 * @param title
+	 * @return テキストビュー
+	 */
 	private TextView getTabView(int width, int height, String title) {
 		TextView view = new TextView(this);
 		view.setMinimumWidth(width);
@@ -126,117 +145,49 @@ MyLog.d("test");
 		return view;
 	}
 
-	private static class MyPagerAdapter extends FragmentPagerAdapter
-			implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
-
-		private final Context context;
-		private final TabHost tabHost;
-		private final ViewPager pager;
-		private final ArrayList<String> tabs = new ArrayList<String>();
-
-		// dummy contents class
-		class DummyTabFactory implements TabHost.TabContentFactory {
-			private final Context context;
-
-			public DummyTabFactory(Context context) {
-				this.context = context;
-			}
-
-			public View createTabContent(String tag) {
-				View v = new View(context);
-				v.setMinimumWidth(0);
-				v.setMinimumHeight(0);
-				return v;
-			}
-		}
-
-		public MyPagerAdapter(FragmentManager fm, Context context, TabHost tabHost, ViewPager pager) {
-			super(fm);
-			this.context = context;
-			this.tabHost = tabHost;
-			this.pager = pager;
-			this.tabHost.setOnTabChangedListener(this);
-			this.pager.setAdapter(this);
-			this.pager.setOnPageChangeListener(this);
-		}
-
-		public void addTab(TabHost.TabSpec tabSpec, String content) {
-			tabSpec.setContent(new DummyTabFactory(this.context));
-			tabs.add(content);
-			tabHost.addTab(tabSpec);
-			notifyDataSetChanged();
-		}
-
-		@Override
-		public Fragment getItem(int position) {
-			if (position == 0) {
-				return new CardFragment_();
-			} else if (position == 1) {
-				return new StateFragment_();
-			} else {
-				return new SleepFragment_();
-			}
-		}
-
-		@Override
-		public int getCount() {
-			return 3;
-		}
-
-		public void onPageScrollStateChanged(int state) {
-			;
-		}
-
-		public void onPageScrolled(int position, float positionOffset, int positionOggsetPixesl) {
-			;
-		}
-
-		public void onPageSelected(int position) {
-			TabWidget widget = tabHost.getTabWidget();
-
-			int oldFocus = widget.getDescendantFocusability();
-			widget.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-
-			tabHost.setCurrentTab(position);
-
-			widget.setDescendantFocusability(oldFocus);
-		}
-
-		public void onTabChanged(String tabId) {
-			int position = tabHost.getCurrentTab();
-
-			pager.setCurrentItem(position);
-		}
-	}
-
+	/**
+	 * カードを作るメニューが選択された.
+	 */
 	@OptionsItem(R.id.make_card)
-	void onMenuMakeCard() {
+	/*package*/void onMenuMakeCard() {
 		Intent myIntent = new Intent(getApplicationContext(), MakeCardActivity_.class);
 		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(myIntent);
 	}
 
+	/**
+	 * カードを選ぶメニューが選択された.
+	 */
 	@OptionsItem(R.id.select_card)
-	void onMenuSelectCard() {
+	/*package*/void onMenuSelectCard() {
 		Intent myIntent = new Intent(getApplicationContext(), CardListActivity_.class);
 		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(myIntent);
 	}
 
+	/**
+	 * 設定メニューが選択された.
+	 */
 	@OptionsItem(R.id.settings)
-	void onMenuSettings() {
+	/*package*/void onMenuSettings() {
 		Intent myIntent = new Intent(getApplicationContext(), MyPreference_.class);
 		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(myIntent);
 	}
 
+	/**
+	 * 使い方メニューが選択された.
+	 */
 	@OptionsItem(R.id.usage)
-	void onMenuUsage() {
+	/*package*/void onMenuUsage() {
 		Intent myIntent = new Intent(getApplicationContext(), UsageActivity_.class);
 		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(myIntent);
 	}
 
+	/**
+	 * バイブレーターと着信音の停止
+	 */
 	public void stopVibrator() {
 		if (mVibrator != null) {
 			mVibrator.cancel();
@@ -248,6 +199,9 @@ MyLog.d("test");
 		}
 	}
 
+	/**
+	 * アクティビティを閉じる
+	 */
 	public void closeActivity() {
 		finish();
 	}

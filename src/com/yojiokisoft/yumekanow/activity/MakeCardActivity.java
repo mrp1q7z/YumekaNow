@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2013 YojiokiSoft
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.yojiokisoft.yumekanow.activity;
 
 import java.io.File;
@@ -18,18 +33,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Pair;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AnimationUtils;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ViewSwitcher.ViewFactory;
@@ -42,9 +53,11 @@ import com.googlecode.androidannotations.annotations.ItemSelect;
 import com.googlecode.androidannotations.annotations.SeekBarProgressChange;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.adapter.BackImageAdapter;
 import com.yojiokisoft.yumekanow.db.BackImageDao;
 import com.yojiokisoft.yumekanow.db.CardDao;
-import com.yojiokisoft.yumekanow.dialog.ColorPickerDialog;
+import com.yojiokisoft.yumekanow.dialog.AmbilWarnaDialog;
+import com.yojiokisoft.yumekanow.dialog.AmbilWarnaDialog.OnAmbilWarnaListener;
 import com.yojiokisoft.yumekanow.entity.BackImageEntity;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
@@ -53,68 +66,74 @@ import com.yojiokisoft.yumekanow.utils.MyDialog;
 import com.yojiokisoft.yumekanow.utils.MyFile;
 import com.yojiokisoft.yumekanow.utils.MyImage;
 
+/**
+ * カードを作るアクティビティ
+ */
 @EActivity(R.layout.activity_make_card)
 public class MakeCardActivity extends Activity implements ViewFactory {
 	private final int TEXT_SIZE_MIN = 10;
 	private final int INTENT_REQUEST_PICTURE = 3;
-	private BaseAdapter mAdapter;
-	private BackImageDao mBackImageDao;
 
 	@ViewById(R.id.backImgSwitcher)
-	ImageSwitcher mImageSwitcher;
+	/*package*/ImageSwitcher mImageSwitcher;
 
 	@ViewById(R.id.backImgGallery)
-	Gallery mGallery;
+	/*package*/Gallery mGallery;
 
 	@ViewById(R.id.affirmationText)
-	EditText mAffirmationText;
+	/*package*/EditText mAffirmationText;
 
 	@ViewById(R.id.textColor)
-	TextView mTextColor;
+	/*package*/TextView mTextColor;
 
 	@ViewById(R.id.shadowColor)
-	TextView mShadowColor;
+	/*package*/TextView mShadowColor;
 
 	@ViewById(R.id.textSize)
-	TextView mTextSize;
+	/*package*/TextView mTextSize;
 
 	@ViewById(R.id.marginTop)
-	TextView mMarginTop;
+	/*package*/TextView mMarginTop;
 
 	@ViewById(R.id.marginLeft)
-	TextView mMarginLeft;
+	/*package*/TextView mMarginLeft;
 
 	@ViewById(R.id.delBackImgButton)
-	Button mDelBackImgButton;
+	/*package*/Button mDelBackImgButton;
 
 	@ViewById(R.id.textSizeBar)
-	SeekBar mTextSizeBar;
+	/*package*/SeekBar mTextSizeBar;
 
 	@ViewById(R.id.marginTopBar)
-	SeekBar mMarginTopBar;
+	/*package*/SeekBar mMarginTopBar;
 
 	@ViewById(R.id.marginLeftBar)
-	SeekBar mMarginLeftBar;
+	/*package*/SeekBar mMarginLeftBar;
 
 	@Extra(MyConst.EN_CARD)
-	CardEntity mCard;
+	/*package*/CardEntity mCard;
 
+	private BackImageDao mBackImageDao;
+
+	/**
+	 * アクティビティの初期化 (onCreateと同等のタイミングで呼ばれる）
+	 */
 	@AfterViews
-	void initActivity() {
+	/*package*/void initActivity() {
 		mImageSwitcher.setFactory(this);
 		mImageSwitcher.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
 		mImageSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
 
 		mBackImageDao = new BackImageDao();
 		List<BackImageEntity> list = mBackImageDao.queryForAll();
-		mAdapter = new MyListArrayAdapter(this, list);
-		mGallery.setAdapter(mAdapter);
+		BackImageAdapter adapter = new BackImageAdapter(this, list);
+		mGallery.setAdapter(adapter);
 
 		int color = getResources().getColor(R.color.textColor);
-		setBackAndForeColor(mTextColor, color);
+		setBackAndForeColorLabel(mTextColor, color);
 
 		color = getResources().getColor(R.color.shadowColor);
-		setBackAndForeColor(mShadowColor, color);
+		setBackAndForeColorLabel(mShadowColor, color);
 
 		mTextSize.setText(String.valueOf(mTextSizeBar.getProgress() + TEXT_SIZE_MIN));
 		mMarginTop.setText(String.valueOf(mMarginTopBar.getProgress()));
@@ -122,8 +141,8 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 
 		if (mCard != null) {
 			mAffirmationText.setText(mCard.affirmationText);
-			setBackAndForeColor(mTextColor, mCard.textColor);
-			setBackAndForeColor(mShadowColor, mCard.shadowColor);
+			setBackAndForeColorLabel(mTextColor, mCard.textColor);
+			setBackAndForeColorLabel(mShadowColor, mCard.shadowColor);
 			mTextSize.setText(String.valueOf(mCard.textSize));
 			mTextSizeBar.setProgress(mCard.textSize - TEXT_SIZE_MIN);
 			mMarginTop.setText(String.valueOf(mCard.marginTop));
@@ -152,6 +171,9 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		}
 	}
 
+	/**
+	 * ViewSitcher用のビューを作成
+	 */
 	@Override
 	public View makeView() {
 		ImageView imageView = new ImageView(this);
@@ -161,6 +183,9 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		return imageView;
 	}
 
+	/**
+	 * ギャラリーから画像を受け取る
+	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -236,42 +261,38 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		}
 		// ギャラリーの再読み込み
 		List<BackImageEntity> list = mBackImageDao.queryForAll();
-		MyListArrayAdapter adapter = (MyListArrayAdapter) mGallery.getAdapter();
+		BackImageAdapter adapter = (BackImageAdapter) mGallery.getAdapter();
 		adapter.setData(list);
 		adapter.notifyDataSetChanged();
 	}
 
 	/**
-	 * 文字色の設定
-	 */
-	final ColorPickerDialog.DialogCallback mTextColorOnDialgOk = new ColorPickerDialog.DialogCallback() {
-		@Override
-		public void onDialogOk(int color) {
-			setBackAndForeColor(mTextColor, color);
-		}
-	};
-
-	/**
 	 * 文字色のクリック
 	 */
 	@Click(R.id.textColor)
-	void textColorClicked() {
-		ColorPickerDialog dialog = new ColorPickerDialog(MakeCardActivity.this);
-		dialog.setDialogOkClickListener(mTextColorOnDialgOk);
+	/*package*/void textColorClicked() {
+		CardEntity card = getInputCard();
+		AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, card.textColor, new OnAmbilWarnaListener() {
+			@Override
+			public void onOk(AmbilWarnaDialog dialog, int color) {
+				setBackAndForeColorLabel(mTextColor, color);
+			}
+
+			@Override
+			public void onCancel(AmbilWarnaDialog dialog) {
+				;
+			}
+		});
 		dialog.show();
 	}
 
 	/**
-	 * 影の色の設定
+	 * 文字／文字の影のラベルをセットする.
+	 * 
+	 * @param textView
+	 * @param backColor
 	 */
-	final ColorPickerDialog.DialogCallback mShadowColorOnDialgOk = new ColorPickerDialog.DialogCallback() {
-		@Override
-		public void onDialogOk(int color) {
-			setBackAndForeColor(mShadowColor, color);
-		}
-	};
-
-	private void setBackAndForeColor(TextView textView, int backColor) {
+	private void setBackAndForeColorLabel(TextView textView, int backColor) {
 		int foreColor = backColor ^ 0xffffff;
 		textView.setTextColor(foreColor);
 		textView.setBackgroundColor(backColor);
@@ -285,12 +306,27 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	 * 影の色のクリック
 	 */
 	@Click(R.id.shadowColor)
-	void shadowColorClicked() {
-		ColorPickerDialog dialog = new ColorPickerDialog(MakeCardActivity.this);
-		dialog.setDialogOkClickListener(mShadowColorOnDialgOk);
+	/*package*/void shadowColorClicked() {
+		CardEntity card = getInputCard();
+		AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, card.shadowColor, new OnAmbilWarnaListener() {
+			@Override
+			public void onOk(AmbilWarnaDialog dialog, int color) {
+				setBackAndForeColorLabel(mShadowColor, color);
+			}
+
+			@Override
+			public void onCancel(AmbilWarnaDialog dialog) {
+				;
+			}
+		});
 		dialog.show();
 	}
 
+	/**
+	 * 入力されたカード情報を取得する.
+	 * 
+	 * @return カード情報
+	 */
 	private CardEntity getInputCard() {
 		CardEntity card = new CardEntity();
 		card.id = (mCard == null) ? 0 : mCard.id;
@@ -308,10 +344,10 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	}
 
 	/**
-	 * プレビューボタンのクリックリスナー
+	 * プレビューボタンのクリック
 	 */
 	@Click(R.id.previewButton)
-	void previewButtonClicked() {
+	/*package*/void previewButtonClicked() {
 		Intent intent = new Intent(getApplicationContext(), CardPreviewActivity_.class);
 		CardEntity card = getInputCard();
 		intent.putExtra(MyConst.EN_CARD, card);
@@ -320,10 +356,10 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	}
 
 	/**
-	 * OKボタンのクリックリスナー
+	 * OKボタンのクリック
 	 */
 	@Click(R.id.okButton)
-	void okButtonClicked() {
+	/*package*/void okButtonClicked() {
 		try {
 			CardDao cardDao = new CardDao();
 			CardEntity cardEntity = getInputCard();
@@ -346,20 +382,20 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	}
 
 	/**
-	 * 背景画像の追加ボタンのクリックリスナー
+	 * 背景画像の追加ボタンのクリック
 	 */
 	@Click(R.id.addBackImgButton)
-	void addBackImgButtonClicked() {
+	/*package*/void addBackImgButtonClicked() {
 		Intent intent = new Intent(Intent.ACTION_PICK);
 		intent.setType("image/*");
 		startActivityForResult(intent, INTENT_REQUEST_PICTURE);
 	}
 
 	/**
-	 * 背景画像の削除ボタンのクリックリスナー
+	 * 背景画像の削除ボタンのクリック
 	 */
 	@Click(R.id.delBackImgButton)
-	void delBackImgButtonClicked() {
+	/*package*/void delBackImgButtonClicked() {
 		OnClickListener delBackImg = new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -369,7 +405,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 				// ギャラリーの再読み込み
 				List<BackImageEntity> list = mBackImageDao.queryForAll();
 				mGallery.setSelection(0);
-				MyListArrayAdapter adapter = (MyListArrayAdapter) mGallery.getAdapter();
+				BackImageAdapter adapter = (BackImageAdapter) mGallery.getAdapter();
 				adapter.setData(list);
 				adapter.notifyDataSetChanged();
 			}
@@ -384,23 +420,47 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 				.show();
 	}
 
+	/**
+	 * 文字サイズの変更.
+	 * 
+	 * @param seekBar
+	 * @param progress
+	 */
 	@SeekBarProgressChange(R.id.textSizeBar)
-	void textSizeChanged(SeekBar seekBar, int progress) {
+	/*package*/void textSizeChanged(SeekBar seekBar, int progress) {
 		mTextSize.setText(String.valueOf(progress + TEXT_SIZE_MIN));
 	}
 
+	/**
+	 * 文字の位置（上マージン）の変更.
+	 * 
+	 * @param seekBar
+	 * @param progress
+	 */
 	@SeekBarProgressChange(R.id.marginTopBar)
-	void marginTopChanged(SeekBar seekBar, int progress) {
+	/*package*/void marginTopChanged(SeekBar seekBar, int progress) {
 		mMarginTop.setText(String.valueOf(progress));
 	}
 
+	/**
+	 * 文字の位置（左マージン）の変更.
+	 * 
+	 * @param seekBar
+	 * @param progress
+	 */
 	@SeekBarProgressChange(R.id.marginLeftBar)
-	void marginLeftChanged(SeekBar seekBar, int progress) {
+	/*package*/void marginLeftChanged(SeekBar seekBar, int progress) {
 		mMarginLeft.setText(String.valueOf(progress));
 	}
 
+	/**
+	 * 背景画像が選択された.
+	 * 
+	 * @param selected
+	 * @param backImage
+	 */
 	@ItemSelect
-	void backImgGalleryItemSelected(boolean selected, BackImageEntity backImage) {
+	/*package*/void backImgGalleryItemSelected(boolean selected, BackImageEntity backImage) {
 		if (backImage.resouceId == 0) {
 			mImageSwitcher.setImageURI(Uri.parse("file:///" + backImage.bitmapPath));
 			try {
@@ -416,68 +476,6 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		} else {
 			mImageSwitcher.setImageResource(backImage.resouceId);
 			mDelBackImgButton.setVisibility(View.GONE);
-		}
-	}
-
-	/**
-	 * アダプタークラス
-	 */
-	private class MyListArrayAdapter extends BaseAdapter {
-		private Activity mActivity;
-		private List<BackImageEntity> mItems;
-
-		MyListArrayAdapter(Activity activity, List<BackImageEntity> items) {
-			super();
-			mActivity = activity;
-			mItems = items;
-		}
-
-		@Override
-		public int getCount() {
-			return mItems.size();
-		}
-
-		@Override
-		public Object getItem(int pos) {
-			return mItems.get(pos);
-		}
-
-		@Override
-		public long getItemId(int pos) {
-			return mItems.get(pos).resouceId;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				LinearLayout layout = new LinearLayout(mActivity);
-				layout.setPadding(5, 5, 5, 5);
-				layout.setOrientation(LinearLayout.VERTICAL);
-				layout.setGravity(Gravity.CENTER);
-				convertView = layout;
-
-				ImageView view = new ImageView(mActivity);
-				view.setTag("image");
-				view.setLayoutParams(new LinearLayout.LayoutParams(80, 120));
-				layout.addView(view);
-			}
-
-			BackImageEntity item = mItems.get(position);
-			ImageView imageView = (ImageView) convertView.findViewWithTag("image");
-			if (item.resouceId == 0) {
-				imageView.setImageBitmap(BitmapFactory.decodeFile(item.bitmapPath));
-			} else {
-				imageView.setImageResource(item.resouceId);
-			}
-
-			return convertView;
-		}
-
-		public void setData(List<BackImageEntity> items) {
-			if (mItems != null) {
-				mItems = null;
-			}
-			mItems = items;
 		}
 	}
 }

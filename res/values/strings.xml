@@ -8,8 +8,6 @@
 	<string name="err_dialog_msg">前回は、エラーで終了してしまい、大変申し訳ありません。今後の改善に役立てますので、開発元にエラーを送っていただけると大変助かります。プライバシーに関する情報は送信されません</string>
 	<string name="err_dialog_msg2">大変申し訳ありません。予期せぬエラーが発生しました。今後の改善に役立てますので、開発元にエラーを送っていただけると大変助かります。プライバシーに関する情報は送信されません</string>
 		
-    <integer name="colorGridColumnWidth">32</integer>
-
     <string name="defaultDispInterval">60</string>
     <string name="defaultGoalCnt">1440</string>
     <string name="version">Version 0.0.2</string>

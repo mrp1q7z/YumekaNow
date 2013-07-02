@@ -112,6 +112,10 @@ public final class MainActivity_
             return true;
         }
         int itemId_ = item.getItemId();
+        if (itemId_ == com.yojiokisoft.yumekanow.R.id.make_card) {
+            onMenuMakeCard();
+            return true;
+        }
         if (itemId_ == com.yojiokisoft.yumekanow.R.id.settings) {
             onMenuSettings();
             return true;
@@ -122,10 +126,6 @@ public final class MainActivity_
         }
         if (itemId_ == com.yojiokisoft.yumekanow.R.id.select_card) {
             onMenuSelectCard();
-            return true;
-        }
-        if (itemId_ == com.yojiokisoft.yumekanow.R.id.make_card) {
-            onMenuMakeCard();
             return true;
         }
         return false;

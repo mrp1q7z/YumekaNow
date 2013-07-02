@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2013 YojiokiSoft
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.yojiokisoft.yumekanow.activity;
 
 import java.sql.SQLException;
@@ -7,13 +22,8 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.net.Uri;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EActivity;
@@ -21,6 +31,7 @@ import com.googlecode.androidannotations.annotations.ItemClick;
 import com.googlecode.androidannotations.annotations.ItemLongClick;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.adapter.CardListAdapter;
 import com.yojiokisoft.yumekanow.db.CardDao;
 import com.yojiokisoft.yumekanow.db.SettingDao;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
@@ -28,15 +39,21 @@ import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.utils.MyDialog;
 
+/**
+ * カード一覧アクティビティ
+ */
 @EActivity(R.layout.activity_card_list)
 public class CardListActivity extends Activity {
 	@ViewById(R.id.cardList)
-	ListView mListView;
+	/*package*/ListView mListView;
 
 	private Activity mActivity;
 
+	/**
+	 * アクティビティの初期化 (onCreateと同等のタイミングで呼ばれる）
+	 */
 	@AfterViews
-	public void initActivity() {
+	/*package*/void initActivity() {
 		mActivity = this;
 		List<CardEntity> list = null;
 		try {
@@ -48,20 +65,30 @@ public class CardListActivity extends Activity {
 		if (list == null) {
 			return;
 		}
-		BaseAdapter adapter = new MyListArrayAdapter(this, list);
+		BaseAdapter adapter = new CardListAdapter(this, list);
 		mListView.setAdapter(adapter);
 	}
 
+	/**
+	 * カード一覧のアイテムがクリックされた.
+	 * 
+	 * @param card クリックされたカード
+	 */
 	@ItemClick
-	public void cardListItemClicked(CardEntity card) {
+	/*package*/void cardListItemClicked(CardEntity card) {
 		Intent intent = new Intent(getApplicationContext(), CardDetailActivity_.class);
 		intent.putExtra(MyConst.EN_CARD, card);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
 	}
 
+	/**
+	 * カード一覧のアイテムが長押しされた.
+	 * 
+	 * @param card 長押しされたカード
+	 */
 	@ItemLongClick
-	public void cardListItemLongClicked(CardEntity card) {
+	/*package*/void cardListItemLongClicked(CardEntity card) {
 		SettingDao settingDao = SettingDao.getInstance();
 		int useCardId = settingDao.getUseCard();
 		if (card.id == useCardId) {
@@ -71,8 +98,8 @@ public class CardListActivity extends Activity {
 			return;
 		}
 
-		final CardEntity delCard = card;
 		// カード削除リスナー
+		final CardEntity delCard = card;
 		OnClickListener deleteCard = new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -80,7 +107,7 @@ public class CardListActivity extends Activity {
 					CardDao cardDao = new CardDao();
 					cardDao.delete(delCard);
 					List<CardEntity> list = cardDao.queryForAll();
-					((MyListArrayAdapter) mListView.getAdapter()).setItems(list);
+					((CardListAdapter) mListView.getAdapter()).setItems(list);
 					mListView.invalidateViews();
 				} catch (SQLException e) {
 					MyUncaughtExceptionHandler.sendBugReport(mActivity, e);
@@ -88,78 +115,12 @@ public class CardListActivity extends Activity {
 			}
 		};
 
+		// 削除確認ダイアログの表示
 		MyDialog.Builder.newInstance(this).setTitle(getString(R.string.del))
 				.setMessage(getString(R.string.del_confirm_msg))
 				.setPositiveLabel(getString(R.string.yes))
 				.setPositiveClickListener(deleteCard)
 				.setNegativeLabel(getString(R.string.no))
 				.show();
-	}
-
-	/**
-	 * アダプタークラス
-	 */
-	private class MyListArrayAdapter extends BaseAdapter {
-		private Activity mActivity;
-		private List<CardEntity> mItems;
-
-		MyListArrayAdapter(Activity activity, List<CardEntity> items) {
-			super();
-			mActivity = activity;
-			mItems = items;
-		}
-
-		public void setItems(List<CardEntity> items) {
-			mItems = items;
-		}
-
-		@Override
-		public int getCount() {
-			return mItems.size();
-		}
-
-		@Override
-		public Object getItem(int pos) {
-			return mItems.get(pos);
-		}
-
-		@Override
-		public long getItemId(int pos) {
-			return pos;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			View view = convertView;
-			ViewWrapper wrapper = null;
-
-			if (view == null) {
-				view = mActivity.getLayoutInflater().inflate(R.layout.item_row, null);
-				wrapper = new ViewWrapper(view);
-				view.setTag(wrapper);
-			} else {
-				wrapper = (ViewWrapper) view.getTag();
-			}
-
-			CardEntity item = mItems.get(position);
-			if (item.backImageResourceId == 0) {
-				wrapper.image.setImageURI(Uri.parse("file:///" + item.backImagePath));
-			} else {
-				wrapper.image.setImageResource(item.backImageResourceId);
-			}
-			wrapper.label.setText(item.affirmationText);
-
-			return view;
-		}
-
-		class ViewWrapper {
-			public final ImageView image;
-			public final TextView label;
-
-			ViewWrapper(View view) {
-				this.image = (ImageView) view.findViewById(R.id.item_row_img);
-				this.label = (TextView) view.findViewById(R.id.item_row_txt);
-			}
-		}
 	}
 }
