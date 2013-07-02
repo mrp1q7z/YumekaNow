@@ -44,7 +44,7 @@ public class CardPreviewActivity extends Activity {
 	@ViewById(R.id.backImage)
 	ImageView mImageView;
 
-	@Extra(MyConst.CARD)
+	@Extra(MyConst.EN_CARD)
 	CardEntity mCard;
 
 	private LayoutInflater mInflater;
@@ -269,7 +269,7 @@ public class CardPreviewActivity extends Activity {
 	@Click
 	public void okButtonClicked() {
 		Intent intent = new Intent(getApplicationContext(), MakeCardActivity_.class);
-		intent.putExtra(MyConst.CARD, mCard);
+		intent.putExtra(MyConst.EN_CARD, mCard);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
 		finish();

@@ -55,7 +55,7 @@ public class CardListActivity extends Activity {
 	@ItemClick
 	public void cardListItemClicked(CardEntity card) {
 		Intent intent = new Intent(getApplicationContext(), CardDetailActivity_.class);
-		intent.putExtra(MyConst.CARD, card);
+		intent.putExtra(MyConst.EN_CARD, card);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
 	}

@@ -36,7 +36,8 @@ import com.yojiokisoft.yumekanow.fragment.CardFragment_;
 import com.yojiokisoft.yumekanow.fragment.SleepFragment_;
 import com.yojiokisoft.yumekanow.fragment.StateFragment_;
 import com.yojiokisoft.yumekanow.utils.MyConst;
-import com.yojiokisoft.yumekanow.utils.TimerManager;
+import com.yojiokisoft.yumekanow.utils.MyLog;
+import com.yojiokisoft.yumekanow.utils.MyAlarmManager;
 
 @EActivity(R.layout.activity_main)
 @OptionsMenu(R.menu.activity_main)
@@ -50,7 +51,7 @@ public class MainActivity extends FragmentActivity {
 	@ViewById(R.id.pager)
 	ViewPager mPager;
 
-	@Extra(MyConst.FIRE_EVENT)
+	@Extra(MyConst.EN_FIRE_EVENT)
 	String mFireEvent;
 
 	@AfterViews
@@ -63,8 +64,8 @@ public class MainActivity extends FragmentActivity {
 		DatabaseHelper.getInstance();
 		SettingDao settingDao = SettingDao.getInstance();
 
-		if (TimerManager.getStartTime() == 0) {
-			TimerManager.setStartTimer(this);
+		if (MyAlarmManager.getStartTime() == 0) {
+			MyAlarmManager.setStartTimer(this);
 		}
 
 		FragmentManager manager = getSupportFragmentManager();
@@ -106,6 +107,7 @@ public class MainActivity extends FragmentActivity {
 	protected void onStart() {
 		super.onStart();
 		MyUncaughtExceptionHandler.sendBugReport(this);
+MyLog.d("test");
 	}
 
 	@Override

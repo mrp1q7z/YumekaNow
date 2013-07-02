@@ -24,7 +24,7 @@ import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.activity.MainActivity;
 import com.yojiokisoft.yumekanow.db.SettingDao;
-import com.yojiokisoft.yumekanow.utils.TimerManager;
+import com.yojiokisoft.yumekanow.utils.MyAlarmManager;
 
 @EFragment(R.layout.fragment_sleep)
 public class SleepFragment extends Fragment {
@@ -57,7 +57,7 @@ public class SleepFragment extends Fragment {
 
 	private void printCurrentTimer() {
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(TimerManager.getWakeUpTime());
+		calendar.setTimeInMillis(MyAlarmManager.getWakeUpTime());
 		if (calendar.getTimeInMillis() == 0) {
 			mCurrentTimer.setText(getString(R.string.timer_not_set));
 			mCancelTimerButton.setVisibility(View.GONE);
@@ -101,7 +101,7 @@ public class SleepFragment extends Fragment {
 	@Click(R.id.setTimerButton)
 	void setTimerButtonClicked() {
 		// アファーメーションアラームの解除
-		TimerManager.cancelStartTimer(mActivity);
+		MyAlarmManager.cancelStartTimer(mActivity);
 
 		// タイマーのアラームをセット
 		int hour = mWakeUpTime.getCurrentHour();
@@ -120,7 +120,7 @@ public class SleepFragment extends Fragment {
 			// タイマー指定
 			calendar.add(Calendar.MINUTE, 60 * hour + min); // 現時刻 + 指定時間
 		}
-		TimerManager.setWakuUpTimer(mActivity, calendar.getTimeInMillis());
+		MyAlarmManager.setWakuUpTimer(mActivity, calendar.getTimeInMillis());
 
 		Toast toast = Toast.makeText(mActivity, getString(R.string.good_night), Toast.LENGTH_LONG);
 		toast.show();
@@ -143,9 +143,9 @@ public class SleepFragment extends Fragment {
 
 	@Click(R.id.cancelTimerButton)
 	void cancelTimerButtonClicked() {
-		TimerManager.cancelWakeUpTimer(mActivity);
+		MyAlarmManager.cancelWakeUpTimer(mActivity);
 		printCurrentTimer();
 
-		TimerManager.setStartTimer(mActivity);
+		MyAlarmManager.setStartTimer(mActivity);
 	}
 }

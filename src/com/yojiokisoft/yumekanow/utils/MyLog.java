@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2013 YojiokiSoft
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.yojiokisoft.yumekanow.utils;
 
 import java.io.File;
@@ -9,12 +24,17 @@ import android.util.Log;
 
 import com.yojiokisoft.yumekanow.BuildConfig;
 
+/**
+ * デバッグログクラス
+ */
 public class MyLog {
-	private static final String TAG = "MyLog";
-	private static final int MAX_TAB_COUNT = 8;
-	private static final int TAB_SIZE = 4;
-	private static final int INDEX = 3;
-
+	/**
+	 * StackTraceをファイルに書き込む.
+	 * 
+	 * @param fileName ファイル名
+	 * @param ex エラー
+	 * @throws FileNotFoundException
+	 */
 	public static void writeStackTrace(String fileName, Throwable ex) throws FileNotFoundException {
 		File file = new File(fileName);
 		PrintWriter pw = null;
@@ -28,66 +48,94 @@ public class MyLog {
 		}
 	}
 
-	/*
-	* DEBUG
-	*/
+	/**
+	 * メッセージの最後に呼び出し元情報を付加したデバッグメッセージを出力する.
+	 * 
+	 * @param message
+	 */
 	public static void d(String message) {
 		if (BuildConfig.DEBUG) {
-			Log.d(TAG, message + getPadding(message) + getAdditionalLog());
+			StackTraceElement s = getCallerInfo();
+			Log.d(getShortClassName(s.getClassName()), message + getCallerInfo(s));
 		}
 	}
 
+	/**
+	 * メッセージの最後に呼び出し元情報を付加したデバッグメッセージを出力する.
+	 * 
+	 * @param tag
+	 * @param message
+	 */
 	public static void d(String tag, String message) {
 		if (BuildConfig.DEBUG) {
-			Log.d(tag, message + getPadding(message) + getAdditionalLog());
+			StackTraceElement s = getCallerInfo();
+			Log.d(tag, message + getCallerInfo(s));
 		}
 	}
 
+	/**
+	 * メッセージの最後に呼び出し元情報を付加したデバッグメッセージを出力する.
+	 * 
+	 * @param message
+	 * @param throwable
+	 */
 	public static void d(String message, Throwable throwable) {
 		if (BuildConfig.DEBUG) {
-			Log.d(TAG, message + getPadding(message) + getAdditionalLog(), throwable);
+			StackTraceElement s = getCallerInfo();
+			Log.d(getShortClassName(s.getClassName()), message + getCallerInfo(s), throwable);
 		}
 	}
 
+	/**
+	 * メッセージの最後に呼び出し元情報を付加したデバッグメッセージを出力する.
+	 * 
+	 * @param tag
+	 * @param message
+	 * @param throwable
+	 */
 	public static void d(String tag, String message, Throwable throwable) {
 		if (BuildConfig.DEBUG) {
-			Log.d(tag, message + getPadding(message) + getAdditionalLog(), throwable);
+			StackTraceElement s = getCallerInfo();
+			Log.d(tag, message + getCallerInfo(s), throwable);
 		}
 	}
 
-	private static String getPadding(String message) {
-		String padding = "";
-		int tabCount = MAX_TAB_COUNT - (message.length() / TAB_SIZE);
-		if (tabCount <= 0) {
-			return "\t";
-		}
-		for (int i = 0; i < tabCount; i++) {
-			padding += "\t";
-		}
-		return padding;
+	/**
+	 * 呼び出し元情報の取得
+	 * この関数(getCallerInfo) : [0]
+	 * この関数を呼んだ親(d)   : [1]
+	 * 親を呼んだ関数          : [2] <-- これのクラス名等を取得
+	 * 
+	 * @return StackTraceElement
+	 */
+	private static StackTraceElement getCallerInfo() {
+		StackTraceElement[] stackTraceElements = new Throwable().getStackTrace();
+		return stackTraceElements[2];
 	}
 
-	private static String getAdditionalLog() {
-		String additionalLog = " at " + getClassName() + "#" + getMethodName()
-				+ "(" + getFileName() + ":" + getLineNumber() + ")";
-		return additionalLog;
+	/**
+	 * 呼び出し元情報の取得
+	 * 
+	 * @param s StackTraceElement
+	 * @return 以下のような呼び出し元情報
+	 *          at ClassName#MethodName(FileName:LineNumber)
+	 *          at MainActivity#onStart(MainActivity.java:110)
+	 */
+	private static String getCallerInfo(StackTraceElement s) {
+		String caller = " at " + getShortClassName(s.getClassName()) + "#" + s.getMethodName()
+				+ "(" + s.getFileName() + ":" + s.getLineNumber() + ")";
+		return caller;
 	}
 
-	private static String getClassName() {
-		String className = new Throwable().getStackTrace()[INDEX].getClassName();
-		className = className.substring(className.lastIndexOf(".") + 1);
+	/**
+	 * FQCNのクラス名からクラス名のみを取得する.
+	 * 例：com.yojiokisoft.yumekanow.activity.MainActivity -> MainActivity
+	 * 
+	 * @param fqcnClassName FQCNクラス名
+	 * @return クラス名
+	 */
+	private static String getShortClassName(String fqcnClassName) {
+		String className = fqcnClassName.substring(fqcnClassName.lastIndexOf(".") + 1);
 		return className;
-	}
-
-	private static String getMethodName() {
-		return new Throwable().getStackTrace()[INDEX].getMethodName();
-	}
-
-	private static String getFileName() {
-		return new Throwable().getStackTrace()[INDEX].getFileName();
-	}
-
-	private static String getLineNumber() {
-		return String.valueOf(new Throwable().getStackTrace()[INDEX].getLineNumber());
 	}
 }

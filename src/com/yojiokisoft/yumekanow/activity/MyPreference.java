@@ -25,7 +25,7 @@ import com.yojiokisoft.yumekanow.dialog.VersionDialogPreference;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.utils.MyLog;
 import com.yojiokisoft.yumekanow.utils.MyMail;
-import com.yojiokisoft.yumekanow.utils.TimerManager;
+import com.yojiokisoft.yumekanow.utils.MyAlarmManager;
 
 @EActivity
 public class MyPreference extends PreferenceActivity implements OnSharedPreferenceChangeListener,
@@ -51,7 +51,7 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 
 		setSummary(null);
 
-		clearPreference(MyConst.INQUIRY);
+		clearPreference(MyConst.PK_INQUIRY);
 	}
 
 	private void clearPreference(String key) {
@@ -95,9 +95,9 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 
 	private void setSummary(String key) {
 		String summary;
-		if (key == null || MyConst.DISP_INTERVAL.equals(key)) {
+		if (key == null || MyConst.PK_DISP_INTERVAL.equals(key)) {
 			ListPreference prefDispInterval = (ListPreference) getPreferenceScreen().findPreference(
-					MyConst.DISP_INTERVAL);
+					MyConst.PK_DISP_INTERVAL);
 			summary = indexOfBr(prefDispInterval.getSummary().toString());
 			summary += BR + getString(R.string.now_setting) + dispIntervalVal2Key(prefDispInterval.getValue());
 
@@ -107,9 +107,9 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 					nowVal.length(), 0);
 			prefDispInterval.setSummary(nowVal);
 		}
-		if (key == null || MyConst.GOAL_CNT.equals(key)) {
+		if (key == null || MyConst.PK_GOAL_CNT.equals(key)) {
 			EditTextPreference prefGoalCnt = (EditTextPreference) getPreferenceScreen()
-					.findPreference(MyConst.GOAL_CNT);
+					.findPreference(MyConst.PK_GOAL_CNT);
 			summary = indexOfBr(prefGoalCnt.getSummary().toString());
 			summary += BR + getString(R.string.now_setting) + prefGoalCnt.getText();
 
@@ -119,9 +119,9 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 					nowVal.length(), 0);
 			prefGoalCnt.setSummary(nowVal);
 		}
-		if (key == null || MyConst.VIBRATOR.equals(key)) {
+		if (key == null || MyConst.PK_VIBRATOR.equals(key)) {
 			CheckBoxPreference prefVibrator = (CheckBoxPreference) getPreferenceScreen().findPreference(
-					MyConst.VIBRATOR);
+					MyConst.PK_VIBRATOR);
 			summary = indexOfBr(prefVibrator.getSummary().toString());
 			summary += BR + getString(R.string.now_setting) + vibratorVal2Key(prefVibrator.isChecked());
 
@@ -131,8 +131,8 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 					nowVal.length(), 0);
 			prefVibrator.setSummary(nowVal);
 		}
-		if (key == null || MyConst.ALARM.equals(key)) {
-			RingtonePreference prefAlarm = (RingtonePreference) getPreferenceScreen().findPreference(MyConst.ALARM);
+		if (key == null || MyConst.PK_ALARM.equals(key)) {
+			RingtonePreference prefAlarm = (RingtonePreference) getPreferenceScreen().findPreference(MyConst.PK_ALARM);
 			summary = indexOfBr(prefAlarm.getSummary().toString());
 			SettingDao settingDao = SettingDao.getInstance();
 			summary += BR + getString(R.string.now_setting) + settingDao.getAlarm();
@@ -143,9 +143,9 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 					nowVal.length(), 0);
 			prefAlarm.setSummary(nowVal);
 		}
-		if (key == null || MyConst.SLEEP_ALARM.equals(key)) {
+		if (key == null || MyConst.PK_SLEEP_ALARM.equals(key)) {
 			RingtonePreference prefSleepAlarm = (RingtonePreference) getPreferenceScreen().findPreference(
-					MyConst.SLEEP_ALARM);
+					MyConst.PK_SLEEP_ALARM);
 			summary = indexOfBr(prefSleepAlarm.getSummary().toString());
 			SettingDao settingDao = SettingDao.getInstance();
 			summary += BR + getString(R.string.now_setting) + settingDao.getSleepAlarm();
@@ -156,9 +156,9 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 					nowVal.length(), 0);
 			prefSleepAlarm.setSummary(nowVal);
 		}
-		if (key == null || MyConst.VERSION.equals(key)) {
+		if (key == null || MyConst.PK_VERSION.equals(key)) {
 			VersionDialogPreference prefVersion = (VersionDialogPreference) getPreferenceScreen().findPreference(
-					MyConst.VERSION);
+					MyConst.PK_VERSION);
 			summary = indexOfBr(prefVersion.getSummary().toString());
 
 			SpannableString nowVal;
@@ -167,8 +167,8 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 					nowVal.length(), 0);
 			prefVersion.setSummary(nowVal);
 		}
-		if (key == null || MyConst.INQUIRY.equals(key)) {
-			ListPreference prefInquiry = (ListPreference) getPreferenceScreen().findPreference(MyConst.INQUIRY);
+		if (key == null || MyConst.PK_INQUIRY.equals(key)) {
+			ListPreference prefInquiry = (ListPreference) getPreferenceScreen().findPreference(MyConst.PK_INQUIRY);
 			summary = indexOfBr(prefInquiry.getSummary().toString());
 
 			SpannableString nowVal;
@@ -194,11 +194,11 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		setSummary(key);
-		if (MyConst.DISP_INTERVAL.equals(key)) {
-			TimerManager.cancelStartTimer(this);
-			TimerManager.setStartTimer(this);
+		if (MyConst.PK_DISP_INTERVAL.equals(key)) {
+			MyAlarmManager.cancelStartTimer(this);
+			MyAlarmManager.setStartTimer(this);
 		}
-		if (MyConst.INQUIRY.equals(key)) {
+		if (MyConst.PK_INQUIRY.equals(key)) {
 			String inquiry = sharedPreferences.getString(key, "");
 			if (!"".equals(inquiry)) {
 				String inquiryKey = inquiryVal2Key(inquiry);
@@ -209,7 +209,7 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 						.setTo(getString(R.string.developer_email))
 						.setSubject(subject)
 						.send();
-				clearPreference(MyConst.INQUIRY);
+				clearPreference(MyConst.PK_INQUIRY);
 			}
 		}
 	}
@@ -224,9 +224,9 @@ public class MyPreference extends PreferenceActivity implements OnSharedPreferen
 	protected void onResume() {
 		super.onResume();
 		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-		RingtonePreference pref = (RingtonePreference) findPreference(MyConst.ALARM);
+		RingtonePreference pref = (RingtonePreference) findPreference(MyConst.PK_ALARM);
 		pref.setOnPreferenceChangeListener(this);
-		RingtonePreference prefSleepAlarm = (RingtonePreference) findPreference(MyConst.SLEEP_ALARM);
+		RingtonePreference prefSleepAlarm = (RingtonePreference) findPreference(MyConst.PK_SLEEP_ALARM);
 		prefSleepAlarm.setOnPreferenceChangeListener(this);
 	}
 

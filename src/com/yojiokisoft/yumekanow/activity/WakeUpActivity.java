@@ -11,7 +11,7 @@ import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.db.SettingDao;
-import com.yojiokisoft.yumekanow.utils.TimerManager;
+import com.yojiokisoft.yumekanow.utils.MyAlarmManager;
 
 @EActivity(R.layout.activity_wake_up)
 public class WakeUpActivity extends Activity {
@@ -32,8 +32,8 @@ public class WakeUpActivity extends Activity {
 
 	@Click(R.id.okButton)
 	void okButtonClicked() {
-		TimerManager.cancelWakeUpTimer(mActivity);
-		TimerManager.setStartTimer(mActivity);
+		MyAlarmManager.cancelWakeUpTimer(mActivity);
+		MyAlarmManager.setStartTimer(mActivity);
 
 		Intent intent = new Intent(getApplicationContext(), MainActivity_.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

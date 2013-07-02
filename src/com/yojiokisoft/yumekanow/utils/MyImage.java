@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2013 YojiokiSoft
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.yojiokisoft.yumekanow.utils;
 
 import java.io.File;
@@ -5,55 +20,45 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
-import android.provider.MediaStore.Images;
-import android.provider.MediaStore.Images.Media;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 
+/**
+ * イメージに関するユーティリティ集
+ */
 public class MyImage {
-	public static void saveImage(File path, Bitmap bmp) throws Exception {
+	/**
+	 * ビットマップをファイルに保存する.
+	 * 
+	 * @param file ファイル
+	 * @param bitmap ビットマップ
+	 * @throws IOException
+	 */
+	public static void saveImage(File file, Bitmap bitmap) throws IOException {
 		FileOutputStream out = null;
 
-		// 上の階層(アプリ名のディレクトリ)が存在しなかったら作成
-		if (!path.getParentFile().exists()) {
-			path.getParentFile().mkdir();
+		if (!file.getParentFile().exists()) {
+			file.getParentFile().mkdir();
 		}
 
 		try {
-			out = new FileOutputStream(path);
-			bmp.compress(CompressFormat.JPEG, 100, out);
+			out = new FileOutputStream(file);
+			bitmap.compress(CompressFormat.JPEG, 100, out);
 			out.flush();
-		} catch (Exception e) {
-			throw e;
+			out.close();
 		} finally {
-			if (out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {
-				}
-			}
+			MyFile.closeQuietly(out);
 		}
 	}
 
-	public static void addGarally(Activity activity, File path) throws Exception {
-		try {
-			ContentValues values = new ContentValues();
-			ContentResolver contentResolver = activity.getContentResolver();
-			values.put(Images.Media.MIME_TYPE, "image/jpeg");
-			values.put(Images.Media.DATE_MODIFIED, System.currentTimeMillis() / 1000);
-			values.put(Images.Media.SIZE, path.length());
-			values.put(Images.Media.TITLE, path.getName());
-			values.put(Images.Media.DATA, path.getPath());
-			contentResolver.insert(Media.EXTERNAL_CONTENT_URI, values);
-		} catch (Exception e) {
-			throw e;
-		}
-	}
-
+	/**
+	 * 画面の幅と高さを取得する.
+	 * 
+	 * @param activity
+	 * @return 画面の幅(=first)と高さ(=second)
+	 */
 	public static Pair<Integer, Integer> getScreenWidthAndHeight(Activity activity) {
 		// 画面サイズを取得する
 		DisplayMetrics metrics = new DisplayMetrics();

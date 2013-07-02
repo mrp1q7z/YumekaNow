@@ -35,7 +35,7 @@ public class CardDetailActivity extends Activity {
 	@ViewById(R.id.pager)
 	ViewPager mViewPager;
 
-	@Extra(MyConst.CARD)
+	@Extra(MyConst.EN_CARD)
 	CardEntity mCard;
 
 	@AfterViews
@@ -86,7 +86,7 @@ public class CardDetailActivity extends Activity {
 		CustomPagerAdapter adapter = (CustomPagerAdapter) mViewPager.getAdapter();
 		CardEntity card = adapter.getCard(mViewPager.getCurrentItem());
 		Intent myIntent = new Intent(getApplicationContext(), MakeCardActivity_.class);
-		myIntent.putExtra(MyConst.CARD, card);
+		myIntent.putExtra(MyConst.EN_CARD, card);
 		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(myIntent);
 	}

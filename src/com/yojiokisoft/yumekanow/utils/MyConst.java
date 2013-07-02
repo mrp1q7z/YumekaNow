@@ -1,77 +1,95 @@
+/*
+ * Copyright (C) 2013 YojiokiSoft
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.yojiokisoft.yumekanow.utils;
 
 import com.yojiokisoft.yumekanow.App;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.entity.EncouragementMsgEntity;
 
+/**
+ * 定数クラス.
+ */
 public class MyConst {
-	// アプリケーション名
+	/** アプリケーション名（英語） */
 	public static final String APP_NAME = "YumekaNow";
 
-	// 表示間隔
-	public static final String DISP_INTERVAL = "DispInterval";
+	/** 設定キー：表示間隔 */
+	public static final String PK_DISP_INTERVAL = "DispInterval";
 
-	// 目標回数
-	public static final String GOAL_CNT = "GoalCnt";
+	/** 設定キー：目標回数 */
+	public static final String PK_GOAL_CNT = "GoalCnt";
 
-	// バイブレータ
-	public static final String VIBRATOR = "Vibrator";
+	/** 設定キー：バイブレータ */
+	public static final String PK_VIBRATOR = "Vibrator";
 
-	// アラーム音
-	public static final String ALARM = "Alarm";
+	/** 設定キー：アラーム音 */
+	public static final String PK_ALARM = "Alarm";
 
-	// 目覚まし音
-	public static final String SLEEP_ALARM = "SleepAlarm";
+	/** 設定キー：目覚まし音 */
+	public static final String PK_SLEEP_ALARM = "SleepAlarm";
 
-	// バージョン
-	public static final String VERSION = "Version";
+	/** 設定キー：バージョン */
+	public static final String PK_VERSION = "Version";
 
-	// お問い合わせ
-	public static final String INQUIRY = "Inquiry";
+	/** 設定キー：お問い合わせ */
+	public static final String PK_INQUIRY = "Inquiry";
 
-	// スリープ時間（時間指定）
-	public static final String SLEEP_JIKAN = "SleepJikan";
+	/** 設定キー：スリープ時間（時間指定） */
+	public static final String PK_SLEEP_JIKAN = "SleepJikan";
 
-	// スリープ時間（タイマー指定）
-	public static final String SLEEP_TIMER = "SleepTimer";
+	/** 設定キー：スリープ時間（タイマー指定） */
+	public static final String PK_SLEEP_TIMER = "SleepTimer";
 
-	// カード情報
-	public static final String CARD = "Card";
+	/** 設定キー：次回起動時間 */
+	public static final String PK_NEXT_START_TIME = "NextStartTime";
 
-	// 起動イベント
-	public static final String FIRE_EVENT = "FireEvent";
+	/** 設定キー：目覚まし起動時間 */
+	public static final String PK_WAKE_UP_TIME = "WakeUpTime";
 
-	// 次回起動時間
-	public static final String NEXT_START_TIME = "NextStartTime";
+	/** ExtraName:カード情報 */
+	public static final String EN_CARD = "Card";
 
-	// 目覚まし起動時間
-	public static final String WAKE_UP_TIME = "WakeUpTime";
+	/** ExtraName:起動イベント */
+	public static final String EN_FIRE_EVENT = "FireEvent";
 
-	// バグファイル名(キャッチした)
+	/** バグファイル名(キャッチした) */
 	public static final String BUG_CAUGHT_FILE = "bug_caught.txt";
 
-	// バグファイル名(キャッチされなかった)
+	/** バグファイル名(キャッチされなかった) */
 	public static final String BUG_UNCAUGHT_FILE = "bug_uncaught.txt";
 
-	// キャッチしたバグファイルのフルパス
+	/** キャッチしたバグファイルのフルパス */
 	public static String getCaughtBugFilePath() {
 		return MyFile.pathCombine(App.getInstance().getAppDataPath(), BUG_CAUGHT_FILE);
 	}
 
-	// キャッチされなかったバグファイルのフルパス
+	/** キャッチされなかったバグファイルのフルパス */
 	public static String getUncaughtBugFilePath() {
 		return MyFile.pathCombine(App.getInstance().getAppDataPath(), BUG_UNCAUGHT_FILE);
 	}
 
-	// SQLiteのDB名
+	/** SQLiteのDB名 */
 	public static final String DATABASE_FILE = "yumekanow.db";
 
-	// SQLiteのDB名のフルパス
+	/** SQLiteのDB名のフルパス */
 	public static String getDatabasePath() {
 		return App.getInstance().getDatabasePath(DATABASE_FILE).toString();
 	}
 
-	// 背景画像のパス
+	/** 背景画像のパス */
 	public static String getBackImagePath() {
 		return App.getInstance().getAppDataPath();
 	}
@@ -92,6 +110,9 @@ public class MyConst {
 			{ 90, 0, R.string.ec_atosukosi },
 			{ 100, 0, R.string.ec_yatta } };
 
+	/**
+	 * @return 励ましメッセージ
+	 */
 	public static EncouragementMsgEntity[] getEncouragementMsg() {
 		int len = encouragementMsg.length;
 		EncouragementMsgEntity[] msg = new EncouragementMsgEntity[len];

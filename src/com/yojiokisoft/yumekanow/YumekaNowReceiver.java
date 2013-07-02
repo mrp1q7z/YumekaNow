@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.yojiokisoft.yumekanow.db.SettingDao;
 import com.yojiokisoft.yumekanow.utils.MyLog;
-import com.yojiokisoft.yumekanow.utils.TimerManager;
+import com.yojiokisoft.yumekanow.utils.MyAlarmManager;
 
 public class YumekaNowReceiver extends BroadcastReceiver {
 
@@ -23,7 +23,7 @@ public class YumekaNowReceiver extends BroadcastReceiver {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd(E) HH:mm:ss", Locale.JAPANESE);
 		// debug <<<
 		long now = System.currentTimeMillis();
-		long startTime = TimerManager.getStartTime();
+		long startTime = MyAlarmManager.getStartTime();
 		if (startTime != 0) {
 			SettingDao settingDao = SettingDao.getInstance();
 			long interval = settingDao.getDispInterval() * 60 * 1000;
@@ -31,16 +31,16 @@ public class YumekaNowReceiver extends BroadcastReceiver {
 				int x = (int) ((now - startTime) / interval) + 1;
 				startTime += x * interval;
 			}
-			TimerManager.setStartTimer(context, startTime, interval);
+			MyAlarmManager.setStartTimer(context, startTime, interval);
 			// debug >>>
 			cal.setTimeInMillis(startTime);
 			debug += "\nstartTime=" + sdf.format(cal.getTime());
 			// debug <<<
 		}
 
-		long wakeUpTime = TimerManager.getWakeUpTime();
+		long wakeUpTime = MyAlarmManager.getWakeUpTime();
 		if (wakeUpTime != 0) {
-			TimerManager.setWakuUpTimer(context, wakeUpTime);
+			MyAlarmManager.setWakuUpTimer(context, wakeUpTime);
 			// debug >>>
 			cal.setTimeInMillis(wakeUpTime);
 			debug += "\nwakeUpTime=" + sdf.format(cal.getTime());

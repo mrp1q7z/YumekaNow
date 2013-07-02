@@ -96,7 +96,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	@ViewById(R.id.marginLeftBar)
 	SeekBar mMarginLeftBar;
 
-	@Extra(MyConst.CARD)
+	@Extra(MyConst.EN_CARD)
 	CardEntity mCard;
 
 	@AfterViews
@@ -231,7 +231,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		File file = new File(path);
 		try {
 			MyImage.saveImage(file, bitmap);
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		// ギャラリーの再読み込み
@@ -314,7 +314,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	void previewButtonClicked() {
 		Intent intent = new Intent(getApplicationContext(), CardPreviewActivity_.class);
 		CardEntity card = getInputCard();
-		intent.putExtra(MyConst.CARD, card);
+		intent.putExtra(MyConst.EN_CARD, card);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
 	}
