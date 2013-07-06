@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2013 YojiokiSoft
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.yojiokisoft.yumekanow.db;
 
 import java.io.File;
@@ -21,14 +36,28 @@ import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.utils.MyFile;
 
+/**
+ * DBヘルパー
+ */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 	private static DatabaseHelper mInstance = null;
 
+	/**
+	 * コンストラクタは公開しない
+	 * インスタンスを取得するときは、getInstanceを使用する.
+	 * 
+	 * @param context
+	 */
 	private DatabaseHelper(Context context) {
 		super(context, MyConst.getDatabasePath(), null, DATABASE_VERSION);
 	}
 
+	/**
+	 * インスタンスの取得.
+	 * 
+	 * @return DatabaseHelper
+	 */
 	public static DatabaseHelper getInstance() {
 		if (mInstance == null) {
 			createPreInstallDatabaseIfNotExists();
@@ -37,6 +66,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		return mInstance;
 	}
 
+	/**
+	 * テーブルが存在しなければ、テーブルを作成する.
+	 * 
+	 * @param context
+	 * @param conn
+	 */
 	public static void createTable(Context context, ConnectionSource conn) {
 		try {
 			TableUtils.createTableIfNotExists(conn, CardEntity.class);
@@ -48,7 +83,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	/** 
 	 * DB がなければプリインストールの DB を asset よりコピーして作成する
-	 *  
 	 **/
 	public static void createPreInstallDatabaseIfNotExists() {
 		File file = new File(MyConst.getDatabasePath());
@@ -72,8 +106,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	}
 
 	/** 
-	 * asset に格納したデーだベースをデフォルトの 
-	 * データベースパスに作成したからのデータベースにコピーする 
+	 * asset に格納した DB をデフォルトの DB パスにコピーする 
 	 * */
 	private static void copyDatabaseFromAsset() {
 		InputStream in = null;
@@ -99,11 +132,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		}
 	}
 
+	/**
+	 * @see DatabaseHelper#onCreate(SQLiteDatabase, ConnectionSource)
+	 */
 	@Override
 	public void onCreate(SQLiteDatabase db, ConnectionSource sonn) {
 		;
 	}
 
+	/**
+	 * @see DatabaseHelper#onUpgrade(SQLiteDatabase, ConnectionSource, int, int)
+	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, ConnectionSource conn, int oldVersion, int newVersion) {
 		;

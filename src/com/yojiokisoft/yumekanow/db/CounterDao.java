@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2013 YojiokiSoft
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.yojiokisoft.yumekanow.db;
 
 import java.sql.SQLException;
@@ -12,10 +27,18 @@ import com.yojiokisoft.yumekanow.entity.DayCntEntity;
 import com.yojiokisoft.yumekanow.entity.EncouragementMsgEntity;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 
+/**
+ * アファーメーションを唱えた回数のデータアクセス
+ */
 public class CounterDao {
 	private Dao<CounterEntity, Integer> mCounterDao = null;
 	private int mCurrentCardId;
 
+	/**
+	 * コンストラクタ.
+	 * 
+	 * @throws SQLException
+	 */
 	public CounterDao() throws SQLException {
 		DatabaseHelper helper = DatabaseHelper.getInstance();
 		mCounterDao = helper.getDao(CounterEntity.class);
@@ -23,34 +46,15 @@ public class CounterDao {
 		mCurrentCardId = SettingDao.getInstance().getUseCard();
 	}
 
+	/**
+	 * @return 現在使用中のカードID
+	 */
 	public int getCurrentCardId() {
 		return mCurrentCardId;
 	}
 
 	/**
-	 * 成長レベル(1〜100)の取得
-	 * @return
-	 * @throws SQLException 
-	 */
-	/*
-	public int getGrowLevel() throws SQLException {
-		GenericRawResults<String[]> rawResults = null;
-		int ret = 0;
-		rawResults = mCounterDao
-				.queryRaw(
-				"select case when sum(okCnt) is null then 0 else sum(okCnt) end as okCntSum from counter where cardId = "
-						+ mCurrentCardId);
-		List<String[]> results = rawResults.getResults();
-		String[] resultArray = results.get(0);
-		ret = Integer.parseInt(resultArray[0]);
-
-		return ret;
-	}
-	*/
-
-	/**
-	 * OKカウントの取得
-	 * @return
+	 * @return OKカウント
 	 * @throws SQLException 
 	 */
 	public int getOkCnt() throws SQLException {
@@ -68,8 +72,7 @@ public class CounterDao {
 	}
 
 	/**
-	 * 日々カウントの取得
-	 * @return
+	 * @return 日々カウント
 	 * @throws SQLException 
 	 */
 	public List<DayCntEntity> getDayCnt() throws SQLException {
@@ -133,10 +136,21 @@ public class CounterDao {
 		return ret;
 	}
 
+	/**
+	 * 日々カウントに励ましメッセージをセット.
+	 * 
+	 * @param list 日々カウント
+	 */
 	public void setEncouragementMsg(List<DayCntEntity> list) {
 		setEncouragementMsg(list, true);
 	}
 
+	/**
+	 * 日々カウントに励ましメッセージをセット.
+	 * 
+	 * @param list 日々カウント
+	 * @param clearFlag 最初に励ましメッセージをクリアするかどうか
+	 */
 	private void setEncouragementMsg(List<DayCntEntity> list, boolean clearFlag) {
 		DayCntEntity item;
 		int size = list.size();
@@ -194,7 +208,14 @@ public class CounterDao {
 		}
 	}
 
-	public void setCounter(CounterEntity counter) throws SQLException {
-		mCounterDao.create(counter);
+	/**
+	 * 回数データの登録
+	 * 
+	 * @param counter
+	 * @return データベース内で更新された行数。これは1でなければなりません。
+	 * @throws SQLException
+	 */
+	public int setCounter(CounterEntity counter) throws SQLException {
+		return mCounterDao.create(counter);
 	}
 }
