@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2013 YojiokiSoft
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.yojiokisoft.yumekanow.fragment;
 
 import java.sql.SQLException;
@@ -33,23 +48,42 @@ import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.entity.CounterEntity;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 
+/**
+ * カードフラグメント
+ */
 @EFragment(R.layout.fragment_card)
 public class CardFragment extends Fragment {
-	private Activity mActivity;
-
 	@ViewById(R.id.affirmationText)
-	TextView mAffirmationText;
+	/*package*/TextView mAffirmationText;
 
 	@ViewById(R.id.cardContainer)
-	FrameLayout mBackImage;
+	/*package*/FrameLayout mBackImage;
 
+	private Activity mActivity;
+
+	/**
+	 * フラグメントがアクティビティにアタッチされたときに呼ばれる.
+	 */
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		mActivity = activity;
+	}
+
+	/**
+	 * フラグメント用のビューを作成
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		// nullを返すことで @EFragment(xxx) で定義している xxx がインフレートされる
 		return null;
 	}
 
+	/**
+	 * フラグメントの初期化
+	 */
 	@AfterViews
-	public void printCard() {
+	/*package*/void initFragment() {
 		// カード情報を取得
 		List<CardEntity> cardList = null;
 		int cardId = SettingDao.getInstance().getUseCard();
@@ -93,6 +127,11 @@ public class CardFragment extends Fragment {
 		}
 	}
 
+	/**
+	 * 空のカード情報を返す.（カードの作成を促すメッセージ入り）
+	 * 
+	 * @return CardEntity
+	 */
 	private CardEntity getEmptyCard() {
 		CardEntity card = new CardEntity();
 		card.affirmationText = getString(R.string.make_card_msg);
@@ -105,6 +144,11 @@ public class CardFragment extends Fragment {
 		return card;
 	}
 
+	/**
+	 * カードが未選択時のカード情報を返す.（カードの選択を促すメッセージ入り）
+	 * 
+	 * @return CardEntity
+	 */
 	private CardEntity getDefalutCard() {
 		CardEntity card = new CardEntity();
 		card.affirmationText = getString(R.string.select_card_msg);
@@ -117,13 +161,12 @@ public class CardFragment extends Fragment {
 		return card;
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		mActivity = activity;
-	}
-
-	private void setCounter(int okFlag) {
+	/**
+	 * 唱えた回数を登録する.
+	 * 
+	 * @param buttonResId ボタンのリソースID
+	 */
+	private void setCounter(int buttonResId) {
 		CounterDao counterDao = null;
 		int currentCardId = -1;
 		try {
@@ -139,7 +182,7 @@ public class CardFragment extends Fragment {
 		CounterEntity cnt = new CounterEntity();
 		cnt.cardId = currentCardId;
 		cnt.procTime = System.currentTimeMillis();
-		if (okFlag != 0) {
+		if (buttonResId == R.id.okButton) {
 			cnt.okCnt = 1;
 			cnt.ngCnt = 0;
 		} else {
@@ -155,9 +198,12 @@ public class CardFragment extends Fragment {
 		}
 	}
 
+	/**
+	 * OKボタンのクリック
+	 */
 	@Click(R.id.okButton)
-	void okButtonClicked() {
-		setCounter(1);
+	/*package*/void okButtonClicked() {
+		setCounter(R.id.okButton);
 		try {
 			((MainActivity) mActivity).closeActivity();
 		} catch (RuntimeException e) {
@@ -165,9 +211,12 @@ public class CardFragment extends Fragment {
 		}
 	}
 
+	/**
+	 * キャンセルボタンのクリック
+	 */
 	@Click(R.id.cancelButton)
-	void cancelButtonClicked() {
-		setCounter(0);
+	/*package*/void cancelButtonClicked() {
+		setCounter(R.id.cancelButton);
 		try {
 			((MainActivity) mActivity).closeActivity();
 		} catch (RuntimeException e) {
@@ -175,8 +224,11 @@ public class CardFragment extends Fragment {
 		}
 	}
 
+	/**
+	 * カードのクリック
+	 */
 	@Click(R.id.cardContainer)
-	void cardContainerClicked() {
+	/*package*/void cardContainerClicked() {
 		try {
 			((MainActivity) mActivity).stopVibrator();
 		} catch (RuntimeException e) {

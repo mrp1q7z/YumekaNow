@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2013 YojiokiSoft
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.yojiokisoft.yumekanow.fragment;
 
 import java.text.SimpleDateFormat;
@@ -26,35 +41,57 @@ import com.yojiokisoft.yumekanow.activity.MainActivity;
 import com.yojiokisoft.yumekanow.db.SettingDao;
 import com.yojiokisoft.yumekanow.utils.MyAlarmManager;
 
+/**
+ * スリープフラグメント
+ */
 @EFragment(R.layout.fragment_sleep)
 public class SleepFragment extends Fragment {
-	private Activity mActivity;
-
 	@ViewById(R.id.wakeUpTime)
-	TimePicker mWakeUpTime;
+	/*package*/TimePicker mWakeUpTime;
 
 	@ViewById(R.id.timeKind)
-	RadioGroup mTimeKind;
+	/*package*/RadioGroup mTimeKind;
 
 	@ViewById(R.id.currentTimer)
-	TextView mCurrentTimer;
+	/*package*/TextView mCurrentTimer;
 
 	@ViewById(R.id.cancelTimerButton)
-	Button mCancelTimerButton;
+	/*package*/Button mCancelTimerButton;
 
+	private Activity mActivity;
+
+	/**
+	 * フラグメントがアクティビティにアタッチされたときに呼ばれる.
+	 */
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		mActivity = activity;
+	}
+
+	/**
+	 * フラグメント用のビューを作成
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		// nullを返すことで @EFragment(xxx) で定義している xxx がインフレートされる
 		return null;
 	}
 
+	/**
+	 * フラグメントの初期化
+	 */
 	@AfterViews
-	void initActivity() {
+	/*package*/void initFragment() {
 		mWakeUpTime.setIs24HourView(true);
 		setCurrentTime();
 		printCurrentTimer();
 		mTimeKind.setOnCheckedChangeListener(mTimeKindChanged);
 	}
 
+	/**
+	 * セット中のタイマー時間を表示.
+	 */
 	private void printCurrentTimer() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(MyAlarmManager.getWakeUpTime());
@@ -69,12 +106,9 @@ public class SleepFragment extends Fragment {
 		}
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		mActivity = activity;
-	}
-
+	/**
+	 * 前回セットしていた時間をセット.
+	 */
 	private void setCurrentTime() {
 		SettingDao settingDao = SettingDao.getInstance();
 		String time;
@@ -91,6 +125,9 @@ public class SleepFragment extends Fragment {
 		}
 	}
 
+	/**
+	 * タイマーの種類（時間指定／タイマー指定）が変更された
+	 */
 	private OnCheckedChangeListener mTimeKindChanged = new OnCheckedChangeListener() {
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -98,8 +135,11 @@ public class SleepFragment extends Fragment {
 		}
 	};
 
+	/**
+	 * タイマーセットボタンのクリック
+	 */
 	@Click(R.id.setTimerButton)
-	void setTimerButtonClicked() {
+	/*package*/void setTimerButtonClicked() {
 		// アファーメーションアラームの解除
 		MyAlarmManager.cancelStartTimer(mActivity);
 
@@ -141,8 +181,11 @@ public class SleepFragment extends Fragment {
 		}
 	}
 
+	/**
+	 * タイマーキャンセルボタンのクリック
+	 */
 	@Click(R.id.cancelTimerButton)
-	void cancelTimerButtonClicked() {
+	/*package*/void cancelTimerButtonClicked() {
 		MyAlarmManager.cancelWakeUpTimer(mActivity);
 		printCurrentTimer();
 

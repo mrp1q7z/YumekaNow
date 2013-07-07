@@ -1,10 +1,22 @@
+/*
+ * Copyright (C) 2013 YojiokiSoft
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.yojiokisoft.yumekanow.fragment;
 
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -14,38 +26,61 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.adapter.StateListAdapter;
 import com.yojiokisoft.yumekanow.db.CounterDao;
 import com.yojiokisoft.yumekanow.db.SettingDao;
 import com.yojiokisoft.yumekanow.entity.DayCntEntity;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 import com.yojiokisoft.yumekanow.mycomponent.MyProgress;
-import com.yojiokisoft.yumekanow.utils.MyLog;
 
+/**
+ * 状態フラグメント
+ */
 @EFragment(R.layout.fragment_state)
 public class StateFragment extends Fragment {
+	@ViewById(R.id.totalProgress)
+	/*package*/MyProgress mProgress;
+
+	@ViewById(R.id.dayToDayList)
+	/*package*/ListView mListView;
+
 	private Activity mActivity;
 	private CounterDao mCounter;
 	private int mGoalCnt;
 
-	@ViewById(R.id.totalProgress)
-	MyProgress mProgress;
+	/**
+	 * フラグメントがアクティビティにアタッチされたときに呼ばれる.
+	 */
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		mActivity = activity;
+		try {
+			mCounter = new CounterDao();
+		} catch (SQLException e) {
+			MyUncaughtExceptionHandler.sendBugReport(mActivity, e);
+		}
+	}
 
-	@ViewById(R.id.dayToDayList)
-	ListView mListView;
-
+	/**
+	 * フラグメント用のビューを作成
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		// nullを返すことで @EFragment(xxx) で定義している xxx がインフレートされる
 		return null;
 	}
 
+	/**
+	 * プログレスバーのセット
+	 */
 	@AfterViews
-	void setProgress() {
+	/*package*/void setProgress() {
 		SettingDao settingDao = SettingDao.getInstance();
 		int okCnt = 0;
 		try {
@@ -62,8 +97,11 @@ public class StateFragment extends Fragment {
 		mProgress.setProgress(okCnt * 100 / goalCnt);
 	}
 
+	/**
+	 * リストビューのアダプターをセット
+	 */
 	@AfterViews
-	void setAdapter() {
+	/*package*/void setAdapter() {
 		List<DayCntEntity> list = null;
 		try {
 			list = mCounter.getDayCnt();
@@ -73,118 +111,28 @@ public class StateFragment extends Fragment {
 		if (list == null) {
 			return;
 		}
-		BaseAdapter adapter = new MyListArrayAdapter(mActivity, list);
+		BaseAdapter adapter = new StateListAdapter(mActivity, list);
 		mListView.setAdapter(adapter);
 
 		SettingDao settingDao = SettingDao.getInstance();
 		mGoalCnt = settingDao.getGoalCnt();
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		mActivity = activity;
-		try {
-			mCounter = new CounterDao();
-		} catch (SQLException e) {
-			MyUncaughtExceptionHandler.sendBugReport(mActivity, e);
-		}
-	}
-
+	/**
+	 * 前面に表示された.
+	 */
 	@Override
 	public void onResume() {
 		super.onResume();
 
 		SettingDao settingDao = SettingDao.getInstance();
 		if (mGoalCnt != settingDao.getGoalCnt()) {
-MyLog.d("GlolCntが変えられた");
 			mGoalCnt = settingDao.getGoalCnt();
 			setProgress();
-			List<DayCntEntity> list = ((MyListArrayAdapter) mListView.getAdapter()).getItems();
+			List<DayCntEntity> list = ((StateListAdapter) mListView.getAdapter()).getItems();
 			mCounter.setEncouragementMsg(list);
-			((MyListArrayAdapter) mListView.getAdapter()).setItems(list);
+			((StateListAdapter) mListView.getAdapter()).setItems(list);
 			mListView.invalidateViews();
-		}
-	}
-
-	/**
-	 * アダプタークラス
-	 */
-	private class MyListArrayAdapter extends BaseAdapter {
-		private Activity mActivity;
-		private List<DayCntEntity> mItems;
-
-		MyListArrayAdapter(Activity activity, List<DayCntEntity> items) {
-			super();
-			mActivity = activity;
-			mItems = items;
-		}
-
-		public List<DayCntEntity> getItems() {
-			return mItems;
-		}
-
-		public void setItems(List<DayCntEntity> items) {
-			if (mItems != null) {
-				mItems = null;
-			}
-			mItems = items;
-		}
-
-		@Override
-		public int getCount() {
-			return mItems.size();
-		}
-
-		@Override
-		public Object getItem(int pos) {
-			return mItems.get(pos);
-		}
-
-		@Override
-		public long getItemId(int pos) {
-			return pos;
-		}
-
-		@Override
-		public View getView(int pos, View convertView, ViewGroup parent) {
-			ViewHolder holder;
-			DayCntEntity item = mItems.get(pos);
-			// レイアウトの生成
-			if (convertView == null) {
-				convertView = mActivity.getLayoutInflater().inflate(R.layout.row_state_list, null);
-				TextView nday = (TextView) convertView.findViewById(R.id.nday);
-				TextView date = (TextView) convertView.findViewById(R.id.date);
-				TextView cnt = (TextView) convertView.findViewById(R.id.cnt);
-				TextView percent = (TextView) convertView.findViewById(R.id.percent);
-				holder = new ViewHolder();
-				holder.nday = nday;
-				holder.date = date;
-				holder.cnt = cnt;
-				holder.comment = percent;
-				convertView.setTag(holder);
-			} else {
-				holder = (ViewHolder) convertView.getTag();
-			}
-			// 値の設定
-			String s;
-			s = String.format("%02d", item.day) + "日目";
-			holder.nday.setText(s);
-			DateFormat format = new SimpleDateFormat("yyyy-MM-dd' ('E')'", Locale.JAPAN);
-			s = format.format(item.date.getTime());
-			holder.date.setText(s);
-			s = String.format("%2d", item.okCnt) + "回";
-			holder.cnt.setText(s);
-			holder.comment.setText(item.encouragmentMsg);
-
-			return convertView;
-		}
-
-		class ViewHolder {
-			TextView nday;
-			TextView date;
-			TextView cnt;
-			TextView comment;
 		}
 	}
 }
