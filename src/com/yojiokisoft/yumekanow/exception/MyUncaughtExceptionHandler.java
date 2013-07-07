@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2013 YojiokiSoft
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.yojiokisoft.yumekanow.exception;
 
 import java.io.BufferedReader;
@@ -29,21 +44,31 @@ import com.yojiokisoft.yumekanow.utils.MyDialog;
 import com.yojiokisoft.yumekanow.utils.MyFile;
 import com.yojiokisoft.yumekanow.utils.MyLog;
 
+/**
+ * キャッチされない例外を処理する
+ */
 public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 	private static File sBugReportFile = null;
 	private static String sVersionName;
 	private static final UncaughtExceptionHandler sDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
 
+	/**
+	 * キャッチされない例外が発生したときに呼び出される.
+	 */
 	@Override
 	public void uncaughtException(Thread thread, Throwable ex) {
 		try {
 			MyLog.writeStackTrace(MyConst.getUncaughtBugFilePath(), ex);
 		} catch (FileNotFoundException e) {
+			// このメソッドからの例外は、Java 仮想マシンにより無視される
 			e.printStackTrace();
 		}
 		sDefaultHandler.uncaughtException(thread, ex);
 	}
 
+	/**
+	 * 障害報告ダイアログのOKクリックリスナー
+	 */
 	private static DialogInterface.OnClickListener mBugDialogOkClicked = new DialogInterface.OnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
@@ -51,6 +76,9 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 		}
 	};
 
+	/**
+	 * 障害報告ダイアログのキャンセルクリックリスナー
+	 */
 	private static DialogInterface.OnClickListener mBugDialogCancelClicked = new DialogInterface.OnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
@@ -59,11 +87,11 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 	};
 
 	/** 
-	 * バグレポートの内容をメールで送信します。 
-	 * @param activity 
+	 * バグレポートの内容をメールで送信する.
+	 * 
+	 * @param activity アプリケーションコンテキストはダメ、Activityであること！
 	 */
 	public static void sendBugReport(Activity activity) {
-		//バグレポートがなければ以降の処理を行いません。  
 		sBugReportFile = new File(MyConst.getUncaughtBugFilePath());
 		if (sBugReportFile == null || !sBugReportFile.exists()) {
 			return;
@@ -71,7 +99,6 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 
 		setVersionName();
 
-		//AlertDialogを表示します。
 		MyDialog.Builder.newInstance(activity)
 				.setTitle(activity.getString(R.string.err_dialog_title))
 				.setMessage(activity.getString(R.string.err_dialog_msg))
@@ -83,8 +110,10 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 	}
 
 	/** 
-	 * バグレポートの内容をメールで送信します。 
-	 * @param activity 
+	 * バグレポートの内容をメールで送信する.
+	 * 
+	 * @param activity アプリケーションコンテキストはダメ、Activityであること！
+	 * @param ex
 	 */
 	public static void sendBugReport(Activity activity, Throwable ex) {
 		try {
@@ -92,7 +121,7 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		//バグレポートがなければ以降の処理を行いません。  
+
 		sBugReportFile = new File(MyConst.getCaughtBugFilePath());
 		if (sBugReportFile == null || !sBugReportFile.exists()) {
 			return;
@@ -100,7 +129,6 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 
 		setVersionName();
 
-		//AlertDialogを表示します。  
 		MyDialog.Builder.newInstance(activity)
 				.setTitle(activity.getString(R.string.err_dialog_title))
 				.setMessage(activity.getString(R.string.err_dialog_msg2))
@@ -111,19 +139,25 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 				.show();
 	}
 
+	/**
+	 * バージョン名のセット
+	 */
 	private static void setVersionName() {
 		if (sVersionName != null) {
 			return;
 		}
 		try {
-			PackageInfo sPackInfo;
-			sPackInfo = App.getInstance().getPackageManager().getPackageInfo(App.getInstance().getPackageName(), 0);
-			sVersionName = sPackInfo.versionName;
+			PackageInfo packInfo;
+			packInfo = App.getInstance().getPackageManager().getPackageInfo(App.getInstance().getPackageName(), 0);
+			sVersionName = packInfo.versionName;
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * バグレポートをバックグラウンドで送信.
+	 */
 	private static void postBugReportInBackground() {
 		new Thread(new Runnable() {
 			public void run() {
@@ -132,6 +166,9 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 		}).start();
 	}
 
+	/**
+	 * バグレポートをサーバーにポスト.
+	 */
 	private static void postBugReport() {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		String bug = getFileBody(sBugReportFile);
@@ -151,6 +188,12 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 		sBugReportFile.delete();
 	}
 
+	/**
+	 * ファイルの内容を読み込む.
+	 * 
+	 * @param file
+	 * @return
+	 */
 	private static String getFileBody(File file) {
 		StringBuilder sb = new StringBuilder();
 		BufferedReader br = null;
