@@ -70,7 +70,7 @@ public class MainActivity extends FragmentActivity {
 
 		SettingDao settingDao = SettingDao.getInstance();
 
-		if (MyAlarmManager.getStartTime() == 0) {
+		if (MyAlarmManager.getStartTime() == 0 && MyAlarmManager.getWakeUpTime() == 0) {
 			MyAlarmManager.setStartTimer(this);
 		}
 
