@@ -16,11 +16,8 @@
 package com.yojiokisoft.yumekanow.fragment;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -45,7 +42,6 @@ import com.yojiokisoft.yumekanow.db.CardDao;
 import com.yojiokisoft.yumekanow.db.CounterDao;
 import com.yojiokisoft.yumekanow.db.SettingDao;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
-import com.yojiokisoft.yumekanow.entity.CounterEntity;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 
 /**
@@ -162,51 +158,21 @@ public class CardFragment extends Fragment {
 	}
 
 	/**
-	 * 唱えた回数を登録する.
-	 * 
-	 * @param buttonResId ボタンのリソースID
-	 */
-	private void setCounter(int buttonResId) {
-		CounterDao counterDao = null;
-		int currentCardId = -1;
-		try {
-			counterDao = new CounterDao();
-			currentCardId = counterDao.getCurrentCardId();
-		} catch (SQLException e) {
-			MyUncaughtExceptionHandler.sendBugReport(mActivity, e);
-		}
-		if (currentCardId == -1) {
-			return;
-		}
-
-		CounterEntity cnt = new CounterEntity();
-		cnt.cardId = currentCardId;
-		cnt.procTime = System.currentTimeMillis();
-		if (buttonResId == R.id.okButton) {
-			cnt.okCnt = 1;
-			cnt.ngCnt = 0;
-		} else {
-			cnt.okCnt = 0;
-			cnt.ngCnt = 1;
-		}
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.JAPANESE);
-		cnt.procDay = sdf.format(new Date(cnt.procTime));
-		try {
-			counterDao.setCounter(cnt);
-		} catch (SQLException e) {
-			MyUncaughtExceptionHandler.sendBugReport(mActivity, e);
-		}
-	}
-
-	/**
 	 * OKボタンのクリック
 	 */
 	@Click(R.id.okButton)
 	/*package*/void okButtonClicked() {
-		setCounter(R.id.okButton);
+		CounterDao counterDao;
+		try {
+			counterDao = new CounterDao();
+			counterDao.setCounter(true);
+		} catch (SQLException e1) {
+			MyUncaughtExceptionHandler.sendBugReport(mActivity, e1);
+		}
+
 		try {
 			((MainActivity) mActivity).closeActivity();
-		} catch (RuntimeException e) {
+		} catch (RuntimeException e2) {
 			throw new RuntimeException("activity が closeActivity を実装していません.");
 		}
 	}
@@ -216,10 +182,17 @@ public class CardFragment extends Fragment {
 	 */
 	@Click(R.id.cancelButton)
 	/*package*/void cancelButtonClicked() {
-		setCounter(R.id.cancelButton);
+		CounterDao counterDao;
+		try {
+			counterDao = new CounterDao();
+			counterDao.setCounter(false);
+		} catch (SQLException e1) {
+			MyUncaughtExceptionHandler.sendBugReport(mActivity, e1);
+		}
+		
 		try {
 			((MainActivity) mActivity).closeActivity();
-		} catch (RuntimeException e) {
+		} catch (RuntimeException e2) {
 			throw new RuntimeException("activity が closeActivity を実装していません.");
 		}
 	}

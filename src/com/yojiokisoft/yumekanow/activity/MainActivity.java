@@ -15,6 +15,8 @@
 
 package com.yojiokisoft.yumekanow.activity;
 
+import java.sql.SQLException;
+
 import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -37,6 +39,7 @@ import com.googlecode.androidannotations.annotations.OptionsMenu;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.adapter.MainPagerAdapter;
+import com.yojiokisoft.yumekanow.db.CounterDao;
 import com.yojiokisoft.yumekanow.db.SettingDao;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 import com.yojiokisoft.yumekanow.utils.MyAlarmManager;
@@ -59,6 +62,7 @@ public class MainActivity extends FragmentActivity {
 
 	private Vibrator mVibrator = null;
 	private Ringtone mRingtone = null;
+	private boolean mCloseByButtonClicked; // ボタンクリックによって閉じられた
 
 	/**
 	 * アクティビティの初期化 (onCreateと同等のタイミングで呼ばれる）
@@ -107,6 +111,7 @@ public class MainActivity extends FragmentActivity {
 				mRingtone.play();
 			}
 		}
+		mCloseByButtonClicked = false;
 	}
 
 	/**
@@ -125,6 +130,16 @@ public class MainActivity extends FragmentActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		stopVibrator();
+
+		if (!mCloseByButtonClicked) {
+			CounterDao counterDao;
+			try {
+				counterDao = new CounterDao();
+				counterDao.setCounter(false);
+			} catch (SQLException e) {
+				MyUncaughtExceptionHandler.sendBugReport(this, e);
+			}
+		}
 	}
 
 	/**
@@ -203,6 +218,7 @@ public class MainActivity extends FragmentActivity {
 	 * アクティビティを閉じる
 	 */
 	public void closeActivity() {
+		mCloseByButtonClicked = true;
 		finish();
 	}
 }

@@ -16,9 +16,12 @@
 package com.yojiokisoft.yumekanow.db;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
@@ -217,5 +220,29 @@ public class CounterDao {
 	 */
 	public int setCounter(CounterEntity counter) throws SQLException {
 		return mCounterDao.create(counter);
+	}
+
+	/**
+	 * 唱えた回数を登録する.
+	 * 
+	 * @param advocated アファーメーションを唱えた場合はtrue
+	 * @throws SQLException 
+	 */
+	public void setCounter(boolean advocated) throws SQLException {
+		int currentCardId = getCurrentCardId();
+
+		CounterEntity cnt = new CounterEntity();
+		cnt.cardId = currentCardId;
+		cnt.procTime = System.currentTimeMillis();
+		if (advocated) {
+			cnt.okCnt = 1;
+			cnt.ngCnt = 0;
+		} else {
+			cnt.okCnt = 0;
+			cnt.ngCnt = 1;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.JAPANESE);
+		cnt.procDay = sdf.format(new Date(cnt.procTime));
+		setCounter(cnt);
 	}
 }
