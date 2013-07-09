@@ -63,7 +63,7 @@ public class MyFile {
 	 * @return FilenameFilter
 	 */
 	public static FilenameFilter getFileExtensionFilter(String extension) {
-		final String _extension = "." + extension;
+		final String _extension = extension;
 		return new FilenameFilter() {
 			public boolean accept(File file, String name) {
 				boolean ret = name.endsWith(_extension);
