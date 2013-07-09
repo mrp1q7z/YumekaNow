@@ -41,8 +41,10 @@ import com.yojiokisoft.yumekanow.activity.MainActivity;
 import com.yojiokisoft.yumekanow.db.CardDao;
 import com.yojiokisoft.yumekanow.db.CounterDao;
 import com.yojiokisoft.yumekanow.db.SettingDao;
+import com.yojiokisoft.yumekanow.entity.BackImageEntity;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
+import com.yojiokisoft.yumekanow.utils.MyResource;
 
 /**
  * カードフラグメント
@@ -115,11 +117,12 @@ public class CardFragment extends Fragment {
 		params.topMargin = card.marginTop - (tabHeight / 2);
 		mAffirmationText.setLayoutParams(params);
 
-		if (card.backImageResourceId == 0) {
+		if (card.backImageType == BackImageEntity.IT_BITMAP) {
 			Drawable drawable = Drawable.createFromPath(card.backImagePath);
 			mBackImage.setBackgroundDrawable(drawable);
 		} else {
-			mBackImage.setBackgroundResource(card.backImageResourceId);
+			int resId = MyResource.getResourceIdByName(card.backImageResourceName);
+			mBackImage.setBackgroundResource(resId);
 		}
 	}
 
@@ -136,7 +139,7 @@ public class CardFragment extends Fragment {
 		card.textSize = 20;
 		card.marginLeft = 10;
 		card.marginTop = 50;
-		card.backImageResourceId = R.drawable.back_img01;
+		card.backImageResourceName = "back_img01";
 		return card;
 	}
 
@@ -153,7 +156,7 @@ public class CardFragment extends Fragment {
 		card.textSize = 20;
 		card.marginLeft = 30;
 		card.marginTop = 120;
-		card.backImageResourceId = R.drawable.back_img01;
+		card.backImageResourceName = "back_img01";
 		return card;
 	}
 
@@ -189,7 +192,7 @@ public class CardFragment extends Fragment {
 		} catch (SQLException e1) {
 			MyUncaughtExceptionHandler.sendBugReport(mActivity, e1);
 		}
-		
+
 		try {
 			((MainActivity) mActivity).closeActivity();
 		} catch (RuntimeException e2) {

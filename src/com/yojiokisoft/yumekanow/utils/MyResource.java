@@ -13,21 +13,23 @@
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.yojiokisoft.yumekanow.entity;
+package com.yojiokisoft.yumekanow.utils;
+
+import com.yojiokisoft.yumekanow.App;
 
 /**
- * 背景画像エンティティ
+ * リソース関連のユーティリティ
  */
-public class BackImageEntity {
-	public static final int IT_RESOURCE = 1;
-	public static final int IT_BITMAP = 2;
-
-	/** 画像タイプ（1=リソース、2=外部取込みビットマップ） */
-	public int type;
-
-	/** リソース名 */
-	public String resourceName;
-
-	/** ビットマップパス */
-	public String bitmapPath;
+public class MyResource {
+	/**
+	 * リソース名からリソースIDを得る.
+	 * 
+	 * @param name リソース名
+	 * @return リソースID
+	 */
+	public static int getResourceIdByName(String name) {
+		App app = App.getInstance();
+		String packageName = app.getPackageName();
+		return app.getResources().getIdentifier(name, "drawable", packageName);
+	}
 }

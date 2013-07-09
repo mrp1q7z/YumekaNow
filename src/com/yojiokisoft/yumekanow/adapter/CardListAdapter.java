@@ -18,7 +18,6 @@ package com.yojiokisoft.yumekanow.adapter;
 import java.util.List;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -27,6 +26,7 @@ import android.widget.TextView;
 
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
+import com.yojiokisoft.yumekanow.utils.MyImage;
 
 /**
  * カード一覧アダプター
@@ -97,11 +97,7 @@ public class CardListAdapter extends BaseAdapter {
 		}
 
 		CardEntity item = mItems.get(position);
-		if (item.backImageResourceId == 0) {
-			wrapper.image.setImageURI(Uri.parse("file:///" + item.backImagePath));
-		} else {
-			wrapper.image.setImageResource(item.backImageResourceId);
-		}
+		MyImage.setImage(wrapper.image, item);
 		wrapper.label.setText(item.affirmationText);
 
 		return view;

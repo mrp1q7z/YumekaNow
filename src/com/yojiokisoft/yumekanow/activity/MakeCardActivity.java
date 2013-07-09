@@ -65,6 +65,7 @@ import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.utils.MyDialog;
 import com.yojiokisoft.yumekanow.utils.MyFile;
 import com.yojiokisoft.yumekanow.utils.MyImage;
+import com.yojiokisoft.yumekanow.utils.MyResource;
 
 /**
  * カードを作るアクティビティ
@@ -151,13 +152,13 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 			mMarginLeftBar.setProgress(mCard.marginLeft);
 			int position = -1;
 			for (int i = 0; i < list.size(); i++) {
-				if (mCard.backImageResourceId == 0) {
+				if (mCard.backImageType == BackImageEntity.IT_BITMAP) {
 					if (mCard.backImagePath.equals(list.get(i).bitmapPath)) {
 						position = i;
 						break;
 					}
 				} else {
-					if (list.get(i).resouceId == mCard.backImageResourceId) {
+					if (list.get(i).resourceName.equals(mCard.backImageResourceName)) {
 						position = i;
 						break;
 					}
@@ -332,7 +333,8 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		card.id = (mCard == null) ? 0 : mCard.id;
 		card.affirmationText = mAffirmationText.getText().toString();
 		BackImageEntity backImage = (BackImageEntity) mGallery.getSelectedItem();
-		card.backImageResourceId = backImage.resouceId;
+		card.backImageType = backImage.type;
+		card.backImageResourceName = backImage.resourceName;
 		card.backImagePath = backImage.bitmapPath;
 		card.textColor = (Integer) mTextColor.getTag();
 		card.shadowColor = (Integer) mShadowColor.getTag();
@@ -461,7 +463,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	 */
 	@ItemSelect
 	/*package*/void backImgGalleryItemSelected(boolean selected, BackImageEntity backImage) {
-		if (backImage.resouceId == 0) {
+		if (backImage.type == BackImageEntity.IT_BITMAP) {
 			mImageSwitcher.setImageURI(Uri.parse("file:///" + backImage.bitmapPath));
 			try {
 				CardDao cardDao = new CardDao();
@@ -474,7 +476,8 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 				MyUncaughtExceptionHandler.sendBugReport(this, e);
 			}
 		} else {
-			mImageSwitcher.setImageResource(backImage.resouceId);
+			int resId = MyResource.getResourceIdByName(backImage.resourceName);
+			mImageSwitcher.setImageResource(resId);
 			mDelBackImgButton.setVisibility(View.GONE);
 		}
 	}

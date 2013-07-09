@@ -21,7 +21,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +34,7 @@ import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.db.CardDao;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
+import com.yojiokisoft.yumekanow.utils.MyImage;
 
 /**
  * カード詳細アダプター
@@ -142,11 +142,7 @@ public class CardDetailAdapter extends PagerAdapter {
 		params.topMargin = card.marginTop;
 		mTextView.setLayoutParams(params);
 
-		if (card.backImageResourceId == 0) {
-			mImageView.setImageURI(Uri.parse("file:///" + card.backImagePath));
-		} else {
-			mImageView.setImageResource(card.backImageResourceId);
-		}
+		MyImage.setImage(mImageView, card);
 	}
 
 	/**

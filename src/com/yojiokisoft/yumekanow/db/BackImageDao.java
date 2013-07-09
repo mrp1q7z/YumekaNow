@@ -18,10 +18,10 @@ package com.yojiokisoft.yumekanow.db;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yojiokisoft.yumekanow.App;
 import com.yojiokisoft.yumekanow.entity.BackImageEntity;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.utils.MyFile;
+import com.yojiokisoft.yumekanow.utils.MyResource;
 
 /**
  * 背景画像のデータアクセス
@@ -34,22 +34,23 @@ public class BackImageDao {
 	 */
 	public List<BackImageEntity> queryForAll() {
 		List<BackImageEntity> list = new ArrayList<BackImageEntity>();
+		String resName;
 		for (int i = 1; i <= 99; i++) {
-			int resId = App.getInstance().getResources()
-					.getIdentifier("back_img" + String.format("%1$02d", i), "drawable",
-							"com.yojiokisoft.yumekanow");
+			resName = "back_img" + String.format("%1$02d", i);
+			int resId = MyResource.getResourceIdByName(resName);
 			if (resId == 0) {
 				break;
 			}
 			BackImageEntity item = new BackImageEntity();
-			item.resouceId = resId;
+			item.type = BackImageEntity.IT_RESOURCE;
+			item.resourceName = resName;
 			list.add(item);
 		}
 
 		List<String> files = MyFile.getFileList(MyConst.getBackImagePath(), ".jpg");
 		for (String file : files) {
 			BackImageEntity item = new BackImageEntity();
-			item.resouceId = 0;
+			item.type = BackImageEntity.IT_BITMAP;
 			item.bitmapPath = MyFile.pathCombine(MyConst.getBackImagePath(), file);
 			list.add(item);
 		}

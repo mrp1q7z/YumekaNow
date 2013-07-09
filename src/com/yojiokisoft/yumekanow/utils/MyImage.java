@@ -22,8 +22,13 @@ import java.io.IOException;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.util.Pair;
+import android.widget.ImageView;
+
+import com.yojiokisoft.yumekanow.entity.BackImageEntity;
+import com.yojiokisoft.yumekanow.entity.CardEntity;
 
 /**
  * イメージに関するユーティリティ集
@@ -67,5 +72,35 @@ public class MyImage {
 		int screenHeight = (Integer) metrics.heightPixels;
 		Pair<Integer, Integer> size = new Pair<Integer, Integer>(screenWidth, screenHeight);
 		return size;
+	}
+
+	/**
+	 * イメージビューに背景画像のセットする.
+	 * 
+	 * @param imageView
+	 * @param card
+	 */
+	public static void setImage(ImageView imageView, CardEntity card) {
+		if (card.backImageType == BackImageEntity.IT_BITMAP) {
+			imageView.setImageURI(Uri.parse("file:///" + card.backImagePath));
+		} else {
+			int resId = MyResource.getResourceIdByName(card.backImageResourceName);
+			imageView.setImageResource(resId);
+		}
+	}
+
+	/**
+	 * イメージビューに背景画像のセットする.
+	 * 
+	 * @param imageView
+	 * @param card
+	 */
+	public static void setImage(ImageView imageView, BackImageEntity backImage) {
+		if (backImage.type == BackImageEntity.IT_BITMAP) {
+			imageView.setImageURI(Uri.parse("file:///" + backImage.bitmapPath));
+		} else {
+			int resId = MyResource.getResourceIdByName(backImage.resourceName);
+			imageView.setImageResource(resId);
+		}
 	}
 }

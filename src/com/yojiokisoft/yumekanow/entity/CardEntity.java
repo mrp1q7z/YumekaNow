@@ -29,10 +29,14 @@ public class CardEntity implements Serializable {
 	@DatabaseField(generatedId = true)
 	public int id;
 
-	/** 背景画像のリソースID */
+	/** 背景画像のタイプ（1=リソース、2=外部取込みビットマップ） */
 	@DatabaseField
-	public int backImageResourceId;
+	public int backImageType;
 
+	/** 背景画像のリソース名 */
+	@DatabaseField
+	public String backImageResourceName;
+	
 	/** 背景画像のパス */
 	@DatabaseField
 	public String backImagePath;

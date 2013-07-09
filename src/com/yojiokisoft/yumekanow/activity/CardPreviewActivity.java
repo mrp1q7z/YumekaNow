@@ -19,7 +19,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -42,6 +41,7 @@ import com.yojiokisoft.yumekanow.dialog.AmbilWarnaDialog;
 import com.yojiokisoft.yumekanow.dialog.AmbilWarnaDialog.OnAmbilWarnaListener;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.utils.MyConst;
+import com.yojiokisoft.yumekanow.utils.MyImage;
 
 /**
  * カードプレビューアクティビティ
@@ -110,11 +110,7 @@ public class CardPreviewActivity extends Activity {
 		params.topMargin = mCard.marginTop;
 		mTextView.setLayoutParams(params);
 
-		if (mCard.backImageResourceId == 0) {
-			mImageView.setImageURI(Uri.parse("file:///" + mCard.backImagePath));
-		} else {
-			mImageView.setImageResource(mCard.backImageResourceId);
-		}
+		MyImage.setImage(mImageView, mCard);
 
 		mScaleGestureDetector = new ScaleGestureDetector(this, mOnScaleGestureListener);
 		mDragView = mTextView;

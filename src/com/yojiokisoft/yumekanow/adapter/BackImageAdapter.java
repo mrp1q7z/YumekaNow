@@ -18,7 +18,6 @@ package com.yojiokisoft.yumekanow.adapter;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.yojiokisoft.yumekanow.entity.BackImageEntity;
+import com.yojiokisoft.yumekanow.utils.MyImage;
 
 /**
  * 背景画像アダプタークラス
@@ -68,7 +68,7 @@ public class BackImageAdapter extends BaseAdapter {
 	 */
 	@Override
 	public long getItemId(int pos) {
-		return mItems.get(pos).resouceId;
+		return pos;
 	}
 
 	/**
@@ -91,11 +91,7 @@ public class BackImageAdapter extends BaseAdapter {
 
 		BackImageEntity item = mItems.get(position);
 		ImageView imageView = (ImageView) convertView.findViewWithTag("image");
-		if (item.resouceId == 0) {
-			imageView.setImageBitmap(BitmapFactory.decodeFile(item.bitmapPath));
-		} else {
-			imageView.setImageResource(item.resouceId);
-		}
+		MyImage.setImage(imageView, item);
 
 		return convertView;
 	}
