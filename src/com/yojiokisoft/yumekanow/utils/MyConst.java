@@ -47,6 +47,9 @@ public class MyConst {
 	/** 設定キー：お問い合わせ */
 	public static final String PK_INQUIRY = "Inquiry";
 
+	/** 設定キー：寄付 */
+	public static final String PK_DONATION = "Donation";
+
 	/** 設定キー：スリープ時間（時間指定） */
 	public static final String PK_SLEEP_JIKAN = "SleepJikan";
 

@@ -89,7 +89,7 @@ public class CardListAdapter extends BaseAdapter {
 		ViewWrapper wrapper = null;
 
 		if (view == null) {
-			view = mActivity.getLayoutInflater().inflate(R.layout.item_row, null);
+			view = mActivity.getLayoutInflater().inflate(R.layout.row_card_list, null);
 			wrapper = new ViewWrapper(view);
 			view.setTag(wrapper);
 		} else {

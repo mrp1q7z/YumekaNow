@@ -56,6 +56,12 @@
             android:key="Inquiry"
             android:summary="ご意見、ご質問、苦情など、お気軽にお問い合わせください"
             android:title="お問い合わせ" />
+
+        <PreferenceScreen
+            android:key="Donation"
+            android:summary="寄付歓迎！（投げ銭）"
+            android:title="寄付" >
+        </PreferenceScreen>
     </PreferenceCategory>
 
 </PreferenceScreen>

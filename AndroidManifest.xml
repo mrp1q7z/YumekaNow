@@ -9,6 +9,7 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="10" />
 
+    <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -62,6 +63,10 @@
         </activity>
         <activity
             android:name="com.yojiokisoft.yumekanow.activity.WakeUpActivity_"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.yojiokisoft.yumekanow.activity.BillingActivity_"
             android:screenOrientation="portrait" >
         </activity>
 

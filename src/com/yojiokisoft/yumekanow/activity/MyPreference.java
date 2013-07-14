@@ -16,6 +16,7 @@
 package com.yojiokisoft.yumekanow.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -28,6 +29,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -63,6 +65,11 @@ public class MyPreference extends PreferenceActivity {
 		// お問い合わせの設定値をクリア
 		// 既に選択中のものを選択してもイベントが発生しないから
 		clearPreference(MyConst.PK_INQUIRY);
+
+		// 寄付をクリックしたときアクティビティを開くようにする
+		PreferenceScreen prefScreen = (PreferenceScreen) findPreference(MyConst.PK_DONATION);
+		Intent intent = new Intent(this, BillingActivity_.class);
+		prefScreen.setIntent(intent);
 
 		// 設定値が変更された時のイベントリスナーを登録
 		ListPreference prefDispInterval = (ListPreference) findPreference(MyConst.PK_DISP_INTERVAL);
