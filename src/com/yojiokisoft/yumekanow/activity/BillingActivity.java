@@ -250,7 +250,11 @@ public class BillingActivity extends Activity {
 	// Callback for when a purchase is finished
 	IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
 		public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-			if (result.isFailure()) {
+			if (result.getResponse() == IabHelper.IABHELPER_USER_CANCELLED) {
+				setWaitScreen(false);
+				return;
+			}
+			else if (result.isFailure()) {
 				complain("Error purchasing: " + result);
 				setWaitScreen(false);
 				return;
