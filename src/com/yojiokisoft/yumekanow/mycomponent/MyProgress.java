@@ -26,7 +26,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.yojiokisoft.yumekanow.R;
-import com.yojiokisoft.yumekanow.utils.MyLog;
 
 /**
  * カスタムプログレスバー
@@ -141,7 +140,6 @@ public class MyProgress extends LinearLayout {
 	 * メモリの開放
 	 */
 	public void drawableDestroy() {
-		MyLog.d("メモリを開放します");
 		Drawable drawable;
 
 		drawable = mStartImageView.getDrawable();

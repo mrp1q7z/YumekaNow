@@ -18,7 +18,7 @@ package com.yojiokisoft.yumekanow.activity;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.util.Pair;
@@ -32,9 +32,12 @@ import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.ViewById;
+import com.yojiokisoft.yumekanow.App;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.adapter.KeyValueArrayAdapter;
 import com.yojiokisoft.yumekanow.adapter.KeyValueArrayAdapter.Converter;
+import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
+import com.yojiokisoft.yumekanow.utils.MyDialog;
 
 /**
  * Example game using in-app billing version 3.
@@ -166,19 +169,15 @@ public class BillingActivity extends Activity {
 		mDonationType.setAdapter(adapter);
 
 		// Create the helper, passing it our context and the public key to verify signatures with
-		Log.d(TAG, "Creating IAB helper.");
 		mHelper = new IabHelper(this, base64EncodedPublicKey);
 
 		// enable debug logging (for a production application, you should set this to false).
-		mHelper.enableDebugLogging(true);
+		mHelper.enableDebugLogging(false);
 
 		// Start setup. This is asynchronous and the specified listener
 		// will be called once setup completes.
-		Log.d(TAG, "Starting setup.");
 		mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
 			public void onIabSetupFinished(IabResult result) {
-				Log.d(TAG, "Setup finished.");
-
 				if (!result.isSuccess()) {
 					// Oh noes, there was a problem.
 					complain("Problem setting up in-app billing: " + result);
@@ -193,12 +192,9 @@ public class BillingActivity extends Activity {
 	 */
 	@Click(R.id.donationButton)
 	/*package*/void donationButtonClicked() {
-		Log.d(TAG, "donation button clicked.");
-
 		// launch the gas purchase UI flow.
 		// We will be notified of completion via mPurchaseFinishedListener
 		setWaitScreen(true);
-		Log.d(TAG, "Launching purchase flow for donation.");
 
 		/* TODO: for security, generate your payload here for verification. See the comments on 
 		 *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use 
@@ -207,23 +203,17 @@ public class BillingActivity extends Activity {
 
 		Pair<String, String> selectedItem = (Pair<String, String>) mDonationType.getSelectedItem();
 		String sku = selectedItem.first;
-		Log.d(TAG, "sku=" + sku);
 		mHelper.launchPurchaseFlow(this, sku, RC_REQUEST, mPurchaseFinishedListener, payload);
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
-
 		// Pass on the activity result to the helper for handling
 		if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
 			// not handled, so handle it ourselves (here's where you'd
 			// perform any handling of activity results not related to in-app
 			// billing...
 			super.onActivityResult(requestCode, resultCode, data);
-		}
-		else {
-			Log.d(TAG, "onActivityResult handled by IABUtil.");
 		}
 	}
 
@@ -260,7 +250,6 @@ public class BillingActivity extends Activity {
 	// Callback for when a purchase is finished
 	IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
 		public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-			Log.d(TAG, "Purchase finished: " + result + ", purchase: " + purchase);
 			if (result.isFailure()) {
 				complain("Error purchasing: " + result);
 				setWaitScreen(false);
@@ -272,9 +261,6 @@ public class BillingActivity extends Activity {
 				return;
 			}
 
-			Log.d(TAG, "Purchase successful. sku=" + purchase.getSku());
-
-			Log.d(TAG, "Purchase is gas. Starting gas consumption.");
 			mHelper.consumeAsync(purchase, mConsumeFinishedListener);
 		}
 	};
@@ -282,22 +268,21 @@ public class BillingActivity extends Activity {
 	// Called when consumption is complete
 	IabHelper.OnConsumeFinishedListener mConsumeFinishedListener = new IabHelper.OnConsumeFinishedListener() {
 		public void onConsumeFinished(Purchase purchase, IabResult result) {
-			Log.d(TAG, "Consumption finished. Purchase: " + purchase + ", result: " + result);
-
 			// We know this is the "gas" sku because it's the only one we consume,
 			// so we don't check which sku was consumed. If you have more than one
 			// sku, you probably should check...
 			if (result.isSuccess()) {
 				// successfully consumed, so we apply the effects of the item in our
 				// game world's logic, which in our case means filling the gas tank a bit
-				Log.d(TAG, "Consumption successful. Provisioning.");
-				alert("ご寄付いただき、心より感謝いたします。ありがとうございました。");
+				Context context = App.getInstance().getAppContext();
+				MyDialog.Builder.newInstance(context)
+						.setMessage(context.getString(R.string.donation_thank_you))
+						.show();
 			}
 			else {
 				complain("Error while consuming: " + result);
 			}
 			setWaitScreen(false);
-			Log.d(TAG, "End consumption flow.");
 		}
 	};
 
@@ -307,7 +292,6 @@ public class BillingActivity extends Activity {
 		super.onDestroy();
 
 		// very important:
-		Log.d(TAG, "Destroying helper.");
 		if (mHelper != null) {
 			mHelper.dispose();
 		}
@@ -321,15 +305,7 @@ public class BillingActivity extends Activity {
 	}
 
 	void complain(String message) {
-		Log.e(TAG, "**** TrivialDrive Error: " + message);
-		alert("Error: " + message);
-	}
-
-	void alert(String message) {
-		AlertDialog.Builder bld = new AlertDialog.Builder(this);
-		bld.setMessage(message);
-		bld.setNeutralButton("OK", null);
-		Log.d(TAG, "Showing alert dialog: " + message);
-		bld.create().show();
+		Log.e(TAG, "Error: " + message);
+		MyUncaughtExceptionHandler.sendBugReport(this, new RuntimeException(message));
 	}
 }

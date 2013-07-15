@@ -44,27 +44,27 @@ public final class MakeCardActivity_
     }
 
     private void afterSetContentView_() {
+        mDelBackImgButton = ((Button) findViewById(com.yojiokisoft.yumekanow.R.id.delBackImgButton));
         mMarginLeftBar = ((SeekBar) findViewById(com.yojiokisoft.yumekanow.R.id.marginLeftBar));
+        mImageSwitcher = ((ImageSwitcher) findViewById(com.yojiokisoft.yumekanow.R.id.backImgSwitcher));
+        mShadowColor = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.shadowColor));
+        mTextSize = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.textSize));
         mAffirmationText = ((EditText) findViewById(com.yojiokisoft.yumekanow.R.id.affirmationText));
         mGallery = ((Gallery) findViewById(com.yojiokisoft.yumekanow.R.id.backImgGallery));
-        mMarginTop = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.marginTop));
-        mTextSize = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.textSize));
-        mShadowColor = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.shadowColor));
-        mDelBackImgButton = ((Button) findViewById(com.yojiokisoft.yumekanow.R.id.delBackImgButton));
-        mImageSwitcher = ((ImageSwitcher) findViewById(com.yojiokisoft.yumekanow.R.id.backImgSwitcher));
-        mMarginLeft = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.marginLeft));
-        mMarginTopBar = ((SeekBar) findViewById(com.yojiokisoft.yumekanow.R.id.marginTopBar));
-        mTextColor = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.textColor));
         mTextSizeBar = ((SeekBar) findViewById(com.yojiokisoft.yumekanow.R.id.textSizeBar));
+        mMarginTop = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.marginTop));
+        mMarginTopBar = ((SeekBar) findViewById(com.yojiokisoft.yumekanow.R.id.marginTopBar));
+        mMarginLeft = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.marginLeft));
+        mTextColor = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.textColor));
         {
-            View view = findViewById(com.yojiokisoft.yumekanow.R.id.textColor);
+            View view = findViewById(com.yojiokisoft.yumekanow.R.id.previewButton);
             if (view!= null) {
                 view.setOnClickListener(new OnClickListener() {
 
 
                     @Override
                     public void onClick(View view) {
-                        MakeCardActivity_.this.textColorClicked();
+                        MakeCardActivity_.this.previewButtonClicked();
                     }
 
                 }
@@ -102,21 +102,6 @@ public final class MakeCardActivity_
             }
         }
         {
-            View view = findViewById(com.yojiokisoft.yumekanow.R.id.okButton);
-            if (view!= null) {
-                view.setOnClickListener(new OnClickListener() {
-
-
-                    @Override
-                    public void onClick(View view) {
-                        MakeCardActivity_.this.okButtonClicked();
-                    }
-
-                }
-                );
-            }
-        }
-        {
             View view = findViewById(com.yojiokisoft.yumekanow.R.id.addBackImgButton);
             if (view!= null) {
                 view.setOnClickListener(new OnClickListener() {
@@ -132,14 +117,29 @@ public final class MakeCardActivity_
             }
         }
         {
-            View view = findViewById(com.yojiokisoft.yumekanow.R.id.previewButton);
+            View view = findViewById(com.yojiokisoft.yumekanow.R.id.okButton);
             if (view!= null) {
                 view.setOnClickListener(new OnClickListener() {
 
 
                     @Override
                     public void onClick(View view) {
-                        MakeCardActivity_.this.previewButtonClicked();
+                        MakeCardActivity_.this.okButtonClicked();
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            View view = findViewById(com.yojiokisoft.yumekanow.R.id.textColor);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        MakeCardActivity_.this.textColorClicked();
                     }
 
                 }
@@ -162,29 +162,6 @@ public final class MakeCardActivity_
         }
         );
         {
-            final SeekBar view = ((SeekBar) findViewById(com.yojiokisoft.yumekanow.R.id.marginTopBar));
-            if (view!= null) {
-                view.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-                    }
-
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        MakeCardActivity_.this.marginTopChanged(seekBar, progress);
-                    }
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                    }
-
-                }
-                );
-            }
-        }
-        {
             final SeekBar view = ((SeekBar) findViewById(com.yojiokisoft.yumekanow.R.id.marginLeftBar));
             if (view!= null) {
                 view.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -197,6 +174,29 @@ public final class MakeCardActivity_
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         MakeCardActivity_.this.marginLeftChanged(seekBar, progress);
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            final SeekBar view = ((SeekBar) findViewById(com.yojiokisoft.yumekanow.R.id.marginTopBar));
+            if (view!= null) {
+                view.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
+
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        MakeCardActivity_.this.marginTopChanged(seekBar, progress);
                     }
 
                     @Override

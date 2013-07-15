@@ -33,21 +33,6 @@ public final class CardFragment_
         mAffirmationText = ((TextView) findViewById(com.yojiokisoft.yumekanow.R.id.affirmationText));
         mBackImage = ((FrameLayout) findViewById(com.yojiokisoft.yumekanow.R.id.cardContainer));
         {
-            View view = findViewById(com.yojiokisoft.yumekanow.R.id.cardContainer);
-            if (view!= null) {
-                view.setOnClickListener(new OnClickListener() {
-
-
-                    @Override
-                    public void onClick(View view) {
-                        CardFragment_.this.cardContainerClicked();
-                    }
-
-                }
-                );
-            }
-        }
-        {
             View view = findViewById(com.yojiokisoft.yumekanow.R.id.cancelButton);
             if (view!= null) {
                 view.setOnClickListener(new OnClickListener() {
@@ -56,6 +41,21 @@ public final class CardFragment_
                     @Override
                     public void onClick(View view) {
                         CardFragment_.this.cancelButtonClicked();
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            View view = findViewById(com.yojiokisoft.yumekanow.R.id.cardContainer);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        CardFragment_.this.cardContainerClicked();
                     }
 
                 }
