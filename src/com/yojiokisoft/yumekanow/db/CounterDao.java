@@ -112,14 +112,19 @@ public class CounterDao {
 		// debug >>>
 		/*
 		List<DayCntEntity> ret = new ArrayList<DayCntEntity>();
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 2013);
-		cal.set(Calendar.MONTH, 4 - 1);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
+		Calendar startDate = Calendar.getInstance();
+		startDate.set(Calendar.YEAR, 2013);
+		startDate.set(Calendar.MONTH, 4 - 1);
+		startDate.set(Calendar.DAY_OF_MONTH, 1);
 		int totalOkCnt = 0;
 		int totalNgCnt = 0;
 		Random rand = new Random();
 		for (int i = 0; i < 116; i++) {
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.YEAR, startDate.get(Calendar.YEAR));
+			cal.set(Calendar.MONTH, startDate.get(Calendar.MONTH));
+			cal.set(Calendar.DAY_OF_MONTH, startDate.get(Calendar.DAY_OF_MONTH));
+
 			DayCntEntity dayCnt = new DayCntEntity();
 			dayCnt.day = i + 1;
 			dayCnt.date = cal;
@@ -130,7 +135,8 @@ public class CounterDao {
 			dayCnt.totalOkCnt = totalOkCnt;
 			dayCnt.totalNgCnt = totalNgCnt;
 			ret.add(dayCnt);
-			cal.add(Calendar.DAY_OF_MONTH, 1);
+
+			startDate.add(Calendar.DAY_OF_MONTH, 1);
 		}
 		setEncouragementMsg(ret, false);
 		*/
