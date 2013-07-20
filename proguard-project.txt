@@ -11,6 +11,15 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # Add any project specific keep options here:
+-keep class com.android.vending.billing.**
+-keep public interface com.android.vending.billing.IMarketBillingService
+-keep public class com.android.vending.billing.IMarketBillingService$Stub
+-keep class com.android.vending.billing.IMarketBillingService$Stub$Proxy
+
+-libraryjars ./libs/android-support-v4.jar
+-libraryjars ./libs/androidannotations-api-2.7.1.jar
+-libraryjars ./libs/ormlite-android-4.45.jar
+-libraryjars ./libs/ormlite-core-4.45.jar
 
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
