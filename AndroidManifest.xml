@@ -3,7 +3,7 @@
     package="com.yojiokisoft.yumekanow"
     android:installLocation="internalOnly"
     android:versionCode="2"
-    android:versionName="1.1" >
+    android:versionName="1.1.0" >
 
     <uses-sdk
         android:minSdkVersion="8"

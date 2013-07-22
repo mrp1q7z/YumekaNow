@@ -14,7 +14,6 @@
 		
     <string name="defaultDispInterval">60</string>
     <string name="defaultGoalCnt">1440</string>
-    <string name="version">Version 0.0.2</string>
     <string name="use_this_card">このカードを使う</string>
     <string name="edit">編集</string>
     <string name="ok">OK</string>

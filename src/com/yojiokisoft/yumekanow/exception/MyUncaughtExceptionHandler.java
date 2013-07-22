@@ -34,15 +34,14 @@ import org.apache.http.protocol.HTTP;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 
-import com.yojiokisoft.yumekanow.App;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.utils.MyDialog;
 import com.yojiokisoft.yumekanow.utils.MyFile;
 import com.yojiokisoft.yumekanow.utils.MyLog;
+import com.yojiokisoft.yumekanow.utils.MyResource;
 
 /**
  * キャッチされない例外を処理する
@@ -146,13 +145,8 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler {
 		if (sVersionName != null) {
 			return;
 		}
-		try {
-			PackageInfo packInfo;
-			packInfo = App.getInstance().getPackageManager().getPackageInfo(App.getInstance().getPackageName(), 0);
-			sVersionName = packInfo.versionName;
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
-		}
+		PackageInfo packInfo = MyResource.getPackageInfo();
+		sVersionName = packInfo.versionName;
 	}
 
 	/**

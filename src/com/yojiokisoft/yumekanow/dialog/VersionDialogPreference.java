@@ -16,12 +16,15 @@
 package com.yojiokisoft.yumekanow.dialog;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
+import com.yojiokisoft.yumekanow.App;
 import com.yojiokisoft.yumekanow.R;
+import com.yojiokisoft.yumekanow.utils.MyResource;
 
 /**
  * 設定画面のバージョンダイアログ
@@ -42,7 +45,8 @@ public class VersionDialogPreference extends DialogPreference {
 	 */
 	@Override
 	protected View onCreateDialogView() {
-		String version = this.getContext().getResources().getString(R.string.version);
+		PackageInfo packageInfo = MyResource.getPackageInfo();
+		String version = App.getInstance().getString(R.string.app_name) + " Version " + packageInfo.versionName;
 
 		TextView textView = new TextView(this.getContext());
 		textView.setText(version);

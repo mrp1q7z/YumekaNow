@@ -18,6 +18,7 @@ package com.yojiokisoft.yumekanow.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -40,6 +41,7 @@ import com.yojiokisoft.yumekanow.db.SettingDao;
 import com.yojiokisoft.yumekanow.utils.MyAlarmManager;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.utils.MyMail;
+import com.yojiokisoft.yumekanow.utils.MyResource;
 
 /**
  * 設定アクティビティ
@@ -148,21 +150,19 @@ public class MyPreference extends PreferenceActivity {
 	private String getNowValue(String key) {
 		if (MyConst.PK_DISP_INTERVAL.equals(key)) {
 			return mSettingDao.getDispIntervalString();
-		}
-		if (key == null || MyConst.PK_GOAL_CNT.equals(key)) {
+		} else if (MyConst.PK_GOAL_CNT.equals(key)) {
 			return String.valueOf(mSettingDao.getGoalCnt());
-		}
-		if (key == null || MyConst.PK_VIBRATOR.equals(key)) {
+		} else if (MyConst.PK_VIBRATOR.equals(key)) {
 			return mSettingDao.getVibratorString();
-		}
-		if (key == null || MyConst.PK_ALARM.equals(key)) {
+		} else if (MyConst.PK_ALARM.equals(key)) {
 			return mSettingDao.getAlarm();
-		}
-		if (key == null || MyConst.PK_SLEEP_ALARM.equals(key)) {
+		} else if (MyConst.PK_SLEEP_ALARM.equals(key)) {
 			return mSettingDao.getSleepAlarm();
-		} else {
-			return null;
+		} else if (MyConst.PK_VERSION.equals(key)) {
+			PackageInfo packageInfo = MyResource.getPackageInfo();
+			return "Version " + packageInfo.versionName;
 		}
+		return null;
 	}
 
 	/**

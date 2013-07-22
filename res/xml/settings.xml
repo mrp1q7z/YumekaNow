@@ -43,10 +43,10 @@
 
     <PreferenceCategory android:title="このアプリについて" >
         <com.yojiokisoft.yumekanow.dialog.VersionDialogPreference
-            android:dialogMessage="@string/version"
+            android:dialogMessage=""
             android:dialogTitle="バージョン"
             android:key="Version"
-            android:summary="@string/version"
+            android:summary="@string/app_name"
             android:title="バージョン" />
 
         <ListPreference
