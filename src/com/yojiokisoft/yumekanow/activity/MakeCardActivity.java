@@ -31,10 +31,9 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Pair;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
@@ -180,7 +179,10 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		ImageView imageView = new ImageView(this);
 		imageView.setBackgroundColor(0xFF000000);
 		imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-		imageView.setLayoutParams(new ImageSwitcher.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		Pair<Integer, Integer> wh = MyImage.getScreenWidthAndHeight(this);
+		int w = wh.first - 10;
+		int h = (int)(w * 1.37);
+		imageView.setLayoutParams(new ImageSwitcher.LayoutParams(w, h));
 		return imageView;
 	}
 
@@ -222,9 +224,8 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 
 		// Displayに収まるサイズで画像を取得
 		Pair<Integer, Integer> size = MyImage.getScreenWidthAndHeight(this);
-		int width = options.outWidth / size.first + 1;
-		int height = options.outHeight / size.second + 1;
-		options.inSampleSize = Math.max(width, height);
+		int sampleSize = MyImage.calculateInSampleSize(options, size.first, size.second);
+		options.inSampleSize = sampleSize;
 		options.inJustDecodeBounds = false;
 		Bitmap bitmap = null;
 		in = null;
@@ -464,7 +465,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	@ItemSelect
 	/*package*/void backImgGalleryItemSelected(boolean selected, BackImageEntity backImage) {
 		if (backImage.type == BackImageEntity.IT_BITMAP) {
-			mImageSwitcher.setImageURI(Uri.parse("file:///" + backImage.bitmapPath));
+			mImageSwitcher.setImageDrawable(new BitmapDrawable(backImage.bitmapPath));
 			try {
 				CardDao cardDao = new CardDao();
 				if (cardDao.isUsed(backImage.bitmapPath)) {

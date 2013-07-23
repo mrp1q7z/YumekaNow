@@ -22,7 +22,8 @@ import java.io.IOException;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
-import android.net.Uri;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.widget.ImageView;
@@ -82,7 +83,7 @@ public class MyImage {
 	 */
 	public static void setImage(ImageView imageView, CardEntity card) {
 		if (card.backImageType == BackImageEntity.IT_BITMAP) {
-			imageView.setImageURI(Uri.parse("file:///" + card.backImagePath));
+			imageView.setImageDrawable(new BitmapDrawable(card.backImagePath));
 		} else {
 			int resId = MyResource.getResourceIdByName(card.backImageResourceName);
 			imageView.setImageResource(resId);
@@ -97,10 +98,31 @@ public class MyImage {
 	 */
 	public static void setImage(ImageView imageView, BackImageEntity backImage) {
 		if (backImage.type == BackImageEntity.IT_BITMAP) {
-			imageView.setImageURI(Uri.parse("file:///" + backImage.bitmapPath));
+			imageView.setImageDrawable(new BitmapDrawable(backImage.bitmapPath));
 		} else {
 			int resId = MyResource.getResourceIdByName(backImage.resourceName);
 			imageView.setImageResource(resId);
 		}
+	}
+
+	/**
+	 * 表示サイズから縮小率を求める.
+	 * 
+	 * @param options 画像のサイズ
+	 * @param reqWidth 表示サイズ（幅）
+	 * @param reqHeight 表示サイズ（高さ）
+	 * @return 縮小サイズ
+	 */
+	public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+		final int height = options.outHeight;
+		final int width = options.outWidth;
+		int inSampleSize = 1;
+
+		if (height > reqHeight || width > reqWidth) {
+			int inSampleSize1 = (int) Math.floor((float) height / (float) reqHeight);
+			int inSampleSize2 = (int) Math.floor((float) width / (float) reqWidth);
+			inSampleSize = Math.max(inSampleSize1, inSampleSize2);
+		}
+		return inSampleSize;
 	}
 }
