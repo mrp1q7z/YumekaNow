@@ -51,6 +51,16 @@ public class MyProgress extends LinearLayout {
 	 * @param context
 	 * @param attrs
 	 */
+	public MyProgress(Context context) {
+		super(context);
+	}
+	
+	/**
+	 * コンストラクタ.
+	 * 
+	 * @param context
+	 * @param attrs
+	 */
 	public MyProgress(Context context, AttributeSet attrs) {
 		super(context, attrs);
 

@@ -26,6 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EFragment;
@@ -36,7 +38,6 @@ import com.yojiokisoft.yumekanow.db.CounterDao;
 import com.yojiokisoft.yumekanow.db.SettingDao;
 import com.yojiokisoft.yumekanow.entity.DayCntEntity;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
-import com.yojiokisoft.yumekanow.mycomponent.MyProgress;
 
 /**
  * 状態フラグメント
@@ -44,7 +45,13 @@ import com.yojiokisoft.yumekanow.mycomponent.MyProgress;
 @EFragment(R.layout.fragment_state)
 public class StateFragment extends Fragment {
 	@ViewById(R.id.totalProgress)
-	/*package*/MyProgress mProgress;
+	/*package*/ProgressBar mProgress;
+
+	@ViewById(R.id.percent)
+	/*package*/TextView mPercent;
+
+	@ViewById(R.id.description)
+	/*package*/TextView mDescription;
 
 	@ViewById(R.id.dayToDayList)
 	/*package*/ListView mListView;
@@ -91,10 +98,11 @@ public class StateFragment extends Fragment {
 
 		int goalCnt = settingDao.getGoalCnt();
 
-		mProgress.setShowPercent(true);
-		mProgress.setDescription(okCnt + "/" + goalCnt);
+		int percent = okCnt * 100 / goalCnt;
+		mPercent.setText(percent + "%");
+		mDescription.setText(okCnt + "/" + goalCnt);
 		mProgress.setMax(100);
-		mProgress.setProgress(okCnt * 100 / goalCnt);
+		mProgress.setProgress(percent);
 	}
 
 	/**
