@@ -51,6 +51,7 @@ import com.googlecode.androidannotations.annotations.Extra;
 import com.googlecode.androidannotations.annotations.ItemSelect;
 import com.googlecode.androidannotations.annotations.SeekBarProgressChange;
 import com.googlecode.androidannotations.annotations.ViewById;
+import com.yojiokisoft.yumekanow.App;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.adapter.BackImageAdapter;
 import com.yojiokisoft.yumekanow.db.BackImageDao;
@@ -64,6 +65,7 @@ import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.utils.MyDialog;
 import com.yojiokisoft.yumekanow.utils.MyFile;
 import com.yojiokisoft.yumekanow.utils.MyImage;
+import com.yojiokisoft.yumekanow.utils.MyImage_;
 import com.yojiokisoft.yumekanow.utils.MyResource;
 
 /**
@@ -261,6 +263,9 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		// サムネイル画像も作る
+		MyImage_ myImage = MyImage_.getInstance_(App.getInstance().getAppContext());
+		myImage.ReductionImage(path);
 		// ギャラリーの再読み込み
 		List<BackImageEntity> list = mBackImageDao.queryForAll();
 		BackImageAdapter adapter = (BackImageAdapter) mGallery.getAdapter();

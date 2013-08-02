@@ -6,10 +6,10 @@
 
     <ImageView
         android:id="@+id/item_row_img"
-        android:layout_width="105sp"
-        android:layout_height="70sp"
+        android:layout_width="105dp"
+        android:layout_height="144dp"
         android:contentDescription="@string/back_image_description"
-        android:scaleType="fitXY" />
+        android:scaleType="fitCenter" />
 
     <TextView
         android:id="@+id/item_row_txt"

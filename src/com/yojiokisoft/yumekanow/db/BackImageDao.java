@@ -49,6 +49,9 @@ public class BackImageDao {
 
 		List<String> files = MyFile.getFileList(MyConst.getBackImagePath(), ".jpg");
 		for (String file : files) {
+			if (file.startsWith("s_")) { // サムネイル画像は除く
+				continue;
+			}
 			BackImageEntity item = new BackImageEntity();
 			item.type = BackImageEntity.IT_BITMAP;
 			item.bitmapPath = MyFile.pathCombine(MyConst.getBackImagePath(), file);

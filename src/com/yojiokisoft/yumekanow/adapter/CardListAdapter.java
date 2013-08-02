@@ -97,7 +97,7 @@ public class CardListAdapter extends BaseAdapter {
 		}
 
 		CardEntity item = mItems.get(position);
-		MyImage.setImage(wrapper.image, item);
+		MyImage.setImageThum(wrapper.image, item);
 		wrapper.label.setText(item.affirmationText);
 
 		return view;
