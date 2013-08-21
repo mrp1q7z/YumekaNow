@@ -156,6 +156,32 @@ public class MyImage {
 	}
 
 	/**
+	 * イメージビューにサムネイル背景画像をセットする.
+	 * 
+	 * @param imageView
+	 * @param card
+	 */
+	public static void setImageThum(ImageView imageView, BackImageEntity backImage) {
+		if (backImage.type == BackImageEntity.IT_BITMAP) {
+			String fileName = getThumFileName(backImage.bitmapPath);
+			BitmapDrawable drawable = new BitmapDrawable(fileName);
+			if (drawable.getBitmap() == null) {
+				drawable = new BitmapDrawable(backImage.bitmapPath);
+				File file = new File(fileName);
+				if (!file.exists()) {
+					MyImage_ myImage = MyImage_.getInstance_(App.getInstance().getAppContext());
+					myImage.ReductionImage(backImage.bitmapPath);
+				}
+			}
+			imageView.setImageDrawable(drawable);
+		} else {
+			String resName = getThumFileName(backImage.resourceName);
+			int resId = MyResource.getResourceIdByName(resName);
+			imageView.setImageResource(resId);
+		}
+	}
+
+	/**
 	 * 表示サイズから縮小率を求める.
 	 * 
 	 * @param options 画像のサイズ

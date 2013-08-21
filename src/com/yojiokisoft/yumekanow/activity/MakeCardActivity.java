@@ -31,29 +31,26 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.SimpleOnPageChangeListener;
 import android.util.Pair;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Gallery;
-import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.ViewSwitcher.ViewFactory;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.Extra;
-import com.googlecode.androidannotations.annotations.ItemSelect;
 import com.googlecode.androidannotations.annotations.SeekBarProgressChange;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.App;
 import com.yojiokisoft.yumekanow.R;
-import com.yojiokisoft.yumekanow.adapter.BackImageAdapter;
+import com.yojiokisoft.yumekanow.adapter.BackImagePagerAdapter;
 import com.yojiokisoft.yumekanow.db.BackImageDao;
 import com.yojiokisoft.yumekanow.db.CardDao;
 import com.yojiokisoft.yumekanow.dialog.AmbilWarnaDialog;
@@ -61,26 +58,36 @@ import com.yojiokisoft.yumekanow.dialog.AmbilWarnaDialog.OnAmbilWarnaListener;
 import com.yojiokisoft.yumekanow.entity.BackImageEntity;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
+import com.yojiokisoft.yumekanow.mycomponent.CustomHorizontalScrollView;
+import com.yojiokisoft.yumekanow.mycomponent.CustomHorizontalScrollView.IScrollStateListener;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.utils.MyDialog;
 import com.yojiokisoft.yumekanow.utils.MyFile;
 import com.yojiokisoft.yumekanow.utils.MyImage;
 import com.yojiokisoft.yumekanow.utils.MyImage_;
-import com.yojiokisoft.yumekanow.utils.MyResource;
 
 /**
  * カードを作るアクティビティ
  */
 @EActivity(R.layout.activity_make_card)
-public class MakeCardActivity extends Activity implements ViewFactory {
+public class MakeCardActivity extends Activity {
 	private final int TEXT_SIZE_MIN = 10;
 	private final int INTENT_REQUEST_PICTURE = 3;
 
-	@ViewById(R.id.backImgSwitcher)
-	/*package*/ImageSwitcher mImageSwitcher;
+	@ViewById(R.id.backImgHScrollView)
+	/*package*/CustomHorizontalScrollView mScrollView;
 
-	@ViewById(R.id.backImgGallery)
-	/*package*/Gallery mGallery;
+	@ViewById(R.id.backImgContainer)
+	/*package*/LinearLayout mBackImgContainer;
+
+	@ViewById(R.id.leftArrow)
+	/*package*/ImageView mLeftArrow;
+
+	@ViewById(R.id.rightArrow)
+	/*package*/ImageView mRightArrow;
+
+	@ViewById(R.id.backImgPager)
+	/*package*/ViewPager mPager;
 
 	@ViewById(R.id.affirmationText)
 	/*package*/EditText mAffirmationText;
@@ -115,21 +122,29 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	@Extra(MyConst.EN_CARD)
 	/*package*/CardEntity mCard;
 
+	private Activity mActivity;
 	private BackImageDao mBackImageDao;
+	private BackImagePagerAdapter mPagerAdapter;
 
 	/**
 	 * アクティビティの初期化 (onCreateと同等のタイミングで呼ばれる）
 	 */
 	@AfterViews
 	/*package*/void initActivity() {
-		mImageSwitcher.setFactory(this);
-		mImageSwitcher.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
-		mImageSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
-
+		mActivity = this;
 		mBackImageDao = new BackImageDao();
 		List<BackImageEntity> list = mBackImageDao.queryForAll();
-		BackImageAdapter adapter = new BackImageAdapter(this, list);
-		mGallery.setAdapter(adapter);
+		setBackImageList(list);
+
+		Pair<Integer, Integer> wh = MyImage.getScreenWidthAndHeight(this);
+		int w = wh.first - 10;
+		int h = (int) (w * 1.37);
+		mPager.setLayoutParams(new LinearLayout.LayoutParams(w, h));
+		mPagerAdapter = new BackImagePagerAdapter(this, list);
+		mPager.setAdapter(mPagerAdapter);
+		mPager.setOnPageChangeListener(mPagerChanged);
+
+		mScrollView.setScrollStateListener(mBackImageScrolled);
 
 		int color = getResources().getColor(R.color.textColor);
 		setBackAndForeColorLabel(mTextColor, color);
@@ -165,27 +180,53 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 					}
 				}
 			}
-			if (position == -1) {
-				mGallery.setSelection(0);
-			} else {
-				mGallery.setSelection(position, false);
-			}
+			setPagerCurrentItem(position);
+		} else {
+			setPagerCurrentItem(0);
 		}
 	}
 
 	/**
-	 * ViewSitcher用のビューを作成
+	 * 水平スクロールビューがスクロールされた
 	 */
-	@Override
-	public View makeView() {
-		ImageView imageView = new ImageView(this);
-		imageView.setBackgroundColor(0xFF000000);
-		imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-		Pair<Integer, Integer> wh = MyImage.getScreenWidthAndHeight(this);
-		int w = wh.first - 10;
-		int h = (int)(w * 1.37);
-		imageView.setLayoutParams(new ImageSwitcher.LayoutParams(w, h));
-		return imageView;
+	private IScrollStateListener mBackImageScrolled = new IScrollStateListener() {
+		public void onScrollMostRight() {
+			mRightArrow.setVisibility(View.INVISIBLE);
+		}
+
+		public void onScrollMostLeft() {
+			mLeftArrow.setVisibility(View.INVISIBLE);
+		}
+
+		public void onScrollFromMostLeft() {
+			mLeftArrow.setVisibility(View.VISIBLE);
+		}
+
+		public void onScrollFromMostRight() {
+			mRightArrow.setVisibility(View.VISIBLE);
+		}
+	};
+
+	/**
+	 * 背景画像一覧の生成
+	 * 
+	 * @param list
+	 */
+	private void setBackImageList(List<BackImageEntity> list) {
+		int cnt = mBackImgContainer.getChildCount();
+		if (cnt > 0) {
+			mBackImgContainer.removeAllViews();
+		}
+		int size = list.size();
+		for (int i = 0; i < size; i++) {
+			ImageView image = new ImageView(this);
+			MyImage.setImageThum(image, list.get(i));
+			image.setLayoutParams(new LinearLayout.LayoutParams(80, 120));
+			image.setPadding(5, 5, 5, 5);
+			image.setTag(i);
+			image.setOnClickListener(mBackImageClicked);
+			mBackImgContainer.addView(image);
+		}
 	}
 
 	/**
@@ -268,9 +309,9 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		myImage.ReductionImage(path);
 		// ギャラリーの再読み込み
 		List<BackImageEntity> list = mBackImageDao.queryForAll();
-		BackImageAdapter adapter = (BackImageAdapter) mGallery.getAdapter();
-		adapter.setData(list);
-		adapter.notifyDataSetChanged();
+		mPagerAdapter.setItems(list);
+		mPagerAdapter.notifyDataSetChanged();
+		setBackImageList(list);
 	}
 
 	/**
@@ -338,7 +379,7 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		CardEntity card = new CardEntity();
 		card.id = (mCard == null) ? 0 : mCard.id;
 		card.affirmationText = mAffirmationText.getText().toString();
-		BackImageEntity backImage = (BackImageEntity) mGallery.getSelectedItem();
+		BackImageEntity backImage = mPagerAdapter.getBackImage(mPager.getCurrentItem());
 		card.backImageType = backImage.type;
 		card.backImageResourceName = backImage.resourceName;
 		card.backImagePath = backImage.bitmapPath;
@@ -407,15 +448,14 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 		OnClickListener delBackImg = new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				BackImageEntity backImage = (BackImageEntity) mGallery.getSelectedItem();
+				BackImageEntity backImage = mPagerAdapter.getBackImage(mPager.getCurrentItem());
 				File file = new File(backImage.bitmapPath);
 				file.delete();
 				// ギャラリーの再読み込み
 				List<BackImageEntity> list = mBackImageDao.queryForAll();
-				mGallery.setSelection(0);
-				BackImageAdapter adapter = (BackImageAdapter) mGallery.getAdapter();
-				adapter.setData(list);
-				adapter.notifyDataSetChanged();
+				mPagerAdapter.setItems(list);
+				mPagerAdapter.notifyDataSetChanged();
+				setBackImageList(list);
 			}
 		};
 
@@ -462,15 +502,29 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 	}
 
 	/**
-	 * 背景画像が選択された.
-	 * 
-	 * @param selected
-	 * @param backImage
+	 * 背景画像一覧のクリック
 	 */
-	@ItemSelect
-	/*package*/void backImgGalleryItemSelected(boolean selected, BackImageEntity backImage) {
+	private View.OnClickListener mBackImageClicked = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			int position = (Integer) v.getTag();
+			setPagerCurrentItem(position);
+		}
+	};
+
+	/**
+	 * 背景画像のカレントアイテムをセット
+	 * 
+	 * @param position
+	 */
+	private void setPagerCurrentItem(int position) {
+		if (position < 0) {
+			position = 0;
+		}
+		mPager.setCurrentItem(position);
+
+		BackImageEntity backImage = mPagerAdapter.getBackImage(position);
 		if (backImage.type == BackImageEntity.IT_BITMAP) {
-			mImageSwitcher.setImageDrawable(new BitmapDrawable(backImage.bitmapPath));
 			try {
 				CardDao cardDao = new CardDao();
 				if (cardDao.isUsed(backImage.bitmapPath)) {
@@ -479,12 +533,20 @@ public class MakeCardActivity extends Activity implements ViewFactory {
 					mDelBackImgButton.setVisibility(View.VISIBLE);
 				}
 			} catch (SQLException e) {
-				MyUncaughtExceptionHandler.sendBugReport(this, e);
+				MyUncaughtExceptionHandler.sendBugReport(mActivity, e);
 			}
 		} else {
-			int resId = MyResource.getResourceIdByName(backImage.resourceName);
-			mImageSwitcher.setImageResource(resId);
 			mDelBackImgButton.setVisibility(View.GONE);
 		}
 	}
+
+	/**
+	 * 背景画像のページャーがスワイプされた
+	 */
+	private SimpleOnPageChangeListener mPagerChanged = new SimpleOnPageChangeListener() {
+		@Override
+		public void onPageSelected(int position) {
+			setPagerCurrentItem(position);
+		}
+	};
 }

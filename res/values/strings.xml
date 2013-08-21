@@ -35,6 +35,8 @@
     <string name="margin_left">左マージン</string>
     <string name="preview">プレビュー</string>
     <string name="kome">※</string>
+    <string name="left_arrow">＜</string>
+    <string name="right_arrow">＞</string>
     <string name="affirmation_text_hint">ここにアファーメーションの言葉を入力してください</string>
     <string name="start">開始</string>
     <string name="wake_up_msg">おはようございます。\n指定の時間になりました。\n今日も一日よろしくお願いします。</string>
