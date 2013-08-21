@@ -312,6 +312,7 @@ public class MakeCardActivity extends Activity {
 		mPagerAdapter.setItems(list);
 		mPagerAdapter.notifyDataSetChanged();
 		setBackImageList(list);
+		setPagerCurrentItem(0);
 	}
 
 	/**
@@ -452,10 +453,12 @@ public class MakeCardActivity extends Activity {
 				File file = new File(backImage.bitmapPath);
 				file.delete();
 				// ギャラリーの再読み込み
+				int currentItem = mPager.getCurrentItem();
 				List<BackImageEntity> list = mBackImageDao.queryForAll();
 				mPagerAdapter.setItems(list);
 				mPagerAdapter.notifyDataSetChanged();
 				setBackImageList(list);
+				setPagerCurrentItem(currentItem);
 			}
 		};
 

@@ -16,6 +16,7 @@
 package com.yojiokisoft.yumekanow.db;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.yojiokisoft.yumekanow.entity.BackImageEntity;
@@ -34,6 +35,19 @@ public class BackImageDao {
 	 */
 	public List<BackImageEntity> queryForAll() {
 		List<BackImageEntity> list = new ArrayList<BackImageEntity>();
+
+		List<String> files = MyFile.getFileList(MyConst.getBackImagePath(), ".jpg");
+		Collections.sort(files, Collections.reverseOrder());
+		for (String file : files) {
+			if (file.startsWith("s_")) { // サムネイル画像は除く
+				continue;
+			}
+			BackImageEntity item = new BackImageEntity();
+			item.type = BackImageEntity.IT_BITMAP;
+			item.bitmapPath = MyFile.pathCombine(MyConst.getBackImagePath(), file);
+			list.add(item);
+		}
+
 		String resName;
 		for (int i = 1; i <= 99; i++) {
 			resName = "back_img" + String.format("%1$02d", i);
@@ -44,17 +58,6 @@ public class BackImageDao {
 			BackImageEntity item = new BackImageEntity();
 			item.type = BackImageEntity.IT_RESOURCE;
 			item.resourceName = resName;
-			list.add(item);
-		}
-
-		List<String> files = MyFile.getFileList(MyConst.getBackImagePath(), ".jpg");
-		for (String file : files) {
-			if (file.startsWith("s_")) { // サムネイル画像は除く
-				continue;
-			}
-			BackImageEntity item = new BackImageEntity();
-			item.type = BackImageEntity.IT_BITMAP;
-			item.bitmapPath = MyFile.pathCombine(MyConst.getBackImagePath(), file);
 			list.add(item);
 		}
 
