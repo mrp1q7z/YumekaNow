@@ -50,7 +50,7 @@
             android:layout_weight="1"
             android:background="@color/transparentButton"
             android:contentDescription="@string/cancel"
-            android:src="@android:drawable/ic_menu_close_clear_cancel" />
+            android:src="@drawable/ic_menu_close_clear_cancel" />
     </LinearLayout>
 
 </RelativeLayout>
