@@ -65,6 +65,7 @@ import com.yojiokisoft.yumekanow.utils.MyDialog;
 import com.yojiokisoft.yumekanow.utils.MyFile;
 import com.yojiokisoft.yumekanow.utils.MyImage;
 import com.yojiokisoft.yumekanow.utils.MyImage_;
+import com.yojiokisoft.yumekanow.utils.MyResource;
 
 /**
  * カードを作るアクティビティ
@@ -217,12 +218,15 @@ public class MakeCardActivity extends Activity {
 		if (cnt > 0) {
 			mBackImgContainer.removeAllViews();
 		}
+		int w = MyResource.dpi2Px(53);
+		int h = MyResource.dpi2Px(80);
+		int p = MyResource.dpi2Px(3);
 		int size = list.size();
 		for (int i = 0; i < size; i++) {
 			ImageView image = new ImageView(this);
 			MyImage.setImageThum(image, list.get(i));
-			image.setLayoutParams(new LinearLayout.LayoutParams(80, 120));
-			image.setPadding(5, 5, 5, 5);
+			image.setLayoutParams(new LinearLayout.LayoutParams(w, h));
+			image.setPadding(p, p, p, p);
 			image.setTag(i);
 			image.setOnClickListener(mBackImageClicked);
 			mBackImgContainer.addView(image);
@@ -452,6 +456,8 @@ public class MakeCardActivity extends Activity {
 				BackImageEntity backImage = mPagerAdapter.getBackImage(mPager.getCurrentItem());
 				File file = new File(backImage.bitmapPath);
 				file.delete();
+				File file2 = new File(MyImage.getThumFileName(backImage.bitmapPath));
+				file2.delete();
 				// ギャラリーの再読み込み
 				int currentItem = mPager.getCurrentItem();
 				List<BackImageEntity> list = mBackImageDao.queryForAll();
