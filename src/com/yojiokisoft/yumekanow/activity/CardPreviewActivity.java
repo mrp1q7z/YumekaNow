@@ -50,8 +50,6 @@ import com.yojiokisoft.yumekanow.utils.MyResource;
 @EActivity(R.layout.activity_card_preview)
 public class CardPreviewActivity extends Activity {
 	private final int LONG_PRESS_TIMEOUT = ViewConfiguration.getLongPressTimeout();
-	private final int FONT_SIZE_MIN = 10; // 最小のフォントサイズ
-	private final int FONT_SIZE_MAX = 40; // 最大のフォントサイズ
 	private final int FONT_SIZE_DELAY = 4; // フォントサイズが指定しにくいので遅延させる倍数（大きいほどゆっくりになる）
 
 	private ScaleGestureDetector mScaleGestureDetector;
@@ -96,9 +94,9 @@ public class CardPreviewActivity extends Activity {
 	 */
 	@AfterViews
 	/*package*/void initActivity() {
-		mTextSize = new float[FONT_SIZE_MAX - FONT_SIZE_MIN + 1];
-		for (int i = FONT_SIZE_MIN; i <= FONT_SIZE_MAX; i++) {
-			mTextSize[i - FONT_SIZE_MIN] = i;
+		mTextSize = new float[MyConst.TEXT_SIZE_MAX - MyConst.TEXT_SIZE_MIN + 1];
+		for (int i = MyConst.TEXT_SIZE_MIN; i <= MyConst.TEXT_SIZE_MAX; i++) {
+			mTextSize[i - MyConst.TEXT_SIZE_MIN] = i;
 		}
 
 		mTextView.setText(mCard.affirmationText);

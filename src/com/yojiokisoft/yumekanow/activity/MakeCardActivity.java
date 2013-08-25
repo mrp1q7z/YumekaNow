@@ -72,7 +72,6 @@ import com.yojiokisoft.yumekanow.utils.MyResource;
  */
 @EActivity(R.layout.activity_make_card)
 public class MakeCardActivity extends Activity {
-	private final int TEXT_SIZE_MIN = 10;
 	private final int INTENT_REQUEST_PICTURE = 3;
 
 	@ViewById(R.id.backImgHScrollView)
@@ -153,14 +152,14 @@ public class MakeCardActivity extends Activity {
 		color = getResources().getColor(R.color.shadowColor);
 		setBackAndForeColorLabel(mShadowColor, color);
 
-		mTextSize.setText(String.valueOf(mTextSizeBar.getProgress() + TEXT_SIZE_MIN));
+		mTextSize.setText(String.valueOf(mTextSizeBar.getProgress() + MyConst.TEXT_SIZE_MIN));
 		mMarginTop.setText(String.valueOf(mMarginTopBar.getProgress()));
 		mMarginLeft.setText(String.valueOf(mMarginLeftBar.getProgress()));
 
 		// 最大の左マージン・上マージンのセット
 		int imgH = MyResource.px2Dip(wh.second - (MyResource.getStatusBarHeight() * 2) - (wh.first / 7));
 		int imgW = MyResource.px2Dip(wh.first);
-		int fontSizeMin = MyResource.sp2Px(TEXT_SIZE_MIN);
+		int fontSizeMin = MyResource.sp2Px(MyConst.TEXT_SIZE_MIN);
 		mMarginTopBar.setMax(imgH - fontSizeMin);
 		mMarginLeftBar.setMax(imgW - fontSizeMin);
 
@@ -169,7 +168,7 @@ public class MakeCardActivity extends Activity {
 			setBackAndForeColorLabel(mTextColor, mCard.textColor);
 			setBackAndForeColorLabel(mShadowColor, mCard.shadowColor);
 			mTextSize.setText(String.valueOf(mCard.textSize));
-			mTextSizeBar.setProgress(mCard.textSize - TEXT_SIZE_MIN);
+			mTextSizeBar.setProgress(mCard.textSize - MyConst.TEXT_SIZE_MIN);
 			mMarginTop.setText(String.valueOf(mCard.marginTop));
 			mMarginTopBar.setProgress(mCard.marginTop);
 			mMarginLeft.setText(String.valueOf(mCard.marginLeft));
@@ -492,7 +491,7 @@ public class MakeCardActivity extends Activity {
 	 */
 	@SeekBarProgressChange(R.id.textSizeBar)
 	/*package*/void textSizeChanged(SeekBar seekBar, int progress) {
-		mTextSize.setText(String.valueOf(progress + TEXT_SIZE_MIN));
+		mTextSize.setText(String.valueOf(progress + MyConst.TEXT_SIZE_MIN));
 	}
 
 	/**

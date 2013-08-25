@@ -77,6 +77,12 @@ public class MyConst {
 	/** バグファイル名(キャッチされなかった) */
 	public static final String BUG_UNCAUGHT_FILE = "bug_uncaught.txt";
 
+	/** 最小の文字サイズ(単位はsp) */
+	public static final int TEXT_SIZE_MIN = 10;
+
+	/** 最小の文字サイズ(単位はsp) */
+	public static final int TEXT_SIZE_MAX = 50;
+
 	/** キャッチしたバグファイルのフルパス */
 	public static String getCaughtBugFilePath() {
 		return MyFile.pathCombine(App.getInstance().getAppDataPath(), BUG_CAUGHT_FILE);
