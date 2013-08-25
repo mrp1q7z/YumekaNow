@@ -42,6 +42,7 @@ import com.yojiokisoft.yumekanow.dialog.AmbilWarnaDialog.OnAmbilWarnaListener;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.utils.MyConst;
 import com.yojiokisoft.yumekanow.utils.MyImage;
+import com.yojiokisoft.yumekanow.utils.MyResource;
 
 /**
  * カードプレビューアクティビティ
@@ -106,8 +107,8 @@ public class CardPreviewActivity extends Activity {
 		mTextView.setTextSize(mCard.textSize);
 
 		MarginLayoutParams params = (MarginLayoutParams) mTextView.getLayoutParams();
-		params.leftMargin = mCard.marginLeft;
-		params.topMargin = mCard.marginTop;
+		params.leftMargin = MyResource.dip2Px(mCard.marginLeft);
+		params.topMargin = MyResource.dip2Px(mCard.marginTop);
 		mTextView.setLayoutParams(params);
 
 		MyImage.setImage(mImageView, mCard);
@@ -178,11 +179,11 @@ public class CardPreviewActivity extends Activity {
 			if (System.currentTimeMillis() - mDownTime < LONG_PRESS_TIMEOUT) {
 				setTextColor();
 			} else {
-				mCard.marginLeft = mDragView.getLeft();
-				mCard.marginTop = mDragView.getTop();
+				mCard.marginLeft = MyResource.px2Dip(mDragView.getLeft());
+				mCard.marginTop = MyResource.px2Dip(mDragView.getTop());
 				MarginLayoutParams params = (MarginLayoutParams) mDragView.getLayoutParams();
-				params.leftMargin = mCard.marginLeft;
-				params.topMargin = mCard.marginTop;
+				params.leftMargin = mDragView.getLeft();
+				params.topMargin = mDragView.getTop();
 				mDragView.setLayoutParams(params);
 			}
 			break;

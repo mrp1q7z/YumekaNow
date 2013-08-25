@@ -290,4 +290,20 @@ public class SettingDao {
 	public void setWakeUpTime(long time) {
 		mSharedPref.edit().putLong(MyConst.PK_WAKE_UP_TIME, time).commit();
 	}
+
+	/**
+	 * @return DP変換済みフラグ
+	 */
+	public boolean getConvDpFlag() {
+		return mSharedPref.getBoolean(MyConst.PK_CONV_DP_FLAG, false);
+	}
+
+	/**
+	 * DP変換済みフラグのセット.
+	 * 
+	 * @param flag
+	 */
+	public void setConvDpFlag(boolean flag) {
+		mSharedPref.edit().putBoolean(MyConst.PK_CONV_DP_FLAG, flag).commit();
+	}
 }

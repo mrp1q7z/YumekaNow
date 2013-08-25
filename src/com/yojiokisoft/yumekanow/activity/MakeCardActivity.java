@@ -157,6 +157,13 @@ public class MakeCardActivity extends Activity {
 		mMarginTop.setText(String.valueOf(mMarginTopBar.getProgress()));
 		mMarginLeft.setText(String.valueOf(mMarginLeftBar.getProgress()));
 
+		// 最大の左マージン・上マージンのセット
+		int imgH = MyResource.px2Dip(wh.second - (MyResource.getStatusBarHeight() * 2) - (wh.first / 7));
+		int imgW = MyResource.px2Dip(wh.first);
+		int fontSizeMin = MyResource.sp2Px(TEXT_SIZE_MIN);
+		mMarginTopBar.setMax(imgH - fontSizeMin);
+		mMarginLeftBar.setMax(imgW - fontSizeMin);
+
 		if (mCard != null) {
 			mAffirmationText.setText(mCard.affirmationText);
 			setBackAndForeColorLabel(mTextColor, mCard.textColor);
@@ -218,9 +225,9 @@ public class MakeCardActivity extends Activity {
 		if (cnt > 0) {
 			mBackImgContainer.removeAllViews();
 		}
-		int w = MyResource.dpi2Px(53);
-		int h = MyResource.dpi2Px(80);
-		int p = MyResource.dpi2Px(3);
+		int w = MyResource.dip2Px(53);
+		int h = MyResource.dip2Px(80);
+		int p = MyResource.dip2Px(3);
 		int size = list.size();
 		for (int i = 0; i < size; i++) {
 			ImageView image = new ImageView(this);

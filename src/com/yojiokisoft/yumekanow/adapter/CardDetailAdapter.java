@@ -35,6 +35,7 @@ import com.yojiokisoft.yumekanow.db.CardDao;
 import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 import com.yojiokisoft.yumekanow.utils.MyImage;
+import com.yojiokisoft.yumekanow.utils.MyResource;
 
 /**
  * カード詳細アダプター
@@ -138,8 +139,8 @@ public class CardDetailAdapter extends PagerAdapter {
 		mTextView.setShadowLayer(1.5f, 1.5f, 1.5f, card.shadowColor);
 		mTextView.setTextSize(card.textSize);
 		MarginLayoutParams params = (MarginLayoutParams) mTextView.getLayoutParams();
-		params.leftMargin = card.marginLeft;
-		params.topMargin = card.marginTop;
+		params.leftMargin = MyResource.dip2Px(card.marginLeft);
+		params.topMargin = MyResource.dip2Px(card.marginTop);
 		mTextView.setLayoutParams(params);
 
 		MyImage.setImage(mImageView, card);

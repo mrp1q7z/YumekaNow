@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.util.DisplayMetrics;
 
 import com.yojiokisoft.yumekanow.App;
 
@@ -59,14 +60,45 @@ public class MyResource {
 	}
 
 	/**
-	 * dpiをpxに変換
+	 * dipをpxに変換
 	 * 
-	 * @param dpi
+	 * @param dip
 	 * @return px
 	 */
-	public static int dpi2Px(int dpi) {
+	public static int dip2Px(int dip) {
 		float density = App.getInstance().getResources().getDisplayMetrics().density;
-		int px = (int) (dpi * density + 0.5f);
+		int px = (int) (dip * density + 0.5f);
 		return px;
+	}
+
+	/**
+	 * pxをdipに変換
+	 * 
+	 * @param px
+	 * @return dip
+	 */
+	public static int px2Dip(int px) {
+		float density = App.getInstance().getResources().getDisplayMetrics().density;
+		int dip = (int) (px / density + 0.5f);
+		return dip;
+	}
+
+	/**
+	 * spをpxに変換
+	 * 
+	 * @param sp
+	 * @return px
+	 */
+	public static int sp2Px(int sp) {
+		DisplayMetrics matrics = App.getInstance().getResources().getDisplayMetrics();
+		int px = (int) (sp * matrics.scaledDensity + 0.5f);
+		return px;
+	}
+
+	/**
+	 * @return ステータスバーの高さ
+	 */
+	public static int getStatusBarHeight() {
+		return dip2Px(25);
 	}
 }

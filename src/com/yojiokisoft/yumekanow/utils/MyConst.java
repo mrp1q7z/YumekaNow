@@ -62,6 +62,9 @@ public class MyConst {
 	/** 設定キー：目覚まし起動時間 */
 	public static final String PK_WAKE_UP_TIME = "WakeUpTime";
 
+	/** 設定キー：DP変換済みフラグ */
+	public static final String PK_CONV_DP_FLAG = "ConvDpFlag";
+
 	/** ExtraName:カード情報 */
 	public static final String EN_CARD = "Card";
 

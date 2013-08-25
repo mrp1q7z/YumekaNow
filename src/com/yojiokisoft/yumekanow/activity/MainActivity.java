@@ -16,6 +16,7 @@
 package com.yojiokisoft.yumekanow.activity;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import android.content.Intent;
 import android.media.Ringtone;
@@ -39,11 +40,14 @@ import com.googlecode.androidannotations.annotations.OptionsMenu;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.yojiokisoft.yumekanow.R;
 import com.yojiokisoft.yumekanow.adapter.MainPagerAdapter;
+import com.yojiokisoft.yumekanow.db.CardDao;
 import com.yojiokisoft.yumekanow.db.CounterDao;
 import com.yojiokisoft.yumekanow.db.SettingDao;
+import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 import com.yojiokisoft.yumekanow.utils.MyAlarmManager;
 import com.yojiokisoft.yumekanow.utils.MyConst;
+import com.yojiokisoft.yumekanow.utils.MyResource;
 
 /**
  * メインアクティビティ
@@ -73,6 +77,12 @@ public class MainActivity extends FragmentActivity {
 		Thread.setDefaultUncaughtExceptionHandler(new MyUncaughtExceptionHandler());
 
 		SettingDao settingDao = SettingDao.getInstance();
+
+		// px -> dp 変換
+		if (!settingDao.getConvDpFlag()) {
+			convPx2Dp();
+			settingDao.setConvDpFlag(true);
+		}
 
 		if (MyAlarmManager.getStartTime() == 0 && MyAlarmManager.getWakeUpTime() == 0) {
 			MyAlarmManager.setStartTimer(this);
@@ -220,5 +230,22 @@ public class MainActivity extends FragmentActivity {
 	public void closeActivity() {
 		mCloseByButtonClicked = true;
 		finish();
+	}
+
+	/**
+	 * px -> dp 変換
+	 */
+	private void convPx2Dp() {
+		try {
+			CardDao cardDao = new CardDao();
+			List<CardEntity> list = cardDao.queryForAll();
+			for (CardEntity card : list) {
+				card.marginLeft = MyResource.px2Dip(card.marginLeft);
+				card.marginTop = MyResource.px2Dip(card.marginTop);
+				cardDao.createOrUpdate(card);
+			}
+		} catch (SQLException e) {
+			MyUncaughtExceptionHandler.sendBugReport(this, e);
+		}
 	}
 }

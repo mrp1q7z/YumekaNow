@@ -113,8 +113,8 @@ public class CardFragment extends Fragment {
 		mActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int tabHeight = metrics.widthPixels / 7;
 		MarginLayoutParams params = (MarginLayoutParams) mAffirmationText.getLayoutParams();
-		params.leftMargin = card.marginLeft;
-		params.topMargin = card.marginTop - (tabHeight / 2);
+		params.leftMargin = MyResource.dip2Px(card.marginLeft);
+		params.topMargin = MyResource.dip2Px(card.marginTop) - (tabHeight / 2);
 		mAffirmationText.setLayoutParams(params);
 
 		if (card.backImageType == BackImageEntity.IT_BITMAP) {
@@ -137,8 +137,8 @@ public class CardFragment extends Fragment {
 		card.textColor = Color.BLACK;
 		card.shadowColor = Color.WHITE;
 		card.textSize = 20;
-		card.marginLeft = 10;
-		card.marginTop = 50;
+		card.marginLeft = MyResource.dip2Px(20);
+		card.marginTop = MyResource.dip2Px(80);
 		card.backImageResourceName = "back_img01";
 		return card;
 	}
@@ -154,8 +154,8 @@ public class CardFragment extends Fragment {
 		card.textColor = Color.RED;
 		card.shadowColor = Color.WHITE;
 		card.textSize = 20;
-		card.marginLeft = 30;
-		card.marginTop = 120;
+		card.marginLeft = MyResource.dip2Px(20);
+		card.marginTop = MyResource.dip2Px(80);
 		card.backImageResourceName = "back_img01";
 		return card;
 	}
