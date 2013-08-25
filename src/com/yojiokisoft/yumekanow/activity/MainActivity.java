@@ -27,6 +27,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
+import android.util.Pair;
 import android.view.Gravity;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
@@ -47,6 +48,7 @@ import com.yojiokisoft.yumekanow.entity.CardEntity;
 import com.yojiokisoft.yumekanow.exception.MyUncaughtExceptionHandler;
 import com.yojiokisoft.yumekanow.utils.MyAlarmManager;
 import com.yojiokisoft.yumekanow.utils.MyConst;
+import com.yojiokisoft.yumekanow.utils.MyImage;
 import com.yojiokisoft.yumekanow.utils.MyResource;
 
 /**
@@ -236,12 +238,17 @@ public class MainActivity extends FragmentActivity {
 	 * px -> dp 変換
 	 */
 	private void convPx2Dp() {
+		Pair<Integer, Integer> wh = MyImage.getScreenWidthAndHeight(this);
+		int imgH = MyResource.px2Dip(wh.second - (MyResource.getStatusBarHeight() * 2) - (wh.first / 7));
+		int imgW = MyResource.px2Dip(wh.first);
+		float vRatio = imgH / 656.0f;
+		float hRatio = imgW / 480.0f;
 		try {
 			CardDao cardDao = new CardDao();
 			List<CardEntity> list = cardDao.queryForAll();
 			for (CardEntity card : list) {
-				card.marginLeft = MyResource.px2Dip(card.marginLeft);
-				card.marginTop = MyResource.px2Dip(card.marginTop);
+				card.marginLeft = (int) (card.marginLeft * hRatio + 0.5f);
+				card.marginTop = (int) (card.marginTop * vRatio + 0.5f);
 				cardDao.createOrUpdate(card);
 			}
 		} catch (SQLException e) {
