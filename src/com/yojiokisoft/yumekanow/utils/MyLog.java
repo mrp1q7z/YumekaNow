@@ -18,8 +18,13 @@ package com.yojiokisoft.yumekanow.utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
+import android.os.Environment;
 import android.util.Log;
 
 import com.yojiokisoft.yumekanow.BuildConfig;
@@ -28,6 +33,29 @@ import com.yojiokisoft.yumekanow.BuildConfig;
  * デバッグログクラス
  */
 public class MyLog {
+	/**
+	 * デバッグログへ出力
+	 * 
+	 * @param msg デバッグメッセージ
+	 */
+	public static void writeDebug(String msg) {
+		String path = Environment.getExternalStorageDirectory().getPath();
+		File file = new File(path + "/YumekaNow/debug.txt");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.JAPANESE);
+		String timeStamp = dateFormat.format(new Date());
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file, true)));
+			pw.println(timeStamp + " " + msg);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (pw != null) {
+				pw.close();
+			}
+		}
+	}
+
 	/**
 	 * StackTraceをファイルに書き込む.
 	 * 

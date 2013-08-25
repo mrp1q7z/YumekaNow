@@ -175,6 +175,9 @@ public class MakeCardActivity extends Activity {
 			mMarginLeftBar.setProgress(mCard.marginLeft);
 			int position = -1;
 			for (int i = 0; i < list.size(); i++) {
+				if (mCard.backImageType != list.get(i).type) {
+					continue;
+				}
 				if (mCard.backImageType == BackImageEntity.IT_BITMAP) {
 					if (mCard.backImagePath.equals(list.get(i).bitmapPath)) {
 						position = i;
